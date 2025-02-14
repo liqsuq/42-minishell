@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: update apt-get
         run: sudo apt-get update
+      - name: install dependencies
+        run: sudo apt-get install -y build-essential libreadline-dev
       - name: checkout
         uses: actions/checkout@v4
       - name: build
