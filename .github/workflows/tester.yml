@@ -1,0 +1,19 @@
+name: tester.sh
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: update apt-get
+        run: sudo apt-get update
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: build
+        run: make
+      - name: run tester.sh
+        run: ./tester.sh
