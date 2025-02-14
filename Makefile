@@ -6,7 +6,13 @@ LFT := $(LFTDIR)/libft.a
 CFLAGS := -Wall -Wextra -Werror -I$(LFTDIR)
 LDLIBS := -lreadline
 
-$(NAME): $(LFT) $(MLX) $(OBJECT)
+ifeq ($(shell uname), Darwin)
+	RLDIR := $(shell brew --prefix readline)
+	CFLAGS += -I$(RLDIR)/include
+	LDFLAGS += -L$(RLDIR)/lib
+endif
+
+$(NAME): $(LFT) $(OBJECT)
 	$(LINK.o) $(OBJECT) $(LFT) $(LDLIBS) -o $@
 
 $(LFT): | $(LFTDIR)
