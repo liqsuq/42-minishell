@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: natsumi <natsumi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 18:49:54 by kadachi           #+#    #+#             */
-/*   Updated: 2025/02/16 03:28:56 by natsumi          ###   ########.fr       */
+/*   Updated: 2025/02/16 07:58:03 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	main(void)
 			add_history(line);
 			interpret(line);
 		}
-		printf("%s", line);
 		free(line);
 	}
 	return (0);
