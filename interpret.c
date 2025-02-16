@@ -1,3 +1,5 @@
+// interpret.c
+
 #include "minishell.h"
 
 void	fatal_error(const char *msg)
