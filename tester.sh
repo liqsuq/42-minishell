@@ -39,6 +39,11 @@ echo "+-------------------------------------------------+"
 # Empty line (EOF)
 assert ''
 
+# Absolute path commands without args
+assert '/bin/pwd'
+assert '/bin/echo'
+
+
 echo "==================================================="
 if [ $STATUS -eq 0 ]; then
 	echo "All tests passed"

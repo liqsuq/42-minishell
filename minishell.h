@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
+/*   By: natsumi <natsumi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 18:44:12 by kadachi           #+#    #+#             */
-/*   Updated: 2025/02/14 15:55:32 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/02/16 03:21:00 by natsumi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,6 @@ typedef struct s_data
 	int	exit_status;
 }		t_data;
 
+noreturn void	fatal_error(const char *msg);
+int				interpret(char *line);
 #endif
