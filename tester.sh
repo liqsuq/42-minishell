@@ -47,11 +47,11 @@ assert '/bin/echo'
 assert 'pwd'
 assert 'echo'
 assert 'ls'
-assert './a.out'  # ./ をつければ絶対パス扱いになる
+assert './a.out'
 
 # no such command
-assert 'a.out'      # PATHに「.」が含まれていなければ見つからない
-assert 'nosuchfile' # 存在しないコマンド
+assert 'a.out'
+assert 'nosuchfile'
 
 echo "==================================================="
 if [ $STATUS -eq 0 ]; then
