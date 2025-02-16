@@ -43,6 +43,15 @@ assert ''
 assert '/bin/pwd'
 assert '/bin/echo'
 
+# Search command path without args
+assert 'pwd'
+assert 'echo'
+assert 'ls'
+assert './a.out'  # ./ をつければ絶対パス扱いになる
+
+# no such command
+assert 'a.out'      # PATHに「.」が含まれていなければ見つからない
+assert 'nosuchfile' # 存在しないコマンド
 
 echo "==================================================="
 if [ $STATUS -eq 0 ]; then

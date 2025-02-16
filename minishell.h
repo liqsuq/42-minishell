@@ -6,7 +6,7 @@
 /*   By: natsumi <natsumi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 18:44:12 by kadachi           #+#    #+#             */
-/*   Updated: 2025/02/16 03:21:00 by natsumi          ###   ########.fr       */
+/*   Updated: 2025/02/17 03:18:43 by natsumi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "libft.h"
+# include <limits.h>
+# include "libft/libft.h"
 
 # define PROMPT "minish$ "
 
@@ -51,6 +52,10 @@ typedef struct s_data
 	int	exit_status;
 }		t_data;
 
-noreturn void	fatal_error(const char *msg);
+// interpret.c
 int				interpret(char *line);
+void	fatal_error(const char *msg);
+
+// search_path.c
+char    *search_path(const char *filename);
 #endif
