@@ -68,6 +68,11 @@ assert './a.out'
 assert 'a.out'
 assert 'nosuchfile'
 
+# Unquoted args
+assert 'ls /'
+assert 'echo hello    world'
+
+
 echo "==================================================="
 if [ $STATUS -eq 0 ]; then
 	echo "All tests passed"
