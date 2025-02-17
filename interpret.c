@@ -101,6 +101,7 @@ int interpret(char *line)
 	char	**argv;
 
 	tokens = tokenize(line);
+	expand(tokens);
 	argv = tokens2argv(tokens);
 	path = resolve_path(argv[0]);
 	if (!path)

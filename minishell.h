@@ -22,6 +22,8 @@
 # include "libft/libft.h"
 
 # define PROMPT "minish$ "
+# define SQUOTE '\''
+# define DQUOTE '\"'
 
 typedef enum e_kind
 {
@@ -51,6 +53,8 @@ void	free_argv(char **argv);
 char	*search_path(const char *filename);
 
 // tokenizer.c
+void	assert_error(const char *msg);
+int		is_metacharacter(char c);
 t_token	*tokenize(char *line);
 
 // tokenuil.c
@@ -58,5 +62,8 @@ t_token	*new_token(char *word, t_kind kind);
 void	add_token(t_token **head, t_token *new);
 void	free_tokens(t_token *token);
 void	print_tokens(t_token *tokens);
+
+// expand.c
+void	expand(t_token *tokens);
 
 #endif

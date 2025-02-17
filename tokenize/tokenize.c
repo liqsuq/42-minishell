@@ -78,8 +78,33 @@ t_token	*word(char **rest, char *line)
 	const char	*start = line;
 	char		*word;
 
-	while (*line && !is_metacharacter(*line))
-		line++;
+	while (*line != '\0' && !is_metacharacter(*line))
+	{
+		if (*line == SQUOTE)
+		{
+			line++;
+			while (*line != SQUOTE)
+			{
+				if (*line == '\0')
+					assert_error("unmatched single quote");
+				line++;
+			}
+			line++;
+		}
+		else if (*line == DQUOTE)
+		{
+			line++;
+			while (*line != DQUOTE)
+			{
+				if (*line == '\0')
+					assert_error("unmatched double quote");
+				line++;
+			}
+			line++;
+		}
+		else
+			line++;
+	}
 	word = strndup(start, line - start);
 	if (word == NULL)
 		fatal_error("strndup");

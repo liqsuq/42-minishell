@@ -1,9 +1,11 @@
 NAME := minishell
 TOKSRC := $(addprefix tokenize/, tokenize.c tokenutils.c)
+EXPSRC := $(addprefix expand/, expand.c)
 SOURCE := main.c \
 					interpret.c \
 					search_path.c \
-					$(TOKSRC)
+					$(TOKSRC) \
+					$(EXPSRC)
 OBJECT := $(SOURCE:.c=.o)
 LFTDIR := libft
 LFT := $(LFTDIR)/libft.a
