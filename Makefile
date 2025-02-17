@@ -1,5 +1,7 @@
 NAME := minishell
-SOURCE := main.c interpret.c search_path.c
+SOURCE := main.c \
+					interpret.c \
+					search_path.c
 OBJECT := $(SOURCE:.c=.o)
 LFTDIR := libft
 LFT := $(LFTDIR)/libft.a
