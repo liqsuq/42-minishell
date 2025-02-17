@@ -1,5 +1,4 @@
 // minisehll.h
->>>>>>> main
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
