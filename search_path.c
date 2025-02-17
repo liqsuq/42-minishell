@@ -5,9 +5,9 @@ static int get_next_dir(const char **env_path, char *buf)
 {
 	const char *start;
 	const char *p;
-  size_t len;
+	size_t len;
 
-  start = *env_path;
+	start = *env_path;
 	if (!*start)
 		return (0);
 
@@ -57,16 +57,16 @@ char *search_path(const char *filename)
 	if (!env_value || !*env_value)
 		return (NULL);
 	while (1)
-  {
+	{
 		ft_memset(dir, 0, PATH_MAX);
 		if (!get_next_dir(&env_value, dir))
 			break;
 		join_filename(dir, filename);
 		if (access(dir, X_OK) == 0)
-    {
+		{
 			char *dup_path;
 
-      dup_path = ft_strdup(dir);
+			dup_path = ft_strdup(dir);
 			if (!dup_path)
 				fatal_error("strdup");
 			return dup_path;

@@ -8,7 +8,6 @@ void	fatal_error(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
-
 char	*resolve_path(char *line)
 {
 	char	*path;
@@ -42,11 +41,11 @@ int exec_command(char *path)
 	pid = fork();
 	if (pid < 0)
 	{
-    perror("fork error:");
+		perror("fork error:");
 		exit(EXIT_FAILURE);
-  }
+	}
 	else if (pid == 0)
-  {
+	{
 		execve(path, argv, NULL);
 		if (errno == ENOENT)
 			exit(127);
