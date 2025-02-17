@@ -28,9 +28,24 @@ assert() {
 	echo
 }
 
+gen_aout() {
+	cat <<EOF >a.out
+#!/bin/bash
+echo "Hello, world!"
+EOF
+	chmod +x a.out
+}
+
+del_aout() {
+	rm -f a.out
+}
+
 clean() {
 	rm -f expected actual
+	del_aout
 }
+
+gen_aout
 
 echo "+-------------------------------------------------+"
 echo "|  minishell test                                 |"
