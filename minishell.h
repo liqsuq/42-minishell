@@ -18,7 +18,8 @@
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "libft.h"
+# include <limits.h>
+# include "libft/libft.h"
 
 # define PROMPT "minish$ "
 
@@ -41,6 +42,10 @@ typedef struct s_data
 	int	exit_status;
 }		t_data;
 
-noreturn void	fatal_error(const char *msg);
+// interpret.c
 int				interpret(char *line);
+void	fatal_error(const char *msg);
+
+// search_path.c
+char    *search_path(const char *filename);
 #endif
