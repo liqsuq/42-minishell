@@ -30,14 +30,11 @@ char	*resolve_path(char *line)
 	return (path);
 }
 
-int exec_command(char *path)
+int exec_command(char *path, char **argv)
 {
 	pid_t pid;
 	int wstatus;
-	char *argv[2];
 
-	argv[0] = path;
-	argv[1] = NULL;
 	pid = fork();
 	if (pid < 0)
 	{
@@ -59,16 +56,59 @@ int exec_command(char *path)
 	}
 }
 
+char **tokens2argv(t_token *tokens)
+{
+	t_token	*cur;
+	char	**argv;
+	int		i;
+
+	i = 0;
+	cur = tokens;
+	while (cur != NULL)
+	{
+		cur = cur->next;
+		i++;
+	}
+	argv = malloc((i + 1) * sizeof(char *));
+	if (argv == NULL)
+		fatal_error("malloc");
+	i = 0;
+	cur = tokens;
+	while (cur != NULL)
+	{
+		argv[i++] = ft_strdup(cur->word);
+		cur = cur->next;
+	}
+	argv[i] = NULL;
+	return (argv);
+}
+
+void free_argv(char **argv)
+{
+	char **cur;
+
+	cur = argv;
+	while (*cur != NULL)
+		free(*cur++);
+	free(argv);
+}
+
 int interpret(char *line)
 {
-	char *path;
-	int status;
+	char	*path;
+	int 	status;
+	t_token	*tokens;
+	char	**argv;
 
-	path = resolve_path(line);
+	tokens = tokenize(line);
+	expand(tokens);
+	argv = tokens2argv(tokens);
+	path = resolve_path(argv[0]);
 	if (!path)
 		return (127);
-
-	status = exec_command(path);
+	status = exec_command(path, argv);
 	free(path);
+	free_argv(argv);
+	free_tokens(tokens);
 	return (status);
 }

@@ -22,12 +22,13 @@
 # include "libft/libft.h"
 
 # define PROMPT "minish$ "
+# define SQUOTE '\''
+# define DQUOTE '\"'
 
 typedef enum e_kind
 {
-	WORD,
-	META,
-	EOL,
+	TK_WORD,
+	TK_OP,
 }	t_kind;
 
 typedef struct s_token
@@ -43,9 +44,26 @@ typedef struct s_data
 }		t_data;
 
 // interpret.c
-int				interpret(char *line);
+int		interpret(char *line);
 void	fatal_error(const char *msg);
+char	**tokens2argv(t_token *tokens);
+void	free_argv(char **argv);
 
 // search_path.c
-char    *search_path(const char *filename);
+char	*search_path(const char *filename);
+
+// tokenizer.c
+void	assert_error(const char *msg);
+int		is_metacharacter(char c);
+t_token	*tokenize(char *line);
+
+// tokenuil.c
+t_token	*new_token(char *word, t_kind kind);
+void	add_token(t_token **head, t_token *new);
+void	free_tokens(t_token *token);
+void	print_tokens(t_token *tokens);
+
+// expand.c
+void	expand(t_token *tokens);
+
 #endif

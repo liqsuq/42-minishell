@@ -4,7 +4,7 @@ STATUS=0
 
 assert() {
 	# テストしようとしている内容をprint
-	printf '%-30s:' "\"$1\""
+	printf '%-38s:' "\"$1\""
 	# bashの出力をactualに保存
 	echo -n -e "$1" | bash >expected 2>&-
 	# bashのexit statusをexpectedに代入
@@ -47,9 +47,9 @@ clean() {
 
 gen_aout
 
-echo "+-------------------------------------------------+"
-echo "|  minishell test                                 |"
-echo "+-------------------------------------------------+"
+echo "+---------------------------------------------------------+"
+echo "|  minishell test                                         |"
+echo "+---------------------------------------------------------+"
 
 # Empty line (EOF)
 assert ''
@@ -68,7 +68,24 @@ assert './a.out'
 assert 'a.out'
 assert 'nosuchfile'
 
-echo "==================================================="
+# Unquoted args
+assert 'ls /'
+assert 'echo hello    world'
+
+# Single quote
+assert 'echo '\''hello   world'\'' '\''42Tokyo'\'
+assert 'echo hello'\''      world'\'
+
+# Double quote
+assert 'echo '\"'hello   world'\"' '\"'42Tokyo'\"
+assert 'echo hello'\"'      world'\"
+
+# Combined quote
+assert 'echo '\'\"'hello   world'\"\'' '\''42Tokyo'\'
+assert 'echo '\"\''hello   world'\'\"' '\"'42Tokyo'\"
+assert 'echo hello'\''  world  '\'\"'  42Tokyo  '\"
+
+echo "==========================================================="
 if [ $STATUS -eq 0 ]; then
 	echo "All tests passed"
 else
