@@ -2,12 +2,6 @@
 
 #include "minishell.h"
 
-void	assert_error(const char *msg)
-{
-	ft_dprintf(STDERR_FILENO, "Error: %s\n", msg);
-	exit(EXIT_FAILURE);
-}
-
 int	is_blank(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\n');

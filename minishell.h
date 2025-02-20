@@ -45,7 +45,6 @@ typedef struct s_data
 
 // interpret.c
 int		interpret(char *line);
-void	fatal_error(const char *msg);
 char	**tokens2argv(t_token *tokens);
 void	free_argv(char **argv);
 
@@ -53,7 +52,6 @@ void	free_argv(char **argv);
 char	*search_path(const char *filename);
 
 // tokenizer.c
-void	assert_error(const char *msg);
 int		is_metacharacter(char c);
 t_token	*tokenize(char *line);
 
@@ -65,5 +63,9 @@ void	print_tokens(t_token *tokens);
 
 // expand.c
 void	expand(t_token *tokens);
+
+// error.c
+void	fatal_error(const char *msg);
+void	assert_error(const char *msg);
 
 #endif
