@@ -2,12 +2,6 @@
 
 #include "minishell.h"
 
-void	fatal_error(const char *msg)
-{
-	dprintf(STDERR_FILENO, "Fatal Error: %s\n", msg);
-	exit(EXIT_FAILURE);
-}
-
 char	*resolve_path(char *line)
 {
 	char	*path;
