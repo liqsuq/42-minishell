@@ -100,7 +100,11 @@ int interpret(char *line)
 	path = resolve_path(argv[0]);
 	if (!path)
 		return (127);
+	t_node node;
+	ft_bzero(&node, sizeof(t_node));
 	status = exec_command(path, argv);
+	perform_redirection(&node, NULL);
+	reset_redirection(&node);
 	free(path);
 	free_argv(argv);
 	free_tokens(tokens);

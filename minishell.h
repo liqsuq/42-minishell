@@ -19,6 +19,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <limits.h>
+# include <stdbool.h>
 # include "libft/libft.h"
 
 # define PROMPT "minish$ "
@@ -42,6 +43,41 @@ typedef struct s_data
 {
 	int	exit_status;
 }		t_data;
+
+typedef enum e_node_kind
+{
+	ND_SIMPLE_CMD,    // 単純なコマンド
+	ND_REDIR_OUT,     // 標準出力リダイレクト
+	ND_REDIR_IN,      // 標準入力リダイレクト
+	ND_REDIR_APPEND,  // 出力の追加リダイレクト
+	ND_REDIR_HEREDOC, // ヒアドキュメント
+	ND_PIPELINE       // パイプライン
+}						t_node_kind;
+
+// コマンドやリダイレクトを表すノード構造体
+typedef struct s_node
+{
+	t_node_kind kind;         // ノードの種類
+	struct s_node *next;      // 次のノード
+	t_token *args;            // 引数リスト
+	struct s_node *redirects; // リダイレクト
+	int std_fd;               // 標準ファイルディスクリプタ
+	t_token *filename;        // ファイル名
+	t_token *delimiter;       // ヒアドキュメントの区切り文字
+	int filefd;               // ファイルディスクリプタ
+	int stashed_std_fd;       // 保持している標準ファイルディスクリプタ
+	bool is_delimiter_quote;  // 区切り文字がクオートされているかどうか
+	struct s_node *command;   // コマンドノード
+	int inpipe[2];            // パイプの入力
+	int outpipe[2];           // パイプの出力
+}							t_node;	
+// 環境変数のキーと値を格納するリスト構造体
+typedef struct s_env
+{
+	char *key;          // 環境変数のキー
+	char *value;        // 環境変数の値
+	struct s_env *next; // 次の環境変数
+}							 t_env;
 
 // interpret.c
 int		interpret(char *line);
@@ -67,5 +103,9 @@ void	expand(t_token *tokens);
 // error.c
 void	fatal_error(const char *msg);
 void	assert_error(const char *msg);
+
+// redirection.c
+void reset_redirection(t_node *node);
+void perform_redirection(t_node *node, t_env **env);
 
 #endif
