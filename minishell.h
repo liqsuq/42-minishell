@@ -21,9 +21,12 @@
 # include <limits.h>
 # include "libft/libft.h"
 
+# define NAME "minishell"
+# define HEADER NAME ": "
 # define PROMPT "minish$ "
 # define SQUOTE '\''
 # define DQUOTE '\"'
+# define ERROR_TOKENIZE 258
 
 typedef enum e_kind
 {
@@ -42,6 +45,8 @@ typedef struct s_data
 {
 	int	exit_status;
 }		t_data;
+
+extern int syntax_error;
 
 // interpret.c
 int		interpret(char *line);
@@ -67,5 +72,6 @@ void	expand(t_token *tokens);
 // error.c
 void	fatal_error(const char *msg);
 void	assert_error(const char *msg);
+void	tokenize_error(const char *msg, char **rest, char *line);
 
 #endif

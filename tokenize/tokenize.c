@@ -80,7 +80,10 @@ t_token	*word(char **rest, char *line)
 			while (*line != SQUOTE)
 			{
 				if (*line == '\0')
-					assert_error("unmatched single quote");
+				{
+					tokenize_error("unmatched single quote", &line, line);
+					break;
+				}
 				line++;
 			}
 			line++;
@@ -91,7 +94,10 @@ t_token	*word(char **rest, char *line)
 			while (*line != DQUOTE)
 			{
 				if (*line == '\0')
-					assert_error("unmatched double quote");
+				{
+					tokenize_error("unmatched double quote", &line, line);
+					break;
+				}
 				line++;
 			}
 			line++;
@@ -110,6 +116,7 @@ t_token	*tokenize(char *line)
 {
 	t_token	*head;
 
+	syntax_error = 0;
 	head = NULL;
 	while (*line != '\0')
 	{
@@ -120,7 +127,7 @@ t_token	*tokenize(char *line)
 		else if (is_word(line))
 			add_token(&head, word(&line, line));
 		else
-			assert_error("tokernize error");
+			tokenize_error("tokernize error", &line, line);
 	}
 	return (head);
 }
