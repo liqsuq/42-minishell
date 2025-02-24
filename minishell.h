@@ -49,7 +49,7 @@ typedef enum e_node_kind
 	ND_REDIR_IN,      // 標準入力リダイレクト
 	ND_REDIR_APPEND,  // 出力の追加リダイレクト
 	ND_REDIR_HEREDOC, // ヒアドキュメント
-	ND_PIPELINE       // パイプライン
+	//ND_PIPELINE       // パイプライン
 }	t_node_kind;
 
 // コマンドやリダイレクトを表すノード構造体
@@ -59,15 +59,15 @@ typedef struct s_node
 	struct s_node	*next;              // 次のノード
 	t_token			*args;              // 引数リスト
 	struct s_node	*redirects;         // リダイレクト
-	int				std_fd;             // 標準ファイルディスクリプタ
+	//int				std_fd;             // 標準ファイルディスクリプタ
 	t_token			*filename;          // ファイル名
-	t_token			*delimiter;         // ヒアドキュメントの区切り文字
+	//t_token			*delimiter;         // ヒアドキュメントの区切り文字
 	int				filefd;             // ファイルディスクリプタ
 	int				stashed_std_fd;     // 保持している標準ファイルディスクリプタ
-	bool			is_delimiter_quote; // 区切り文字がクオートされているかどうか
+	//bool			is_delimiter_quote; // 区切り文字がクオートされているかどうか
 	struct s_node	*command;           // コマンドノード
-	int				inpipe[2];          // パイプの入力
-	int				outpipe[2];         // パイプの出力
+	//int				inpipe[2];          // パイプの入力
+	//int				outpipe[2];         // パイプの出力
 }							t_node;
 
 // 環境変数のキーと値を格納するリスト構造体
