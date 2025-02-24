@@ -1,4 +1,5 @@
 // search_path.c
+
 # include "minishell.h"
 
 static int get_next_dir(const char **env_path, char *buf)
