@@ -22,27 +22,25 @@
 # include <stdbool.h>
 # include "libft/libft.h"
 
+# define NAME "minishell"
+# define HEADER NAME ": "
 # define PROMPT "minish$ "
 # define SQUOTE '\''
 # define DQUOTE '\"'
+# define ERROR_SYNTAX 258
 
-typedef enum e_kind
+typedef enum e_token_kind
 {
 	TK_WORD,
 	TK_OP,
-}	t_kind;
+}	t_token_kind;
 
 typedef struct s_token
 {
 	char			*word;
-	t_kind			kind;
+	t_token_kind	kind;
 	struct s_token	*next;
 }					t_token;
-
-typedef struct s_data
-{
-	int	exit_status;
-}		t_data;
 
 typedef enum e_node_kind
 {
@@ -71,6 +69,7 @@ typedef struct s_node
 	int inpipe[2];            // パイプの入力
 	int outpipe[2];           // パイプの出力
 }							t_node;	
+
 // 環境変数のキーと値を格納するリスト構造体
 typedef struct s_env
 {
@@ -78,6 +77,13 @@ typedef struct s_env
 	char *value;        // 環境変数の値
 	struct s_env *next; // 次の環境変数
 }							 t_env;
+
+typedef struct s_data
+{
+	int	exit_status;
+}		t_data;
+
+extern int syntax_error;
 
 // interpret.c
 int		interpret(char *line);
@@ -92,17 +98,30 @@ int		is_metacharacter(char c);
 t_token	*tokenize(char *line);
 
 // tokenuil.c
-t_token	*new_token(char *word, t_kind kind);
+t_token	*new_token(char *word, t_token_kind kind);
 void	add_token(t_token **head, t_token *new);
 void	free_tokens(t_token *token);
 void	print_tokens(t_token *tokens);
 
 // expand.c
-void	expand(t_token *tokens);
+void	expand(t_node *node);
 
 // error.c
 void	fatal_error(const char *msg);
 void	assert_error(const char *msg);
+void	tokenize_error(const char *msg, char **rest, char *line);
+void	parse_error(const char *msg, t_token **rest, t_token *token);
+
+// parse.c
+t_node	*parse(t_token *tok);
+
+// nodeutils.c
+t_node	*new_node(t_node_kind kind);
+void	add_node(t_node **head, t_node *new);
+void	append_token(t_token **tokens, t_token *tok);
+t_token	*tokdup(t_token *tok);
+void	free_nodes(t_node *node);
+void	print_nodes(t_node *nodes);
 
 // redirection.c
 void reset_redirection(t_node *node);
