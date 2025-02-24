@@ -26,20 +26,34 @@
 # define PROMPT "minish$ "
 # define SQUOTE '\''
 # define DQUOTE '\"'
-# define ERROR_TOKENIZE 258
+# define ERROR_SYNTAX 258
 
-typedef enum e_kind
+typedef enum e_token_kind
 {
 	TK_WORD,
 	TK_OP,
-}	t_kind;
+}	t_token_kind;
 
 typedef struct s_token
 {
 	char			*word;
-	t_kind			kind;
+	t_token_kind	kind;
 	struct s_token	*next;
 }					t_token;
+
+typedef enum e_node_kind
+{
+	ND_SIMPLE_CMD,    // 単純なコマンド
+}	t_node_kind;
+
+
+// コマンドやリダイレクトを表すノード構造体
+typedef struct s_node
+{
+	t_node_kind		kind;     // ノードの種類
+	struct s_node	*next;    // 次のノード
+	t_token			*args;    // 引数リスト
+}					t_node;	
 
 typedef struct s_data
 {
@@ -61,17 +75,29 @@ int		is_metacharacter(char c);
 t_token	*tokenize(char *line);
 
 // tokenuil.c
-t_token	*new_token(char *word, t_kind kind);
+t_token	*new_token(char *word, t_token_kind kind);
 void	add_token(t_token **head, t_token *new);
 void	free_tokens(t_token *token);
 void	print_tokens(t_token *tokens);
 
 // expand.c
-void	expand(t_token *tokens);
+void	expand(t_node *node);
 
 // error.c
 void	fatal_error(const char *msg);
 void	assert_error(const char *msg);
 void	tokenize_error(const char *msg, char **rest, char *line);
+void	parse_error(const char *msg, t_token **rest, t_token *token);
+
+// parse.c
+t_node	*parse(t_token *tok);
+
+// nodeutils.c
+t_node	*new_node(t_node_kind kind);
+void	add_node(t_node **head, t_node *new);
+void	append_token(t_token **tokens, t_token *tok);
+t_token	*tokdup(t_token *tok);
+void	free_nodes(t_node *node);
+void	print_nodes(t_node *nodes);
 
 #endif
