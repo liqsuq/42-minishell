@@ -24,3 +24,12 @@ void	tokenize_error(const char *msg, char **rest, char *line)
 		line++;
 	*rest = line;
 }
+
+void	parse_error(const char *msg, t_token **rest, t_token *token)
+{
+	syntax_error = 1;
+	ft_dprintf(STDERR_FILENO, HEADER "syntax error: %s\n", msg);
+	while (token != NULL)
+		token = token->next;
+	*rest = token;
+}

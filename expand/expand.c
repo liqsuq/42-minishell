@@ -66,7 +66,15 @@ void	remove_quotes(t_token *tokens)
 	remove_quotes(tokens->next);
 }
 
-void expand(t_token *tokens)
+void	expand_quotes_removal(t_node *node)
 {
-	remove_quotes(tokens);
+	if (node == NULL)
+		return ;
+	remove_quotes(node->args);
+	expand_quotes_removal(node->next);
+}
+
+void	expand(t_node *node)
+{
+	expand_quotes_removal(node);
 }

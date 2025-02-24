@@ -92,15 +92,17 @@ int interpret(char *line)
 	char	*path;
 	int 	status;
 	t_token	*tokens;
+	t_node	*nodes;
 	char	**argv;
 
 	tokens = tokenize(line);
+	nodes = parse(tokens);
 	if (syntax_error == 1)
-		status = ERROR_TOKENIZE;
+		status = ERROR_SYNTAX;
 	else
 	{
-		expand(tokens);
-		argv = tokens2argv(tokens);
+		expand(nodes);
+		argv = tokens2argv(nodes->args);
 		path = resolve_path(argv[0]);
 		if (!path)
 			return (127);
@@ -108,6 +110,7 @@ int interpret(char *line)
 		free(path);
 		free_argv(argv);
 	}
+	free_nodes(nodes);
 	free_tokens(tokens);
 	return (status);
 }

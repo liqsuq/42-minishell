@@ -2,7 +2,7 @@
 
 #include "minishell.h"
 
-t_token *new_token(char *word, t_kind kind)
+t_token *new_token(char *word, t_token_kind kind)
 {
 	t_token	*token;
 
