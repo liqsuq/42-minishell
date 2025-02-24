@@ -106,9 +106,9 @@ int interpret(char *line)
 		path = resolve_path(argv[0]);
 		if (!path)
 			return (127);
+		perform_redirect(nodes, NULL);
 		status = exec_command(path, argv);
-		perform_redirection(nodes, NULL);
-		reset_redirection(nodes);
+		reset_redirect(nodes);
 		free(path);
 		free_argv(argv);
 	}
