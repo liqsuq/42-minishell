@@ -95,14 +95,19 @@ int interpret(char *line)
 	char	**argv;
 
 	tokens = tokenize(line);
-	expand(tokens);
-	argv = tokens2argv(tokens);
-	path = resolve_path(argv[0]);
-	if (!path)
-		return (127);
-	status = exec_command(path, argv);
-	free(path);
-	free_argv(argv);
+	if (syntax_error == 1)
+		status = ERROR_TOKENIZE;
+	else
+	{
+		expand(tokens);
+		argv = tokens2argv(tokens);
+		path = resolve_path(argv[0]);
+		if (!path)
+			return (127);
+		status = exec_command(path, argv);
+		free(path);
+		free_argv(argv);
+	}
 	free_tokens(tokens);
 	return (status);
 }
