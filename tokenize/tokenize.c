@@ -4,15 +4,23 @@
 
 int is_redir(const char *s)
 {
-  return (s[0] == '<' || s[0] == '>');
+  if (ft_strncmp(s, "<<", 2) == 0)
+    return 2;
+  if (ft_strncmp(s, ">>", 2) == 0)
+    return 2;
+  if (*s == '<' || *s == '>')
+    return 1;
+  return 0;
 }
 
 t_token *redir(char **rest, char *line)
 {
-  char *op = ft_substr(line, 0, 1);
+	int len = is_redir(line);
+  char *op = ft_substr(line, 0, len);
+
   if (!op)
     fatal_error("ft_substr");
-  *rest = line + 1;
+  *rest = line + len;
   return new_token(op, TK_OP); 
 }
 

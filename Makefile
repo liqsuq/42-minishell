@@ -7,6 +7,7 @@ ERRSRC := $(addprefix error/, error.c)
 SOURCE := main.c \
 					interpret.c \
 					search_path.c \
+					debug_print.c \
 					$(TOKSRC) $(PARSRC) $(EXPSRC) $(REDSRC) $(ERRSRC)
 OBJECT := $(SOURCE:.c=.o)
 LFTDIR := libft

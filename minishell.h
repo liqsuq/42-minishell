@@ -61,10 +61,10 @@ typedef struct s_node
 	struct s_node	*redirects;         // リダイレクト
 	//int				std_fd;             // 標準ファイルディスクリプタ
 	t_token			*filename;          // ファイル名
-	//t_token			*delimiter;         // ヒアドキュメントの区切り文字
+	t_token			*delimiter;         // ヒアドキュメントの区切り文字
 	int				filefd;             // ファイルディスクリプタ
 	int				stashed_std_fd;     // 保持している標準ファイルディスクリプタ
-	//bool			is_delimiter_quote; // 区切り文字がクオートされているかどうか
+	bool			is_delimiter_quote; // 区切り文字がクオートされているかどうか
 	struct s_node	*command;           // コマンドノード
 	//int				inpipe[2];          // パイプの入力
 	//int				outpipe[2];         // パイプの出力
@@ -126,5 +126,10 @@ void	print_nodes(t_node *nodes);
 // redirection.c
 void	reset_redirect(t_node *node);
 void	perform_redirect(t_node *node, t_env **env);
+int read_heredoc(const char *delimiter, bool is_delimiter_quote, void *env);
+void redirect_heredoc(t_node *node, t_env **env);
 
+
+
+void	print_token(t_token *token);
 #endif
