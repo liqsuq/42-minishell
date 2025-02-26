@@ -2,28 +2,6 @@
 
 #include "minishell.h"
 
-int is_redir(const char *s)
-{
-  if (ft_strncmp(s, "<<", 2) == 0)
-    return 2;
-  if (ft_strncmp(s, ">>", 2) == 0)
-    return 2;
-  if (*s == '<' || *s == '>')
-    return 1;
-  return 0;
-}
-
-t_token *redir(char **rest, char *line)
-{
-	int len = is_redir(line);
-  char *op = ft_substr(line, 0, len);
-
-  if (!op)
-    fatal_error("ft_substr");
-  *rest = line + len;
-  return new_token(op, TK_OP); 
-}
-
 int	is_blank(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\n');
@@ -44,7 +22,7 @@ int	consume_blank(char **rest, char *line)
 
 int	is_operator(const char *s)
 {
-	char *const	ops[] = {"||", "&", "&&", ";", ";;", "(", ")", "|"};
+	char *const	ops[] = {">>", "<<", "||", "&&", ";;", ">", "<", "|", "&", ";", "(", ")"};
 	size_t		i;
 
 	i = 0;
@@ -69,7 +47,7 @@ int	is_word(const char *s)
 
 t_token	*operator(char **rest, char *line)
 {
-	char *const	ops[] = {"||", "&", "&&", ";", ";;", "(", ")", "|"};
+	char *const	ops[] = {">>", "<<", "||", "&&", ";;", ">", "<", "|", "&", ";", "(", ")"};
 	size_t		i = 0;
 	char		*op;
 
@@ -144,8 +122,6 @@ t_token	*tokenize(char *line)
 	{
 		if (consume_blank(&line, line))
 			continue ;
-    else if (is_redir(line))
-      add_token(&head, redir(&line, line));
 		else if (is_operator(line))
 			add_token(&head, operator(&line, line));
 		else if (is_word(line))
