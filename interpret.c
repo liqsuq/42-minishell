@@ -102,15 +102,28 @@ int interpret(char *line)
 	else
 	{
 		expand(nodes);
+    t_node *redir = nodes->redirects;
+    while (redir)
+    {
+        perform_redirect(redir, NULL); 
+        redir = redir->next;
+    }
 		argv = tokens2argv(nodes->args);
 		path = resolve_path(argv[0]);
 		if (!path)
 			return (127);
-		perform_redirect(nodes, NULL);
-		status = exec_command(path, argv);
-		reset_redirect(nodes);
-		free(path);
-		free_argv(argv);
+    else
+    {
+        status = exec_command(path, argv);
+        free(path);
+    }
+    free_argv(argv);
+    redir = nodes->redirects;
+    while (redir)
+    {
+        reset_redirect(redir);
+        redir = redir->next;
+    }
 	}
 	free_nodes(nodes);
 	free_tokens(tokens);

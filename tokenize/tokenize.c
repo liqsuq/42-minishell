@@ -2,6 +2,20 @@
 
 #include "minishell.h"
 
+int is_redir(const char *s)
+{
+  return (s[0] == '<' || s[0] == '>');
+}
+
+t_token *redir(char **rest, char *line)
+{
+  char *op = ft_substr(line, 0, 1);
+  if (!op)
+    fatal_error("ft_substr");
+  *rest = line + 1;
+  return new_token(op, TK_OP); 
+}
+
 int	is_blank(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\n');
@@ -122,6 +136,8 @@ t_token	*tokenize(char *line)
 	{
 		if (consume_blank(&line, line))
 			continue ;
+    else if (is_redir(line))
+      add_token(&head, redir(&line, line));
 		else if (is_operator(line))
 			add_token(&head, operator(&line, line));
 		else if (is_word(line))
