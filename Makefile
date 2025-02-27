@@ -2,7 +2,7 @@ NAME := minishell
 TOKSRC := $(addprefix tokenize/, tokenize.c tokenutils.c)
 PARSRC := $(addprefix parse/, parse.c nodeutils.c)
 EXPSRC := $(addprefix expand/, expand.c)
-REDSRC := $(addprefix redirect/, redirect.c)
+REDSRC := $(addprefix redirect/, redirect.c reset_redirect.c)
 ERRSRC := $(addprefix error/, error.c)
 SOURCE := main.c \
 					interpret.c \

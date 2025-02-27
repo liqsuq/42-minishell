@@ -129,7 +129,10 @@ void	perform_redirect(t_node *node, t_env **env);
 int read_heredoc(const char *delimiter, bool is_delimiter_quote, void *env);
 void redirect_heredoc(t_node *node, t_env **env);
 
+// reset_redirect.c
+void perform_all_redirects(t_node *redirects);
+void reset_all_redirects(t_node *redirects);
 
-
+// debug_print.c
 void	print_token(t_token *token);
 #endif

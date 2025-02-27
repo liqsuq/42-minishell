@@ -96,38 +96,25 @@ int interpret(char *line)
 	t_node	*nodes;
 
 	tokens = tokenize(line);
-	// --------------debug----------------
-	// print_token(tokens);
-	// --------------debug----------------
 	nodes = parse(tokens);
 	if (syntax_error == 1)
 		status = ERROR_SYNTAX;
 	else
-	{
-		expand(nodes);
-    t_node *redir = nodes->redirects;
-    while (redir)
-    {
-      perform_redirect(redir, NULL); 
-      redir = redir->next;
-    }
-		argv = tokens2argv(nodes->args);
-		path = resolve_path(argv[0]);
-		if (!path)
-			return (127);
+  {
+    expand(nodes);
+    perform_all_redirects(nodes->redirects);
+    argv = tokens2argv(nodes->args);
+    path = resolve_path(argv[0]);
+    if (!path)
+      status = 127;
     else
     {
       status = exec_command(path, argv);
       free(path);
     }
     free_argv(argv);
-    redir = nodes->redirects;
-    while (redir)
-    {
-      reset_redirect(redir);
-      redir = redir->next;
-    }
-	}
+    reset_all_redirects(nodes->redirects);
+  }
 	free_nodes(nodes);
 	free_tokens(tokens);
 	return (status);
