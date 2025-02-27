@@ -28,6 +28,10 @@ assert() {
 	echo
 }
 
+debug() {
+	printf '%-49s:  DEBUG\n' "\"$1\""
+}
+
 gen_aout() {
 	cat <<EOF >a.out
 #!/bin/bash
