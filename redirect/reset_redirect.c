@@ -4,7 +4,9 @@
 
 void perform_all_redirects(t_node *redirects)
 {
-  t_node *cur = redirects;
+  t_node *cur;
+
+  cur = redirects;
   while (cur)
   {
     perform_redirect(cur, NULL);
@@ -15,6 +17,7 @@ void perform_all_redirects(t_node *redirects)
 void reset_all_redirects(t_node *redirects)
 {
   int count;
+  int i;
   t_node *tmp;
 
   count = 0;
@@ -29,7 +32,7 @@ void reset_all_redirects(t_node *redirects)
    if (!array)
        fatal_error("malloc");
    tmp = redirects;
-   int i = 0;
+   i = 0;
    while (tmp)
    {
       array[i++] = tmp;
