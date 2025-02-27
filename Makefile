@@ -2,11 +2,13 @@ NAME := minishell
 TOKSRC := $(addprefix tokenize/, tokenize.c tokenutils.c)
 PARSRC := $(addprefix parse/, parse.c nodeutils.c)
 EXPSRC := $(addprefix expand/, expand.c)
+REDSRC := $(addprefix redirect/, redirect.c reset_redirect.c)
 ERRSRC := $(addprefix error/, error.c)
 SOURCE := main.c \
 					interpret.c \
 					search_path.c \
-					$(TOKSRC) $(PARSRC) $(EXPSRC) $(ERRSRC)
+					debug_print.c \
+					$(TOKSRC) $(PARSRC) $(EXPSRC) $(REDSRC) $(ERRSRC)
 OBJECT := $(SOURCE:.c=.o)
 LFTDIR := libft
 LFT := $(LFTDIR)/libft.a

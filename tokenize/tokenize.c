@@ -22,7 +22,7 @@ int	consume_blank(char **rest, char *line)
 
 int	is_operator(const char *s)
 {
-	char *const	ops[] = {"||", "&", "&&", ";", ";;", "(", ")", "|"};
+	char *const	ops[] = {">>", "<<", "||", "&&", ";;", ">", "<", "|", "&", ";", "(", ")"};
 	size_t		i;
 
 	i = 0;
@@ -47,7 +47,7 @@ int	is_word(const char *s)
 
 t_token	*operator(char **rest, char *line)
 {
-	char *const	ops[] = {"||", "&", "&&", ";", ";;", "(", ")", "|"};
+	char *const	ops[] = {">>", "<<", "||", "&&", ";;", ">", "<", "|", "&", ";", "(", ")"};
 	size_t		i = 0;
 	char		*op;
 

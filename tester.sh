@@ -4,7 +4,7 @@ STATUS=0
 
 assert() {
 	# テストしようとしている内容をprint
-	printf '%-38s:' "\"$1\""
+	printf '%-49s:' "\"$1\""
 	# bashの出力をactualに保存
 	echo -n -e "$1" | bash >expected 2>&-
 	# bashのexit statusをexpectedに代入
@@ -28,6 +28,10 @@ assert() {
 	echo
 }
 
+debug() {
+	printf '%-49s:  DEBUG\n' "\"$1\""
+}
+
 gen_aout() {
 	cat <<EOF >a.out
 #!/bin/bash
@@ -47,9 +51,9 @@ clean() {
 
 gen_aout
 
-echo "+---------------------------------------------------------+"
-echo "|  minishell test                                         |"
-echo "+---------------------------------------------------------+"
+echo "+--------------------------------------------------------------------+"
+echo "|  minishell test                                                    |"
+echo "+--------------------------------------------------------------------+"
 
 # Empty line (EOF)
 assert ''
@@ -85,7 +89,36 @@ assert 'echo '\'\"'hello   world'\"\'' '\''42Tokyo'\'
 assert 'echo '\"\''hello   world'\'\"' '\"'42Tokyo'\"
 assert 'echo hello'\''  world  '\'\"'  42Tokyo  '\"
 
-echo "==========================================================="
+## Redirecting output
+assert 'echo hello >hello.txt'
+rm -f hello.txt
+assert 'echo hello >f1>f2>f3'
+rm -f f1 f2 f3
+assert 'echo hello >hello.txt world'
+rm -f hello.txt
+
+## Redirecting input
+assert 'cat <Makefile'
+echo hello >f1
+echo world >f2
+echo 42Tokyo >f3
+assert 'cat <f1<f2<f3'
+rm -f f1 f2 f3
+assert 'cat <hoge'
+
+## Here Document
+assert 'cat <<EOF\nhello\nworld\nEOF\nNOPRINT'
+assert 'cat <<EOF<<eof\nhello\nworld\nEOF\neof\nNOPRINT'
+assert 'cat <<EOF\nhello\nworld'
+# assert 'cat <<E"O"F\nhello\nworld\nEOF\nNOPRINT' //「クォートを解除して文字列を連結する」機能が未実装
+# assert 'cat <<EOF   \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF' //環境変数が必要
+# assert 'cat <<"EOF" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF' //環境変数が必要
+# assert 'cat <<EO"F" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF' //環境変数が必要
+# export EOF="eof"
+# assert 'cat <<$EOF         \neof\n$EOF\nEOF'　//環境変数が必要
+# assert 'cat <<"$EOF"       \neof\n$EOF\nEOF'　//環境変数が必要
+
+echo "======================================================================"
 if [ $STATUS -eq 0 ]; then
 	echo "All tests passed"
 else

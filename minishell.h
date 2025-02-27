@@ -19,6 +19,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <limits.h>
+# include <stdbool.h>
 # include "libft/libft.h"
 
 # define NAME "minishell"
@@ -44,16 +45,38 @@ typedef struct s_token
 typedef enum e_node_kind
 {
 	ND_SIMPLE_CMD,    // 単純なコマンド
+	ND_REDIR_OUT,     // 標準出力リダイレクト
+	ND_REDIR_IN,      // 標準入力リダイレクト
+	ND_REDIR_APPEND,  // 出力の追加リダイレクト
+	ND_REDIR_HEREDOC, // ヒアドキュメント
+	//ND_PIPELINE       // パイプライン
 }	t_node_kind;
-
 
 // コマンドやリダイレクトを表すノード構造体
 typedef struct s_node
 {
-	t_node_kind		kind;     // ノードの種類
-	struct s_node	*next;    // 次のノード
-	t_token			*args;    // 引数リスト
-}					t_node;	
+	t_node_kind		kind;               // ノードの種類
+	struct s_node	*next;              // 次のノード
+	t_token			*args;                // 引数リスト
+	struct s_node	*redirects;         // リダイレクト
+	//int				std_fd;               // 標準ファイルディスクリプタ
+	t_token			*filename;            // ファイル名
+	t_token			*delimiter;           // ヒアドキュメントの区切り文字
+	int				filefd;                 // ファイルディスクリプタ
+	int				stashed_std_fd;         // 保持している標準ファイルディスクリプタ
+	bool			is_delimiter_quote;     // 区切り文字がクオートされているかどうか
+	struct s_node	*command;           // コマンドノード
+	//int				inpipe[2];            // パイプの入力
+	//int				outpipe[2];           // パイプの出力
+}							t_node;
+
+// 環境変数のキーと値を格納するリスト構造体
+typedef struct s_env
+{
+	char			*key;   // 環境変数のキー
+	char			*value; // 環境変数の値
+	struct s_env	*next;  // 次の環境変数
+}					t_env;
 
 typedef struct s_data
 {
@@ -100,4 +123,16 @@ t_token	*tokdup(t_token *tok);
 void	free_nodes(t_node *node);
 void	print_nodes(t_node *nodes);
 
+// redirection.c
+void	reset_redirect(t_node *node);
+void	perform_redirect(t_node *node, t_env **env);
+int read_heredoc(const char *delimiter, bool is_delimiter_quote, void *env);
+void redirect_heredoc(t_node *node, t_env **env);
+
+// reset_redirect.c
+void perform_all_redirects(t_node *redirects);
+void reset_all_redirects(t_node *redirects);
+
+// debug_print.c
+void	print_token(t_token *token);
 #endif

@@ -91,25 +91,30 @@ int interpret(char *line)
 {
 	char	*path;
 	int 	status;
+	char	**argv;
 	t_token	*tokens;
 	t_node	*nodes;
-	char	**argv;
 
 	tokens = tokenize(line);
 	nodes = parse(tokens);
 	if (syntax_error == 1)
 		status = ERROR_SYNTAX;
 	else
-	{
-		expand(nodes);
-		argv = tokens2argv(nodes->args);
-		path = resolve_path(argv[0]);
-		if (!path)
-			return (127);
-		status = exec_command(path, argv);
-		free(path);
-		free_argv(argv);
-	}
+  {
+    expand(nodes);
+    perform_all_redirects(nodes->redirects);
+    argv = tokens2argv(nodes->args);
+    path = resolve_path(argv[0]);
+    if (!path)
+      status = 127;
+    else
+    {
+      status = exec_command(path, argv);
+      free(path);
+    }
+    free_argv(argv);
+    reset_all_redirects(nodes->redirects);
+  }
 	free_nodes(nodes);
 	free_tokens(tokens);
 	return (status);
