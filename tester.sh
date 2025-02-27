@@ -90,10 +90,12 @@ assert 'echo '\"\''hello   world'\'\"' '\"'42Tokyo'\"
 assert 'echo hello'\''  world  '\'\"'  42Tokyo  '\"
 
 ## Redirecting output
-assert 'echo hello >hello.txt' 'hello.txt'
+assert 'echo hello >hello.txt'
 rm -f hello.txt
-assert 'echo hello >f1>f2>f3' 'f1' 'f2' 'f3'
+assert 'echo hello >f1>f2>f3'
 rm -f f1 f2 f3
+assert 'echo hello >hello.txt world'
+rm -f hello.txt
 
 ## Redirecting input
 assert 'cat <Makefile'
