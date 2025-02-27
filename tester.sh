@@ -96,7 +96,7 @@ assert 'cat <Makefile'
 echo hello >f1
 echo world >f2
 echo 42Tokyo >f3
-assert 'cat <f1<f2<f3' # 環境設定が必要execve()でNULLを渡しているから通らない
+assert 'cat <f1<f2<f3'
 rm -f f1 f2 f3
 assert 'cat <hoge'
 
