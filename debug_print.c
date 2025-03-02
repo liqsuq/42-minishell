@@ -48,69 +48,44 @@ void	print_env(t_env *env)
 	}
 }
 
-// print_node 関数
-// ノード構造体のコマンドとリダイレクトを表示します。
-// コマンド引数とリダイレクトを持つノードが与えられた場合、それらの情報をデバッグ出力します。
-// デバッグ用に使用される関数で、コメントアウトされています。
-// void	print_node(t_node *node)
-// {
-// 	// コマンドの引数が存在する場合、引数を表示
-// 	if (node->command->args)
-// 	{
-// 		printf("node->command->args\n");
-// 		print_token(node->command->args);
-// 	}
-// 	// コマンドのリダイレクトが存在する場合、リダイレクト情報を表示
-// 	if (node->command->redirects)
-// 	{
-// 		printf("node->command->redirects\n");
-// 		print_token(node->command->args);
-// 		print_token(node->command->redirects->filename);
-// 		print_token(node->command->redirects->delimiter);
-// 	}
-// 	// 次のノードが存在する場合、再帰的に呼び出して表示
-// 	if (node->next)
-// 		print_node(node->next);
-// }
-
 void print_node(t_node *node)
 {
-    if (!node)
-        return;
+  if (!node)
+    return;
 
-    // ノード種別表示 (パイプなのか単純コマンドか)
-    printf("Node kind: %d\n", node->kind);
+  // ノード種別表示 (パイプなのか単純コマンドか)
+  printf("Node kind: %d\n", node->kind);
 
-    // このノードの引数 (node->args) を表示
-    // node->command ではなく node->args から印字する
-    if (node->args)
-    {
-        printf("Arguments:\n");
-        print_token(node->args);
-    }
+  // このノードの引数 (node->args) を表示
+  // node->command ではなく node->args から印字する
+  if (node->args)
+  {
+    printf("Arguments:\n");
+    print_token(node->args);
+  }
 
-    // リダイレクトがあるなら表示
-    if (node->redirects)
-    {
-        printf("Redirects:\n");
-        // それぞれの redirect ノードの filename を表示する等
-        // 省略可
-    }
+  // リダイレクトがあるなら表示
+  if (node->redirects)
+  {
+    printf("Redirects:\n");
+    // それぞれの redirect ノードの filename を表示する等
+    // 省略可
+  }
 
-    // ツリー形式なら、パイプラインの left/right を再帰表示
-    if (node->kind == ND_PIPELINE)
-    {
-        printf("Left side:\n");
-        print_node(node->left);
-        printf("Right side:\n");
-        print_node(node->right);
-    }
+  // ツリー形式なら、パイプラインの left/right を再帰表示
+  if (node->kind == ND_PIPELINE)
+  {
+    printf("Left side:\n");
+    print_node(node->left);
+    printf("Right side:\n");
+    print_node(node->right);
+  }
 
-    // node->next を使う実装なら、それを辿る
-    // (今はツリー形式なら next は使わないはず)
-    if (node->next)
-    {
-        printf("Next node:\n");
-        print_node(node->next);
-    }
+  // node->next を使う実装なら、それを辿る
+  // (今はツリー形式なら next は使わないはず)
+  if (node->next)
+  {
+    printf("Next node:\n");
+    print_node(node->next);
+  }
 }
