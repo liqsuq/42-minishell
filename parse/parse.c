@@ -68,17 +68,13 @@ static t_node *parse_simple_command(t_token **rest, t_token *token)
       parse_redirection(cmdnode, &token, token);
     }
     else if (token->kind == TK_OP && !ft_strcmp(token->word, "|"))
-    {
-      // パイプはここでは処理しない。呼び出し元で扱う
       break;
-    }
     else
     {
       parse_error("unexpected token", &token, token);
       break;
     }
   }
-  // 読み終わった時点で token を呼び出し側に返す
   *rest = token;
   return cmdnode;
 }
@@ -86,26 +82,22 @@ static t_node *parse_simple_command(t_token **rest, t_token *token)
 static t_node *parse_pipeline(t_token **rest, t_token *token)
 {
   t_node *left_cmd = parse_simple_command(&token, token);
-  // 左辺の単純コマンドを1つ取る
   if (!left_cmd)
   {
     *rest = token;
     return NULL;
   }
 
-  // 次のトークンが '|' なら、パイプラインノードを作る
   if (token && token->kind == TK_OP && !ft_strcmp(token->word, "|"))
   {
-    token = token->next; // '|' を消費
+    token = token->next;
     t_node *pipe_node = new_node(ND_PIPELINE);
     pipe_node->left = left_cmd;
-    // 右辺は再帰的にパイプラインをパース
     pipe_node->right = parse_pipeline(&token, token);
     *rest = token;
     return pipe_node;
   }
 
-  // パイプがなければ、単純コマンドだけ返す
   *rest = token;
   return left_cmd;
 }
@@ -113,6 +105,5 @@ static t_node *parse_pipeline(t_token **rest, t_token *token)
 t_node *parse(t_token *token)
 {
   t_node *root = parse_pipeline(&token, token);
-  // 構文エラーがある場合などの処理
   return root;
 }
