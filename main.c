@@ -12,7 +12,7 @@ int	main(void)
 	{
 		line = readline(PROMPT);
 		if (line == NULL)
-		break ;
+			break ;
 		if (*line)
 		{
 			add_history(line);

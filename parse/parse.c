@@ -2,19 +2,6 @@
 
 #include "minishell.h"
 
-static int ft_strcmp(const char *s1, const char *s2)
-{
-	int i = 0;
-
-	while (s1[i] && s2[i])
-	{
-		if (s1[i] != s2[i])
-			return (s1[i] - s2[i]);
-		i++;
-	}
-	return (s1[i] - s2[i]);
-}
-
 static void parse_redirection(t_node *cmdnode, t_token **rest, t_token *token)
 {
   t_node *redir_node = NULL;
@@ -50,27 +37,82 @@ static void parse_redirection(t_node *cmdnode, t_token **rest, t_token *token)
   *rest = token;
 }
 
-t_node *parse(t_token *token)
+int ft_strcmp(const char *s1, const char *s2)
 {
-  t_node *node = new_node(ND_SIMPLE_CMD);
+	int i = 0;
+
+	while (s1[i] && s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
+	return (s1[i] - s2[i]);
+}
+
+static t_node *parse_simple_command(t_token **rest, t_token *token)
+{
+  t_node *cmdnode = new_node(ND_SIMPLE_CMD);
 
   while (token)
   {
     if (token->kind == TK_WORD)
     {
-      append_token(&node->args, tokdup(token));
+      append_token(&cmdnode->args, tokdup(token));
       token = token->next;
     }
     else if (token->kind == TK_OP &&
-            (!ft_strcmp(token->word, ">")  || !ft_strcmp(token->word, ">>") ||
-             !ft_strcmp(token->word, "<")  || !ft_strcmp(token->word, "<<")))
+             (!ft_strcmp(token->word, ">")  || !ft_strcmp(token->word, ">>") ||
+              !ft_strcmp(token->word, "<")  || !ft_strcmp(token->word, "<<")))
     {
-      parse_redirection(node, &token, token);
+      parse_redirection(cmdnode, &token, token);
+    }
+    else if (token->kind == TK_OP && !ft_strcmp(token->word, "|"))
+    {
+      // パイプはここでは処理しない。呼び出し元で扱う
+      break;
     }
     else
     {
       parse_error("unexpected token", &token, token);
+      break;
     }
   }
-  return node;
+  // 読み終わった時点で token を呼び出し側に返す
+  *rest = token;
+  return cmdnode;
+}
+
+static t_node *parse_pipeline(t_token **rest, t_token *token)
+{
+  t_node *left_cmd = parse_simple_command(&token, token);
+  // 左辺の単純コマンドを1つ取る
+  if (!left_cmd)
+  {
+    *rest = token;
+    return NULL;
+  }
+
+  // 次のトークンが '|' なら、パイプラインノードを作る
+  if (token && token->kind == TK_OP && !ft_strcmp(token->word, "|"))
+  {
+    token = token->next; // '|' を消費
+    t_node *pipe_node = new_node(ND_PIPELINE);
+    pipe_node->left = left_cmd;
+    // 右辺は再帰的にパイプラインをパース
+    pipe_node->right = parse_pipeline(&token, token);
+    *rest = token;
+    return pipe_node;
+  }
+
+  // パイプがなければ、単純コマンドだけ返す
+  *rest = token;
+  return left_cmd;
+}
+
+t_node *parse(t_token *token)
+{
+  t_node *root = parse_pipeline(&token, token);
+  // 構文エラーがある場合などの処理
+  return root;
 }

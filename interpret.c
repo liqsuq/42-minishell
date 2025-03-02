@@ -89,30 +89,35 @@ void free_argv(char **argv)
 
 int interpret(char *line)
 {
-	char	*path;
+	// char	**argv;
+	// char	*path;
 	int 	status;
-	char	**argv;
 	t_token	*tokens;
 	t_node	*nodes;
 
 	tokens = tokenize(line);
+	// print_token(tokens);
 	nodes = parse(tokens);
+	// print_node(nodes);
 	if (syntax_error == 1)
 		status = ERROR_SYNTAX;
 	else
   {
     expand(nodes);
     perform_all_redirects(nodes->redirects);
-    argv = tokens2argv(nodes->args);
-    path = resolve_path(argv[0]);
-    if (!path)
-      status = 127;
-    else
-    {
-      status = exec_command(path, argv);
-      free(path);
-    }
-    free_argv(argv);
+	
+    // argv = tokens2argv(nodes->args);
+    // path = resolve_path(argv[0]);
+    // if (!path)
+    //   status = 127;
+    // else
+    // {
+    //   status = exec_command(path, argv);
+    //   free(path);
+    // }
+    // free_argv(argv);
+
+		status = exec(nodes, NULL);
     reset_all_redirects(nodes->redirects);
   }
 	free_nodes(nodes);
