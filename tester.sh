@@ -98,7 +98,7 @@ assert 'echo hello >hello.txt world'
 rm -f hello.txt
 
 ## Redirecting input
-assert 'cat <Makefile'
+assert 'cat <Makefile' 
 echo hello >f1
 echo world >f2
 echo 42Tokyo >f3

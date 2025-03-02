@@ -93,6 +93,9 @@ int		interpret(char *line);
 char	**tokens2argv(t_token *tokens);
 void	free_argv(char **argv);
 int		interpret_node(t_node *node);
+void perform_all_redirects_recursive(t_node *node);
+void reset_all_redirects_recursive(t_node *node);
+
 
 // search_path.c
 char	*search_path(const char *filename);
