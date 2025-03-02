@@ -53,26 +53,17 @@ void print_node(t_node *node)
   if (!node)
     return;
 
-  // ノード種別表示 (パイプなのか単純コマンドか)
   printf("Node kind: %d\n", node->kind);
 
-  // このノードの引数 (node->args) を表示
-  // node->command ではなく node->args から印字する
   if (node->args)
   {
     printf("Arguments:\n");
     print_token(node->args);
   }
 
-  // リダイレクトがあるなら表示
   if (node->redirects)
-  {
     printf("Redirects:\n");
-    // それぞれの redirect ノードの filename を表示する等
-    // 省略可
-  }
 
-  // ツリー形式なら、パイプラインの left/right を再帰表示
   if (node->kind == ND_PIPELINE)
   {
     printf("Left side:\n");
@@ -81,8 +72,6 @@ void print_node(t_node *node)
     print_node(node->right);
   }
 
-  // node->next を使う実装なら、それを辿る
-  // (今はツリー形式なら next は使わないはず)
   if (node->next)
   {
     printf("Next node:\n");

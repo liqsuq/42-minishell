@@ -7,6 +7,7 @@ int exec_pipeline(t_node *node)
 	pid_t pid = fork();
 	int cmd_count = 0;
 	int status = 0;
+	int i = 0;
 	int in_fd = STDIN_FILENO;
 	char **argv = tokens2argv(node->args);
 
@@ -69,13 +70,13 @@ int exec_pipeline(t_node *node)
 		}
 	}
 
-	// 全ての子プロセスが終了するのを待つ
-	for (int i = 0; i < cmd_count; i++)
+  while (i < cmd_count)
   {
-		int wstatus;
-		waitpid(pids[i], &wstatus, 0);
-		if (i == cmd_count - 1)
-			status = WEXITSTATUS(wstatus);
-	}
+    int wstatus;
+    waitpid(pids[i], &wstatus, 0);  
+    if (i == cmd_count - 1)
+      status = WEXITSTATUS(wstatus);
+    i++;
+  }
 	return status;
 }
