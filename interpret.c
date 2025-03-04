@@ -26,6 +26,7 @@ char	*resolve_path(char *line)
 
 int exec_command(char *path, char **argv)
 {
+	extern char **environ;
 	pid_t pid;
 	int wstatus;
 
@@ -37,7 +38,7 @@ int exec_command(char *path, char **argv)
 	}
 	else if (pid == 0)
 	{
-		execve(path, argv, NULL);
+		execve(path, argv, environ);
 		if (errno == ENOENT)
 			exit(127);
 		else if (errno == EACCES || errno == ENOEXEC)
