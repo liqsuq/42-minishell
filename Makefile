@@ -8,6 +8,8 @@ SOURCE := main.c \
 					interpret.c \
 					search_path.c \
 					debug_print.c \
+					pipeline/pipe.c \
+					execution/exec.c \
 					$(TOKSRC) $(PARSRC) $(EXPSRC) $(REDSRC) $(ERRSRC)
 OBJECT := $(SOURCE:.c=.o)
 LFTDIR := libft
