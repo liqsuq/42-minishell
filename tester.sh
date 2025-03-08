@@ -118,6 +118,11 @@ assert 'cat <<EOF\nhello\nworld'
 # assert 'cat <<$EOF         \neof\n$EOF\nEOF'　//環境変数が必要
 # assert 'cat <<"$EOF"       \neof\n$EOF\nEOF'　//環境変数が必要
 
+# Expand Variable
+assert 'echo $USER'
+assert 'echo $USER$HOME$PWD'
+assert 'echo "$USER  $HOME   $PWD"'
+
 echo "======================================================================"
 if [ $STATUS -eq 0 ]; then
 	echo "All tests passed"
