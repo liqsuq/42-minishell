@@ -107,6 +107,10 @@ void	print_tokens(t_token *tokens);
 
 // expand.c
 void	expand(t_node *node);
+void	append_char(char **s, char c);
+
+// expand_variable.c
+void	expand_variable(t_node *node);
 
 // error.c
 void	fatal_error(const char *msg);

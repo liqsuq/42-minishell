@@ -76,5 +76,6 @@ void	expand_quotes_removal(t_node *node)
 
 void	expand(t_node *node)
 {
+	expand_variable(node);
 	expand_quotes_removal(node);
 }

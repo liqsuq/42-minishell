@@ -125,6 +125,11 @@ assert 'ls -l | grep test'
 assert 'echo foo | cat -e'
 assert 'pwd | cat'
 
+# Expand Variable
+assert 'echo $USER'
+assert 'echo $USER$HOME$PWD'
+assert 'echo "$USER  $HOME   $PWD"'
+
 echo "======================================================================"
 if [ $STATUS -eq 0 ]; then
 	echo "All tests passed"
