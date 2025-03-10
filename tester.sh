@@ -118,6 +118,13 @@ assert 'cat <<EOF\nhello\nworld'
 # assert 'cat <<$EOF         \neof\n$EOF\nEOF'　//環境変数が必要
 # assert 'cat <<"$EOF"       \neof\n$EOF\nEOF'　//環境変数が必要
 
+# Pipe
+assert 'cat Makefile | grep minishell'
+assert 'cat | cat | ls\n\n'
+assert 'ls -l | grep test'
+assert 'echo foo | cat -e'
+assert 'pwd | cat'
+
 # Expand Variable
 assert 'echo $USER'
 assert 'echo $USER$HOME$PWD'

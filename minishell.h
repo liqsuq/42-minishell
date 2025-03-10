@@ -49,7 +49,7 @@ typedef enum e_node_kind
 	ND_REDIR_IN,      // 標準入力リダイレクト
 	ND_REDIR_APPEND,  // 出力の追加リダイレクト
 	ND_REDIR_HEREDOC, // ヒアドキュメント
-	//ND_PIPELINE       // パイプライン
+	ND_PIPELINE       // パイプライン
 }	t_node_kind;
 
 // コマンドやリダイレクトを表すノード構造体
@@ -89,6 +89,8 @@ extern int syntax_error;
 int		interpret(char *line);
 char	**tokens2argv(t_token *tokens);
 void	free_argv(char **argv);
+char	*resolve_path(char *line);
+int 	exec_command(char *path, char **argv);
 
 // search_path.c
 char	*search_path(const char *filename);
@@ -139,5 +141,12 @@ void reset_all_redirects(t_node *redirects);
 
 // debug_print.c
 void	print_token(t_token *token);
+
+// exec.c
+int exec_nodes(t_node *node);
+
+//piep.c
+int has_pipe(t_node *node);
+int exec_pipeline(t_node *node /*, t_env *env*/);
 
 #endif

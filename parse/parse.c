@@ -52,25 +52,39 @@ static void parse_redirection(t_node *cmdnode, t_token **rest, t_token *token)
 
 t_node *parse(t_token *token)
 {
-  t_node *node = new_node(ND_SIMPLE_CMD);
+  if (!token)
+    return NULL;
+
+  // 最初のコマンドノードを作成
+  t_node *head = new_node(ND_SIMPLE_CMD);
+  t_node *current = head;
 
   while (token)
   {
     if (token->kind == TK_WORD)
     {
-      append_token(&node->args, tokdup(token));
+      append_token(&current->args, tokdup(token));
       token = token->next;
     }
-    else if (token->kind == TK_OP &&
-            (!ft_strcmp(token->word, ">")  || !ft_strcmp(token->word, ">>") ||
-             !ft_strcmp(token->word, "<")  || !ft_strcmp(token->word, "<<")))
+    else if (token->kind == TK_OP)
     {
-      parse_redirection(node, &token, token);
+      if (!ft_strcmp(token->word, "|"))
+      {
+        token = token->next;
+        t_node *newcmd = new_node(ND_SIMPLE_CMD);
+        current->next = newcmd;
+        current = newcmd;
+      }
+      else if (!ft_strcmp(token->word, ">")  || !ft_strcmp(token->word, ">>") ||
+               !ft_strcmp(token->word, "<")  || !ft_strcmp(token->word, "<<"))
+      {
+        parse_redirection(current, &token, token);
+      }
+      else
+        parse_error("unexpected token", &token, token);
     }
     else
-    {
       parse_error("unexpected token", &token, token);
-    }
   }
-  return node;
+  return head;
 }
