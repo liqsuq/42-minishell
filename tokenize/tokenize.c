@@ -101,7 +101,6 @@ t_token	*tokenize(char *line)
 {
 	t_token	*head;
 
-	syntax_error = 0;
 	head = NULL;
 	while (*line != '\0')
 	{

@@ -9,6 +9,7 @@ static int	process_line(char *line)
 	t_node	*node;
 
 	status = 0;
+	syntax_error = 0;
 	token = tokenize(line);
 	node = parse(token);
 	expand(node);
