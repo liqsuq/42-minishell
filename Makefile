@@ -2,11 +2,12 @@ NAME := minishell
 TOKSRC := $(addprefix tokenize/, tokenize.c tokenutils.c)
 PARSRC := $(addprefix parse/, parse.c nodeutils.c)
 EXPSRC := $(addprefix expand/, expand.c expand_variable.c)
+EXESRC := $(addprefix execute/, execute.c)
 REDSRC := $(addprefix redirect/, redirect.c reset_redirect.c)
-PIPSRC := $(addprefix pipeline/, pipe.c)
+PIPSRC := $(addprefix pipeline/, pipeline.c)
 ERRSRC := $(addprefix error/, error.c)
-SOURCE := main.c debug_print.c execution/exec.c \
-			$(TOKSRC) $(PARSRC) $(EXPSRC) $(REDSRC) $(PIPSRC) $(ERRSRC)
+SOURCE := main.c debug_print.c \
+	$(TOKSRC) $(PARSRC) $(EXPSRC) $(EXESRC) $(REDSRC) $(PIPSRC) $(ERRSRC)
 OBJECT := $(SOURCE:.c=.o)
 LFTDIR := libft
 LFT := $(LFTDIR)/libft.a
