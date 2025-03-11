@@ -62,7 +62,6 @@ typedef struct s_node
 	//int				std_fd;			// 標準ファイルディスクリプタ
 	t_token			*filename;			// ファイル名
 	t_token			*delimiter;			// ヒアドキュメントの区切り文字
-	int				filefd;				// ファイルディスクリプタ
 	int				stashed_std_fd;		// 保持している標準ファイルディスクリプタ
 	bool			is_delimiter_quote;	// 区切り文字がクオートされているかどうか
 	struct s_node	*command;			// コマンドノード
