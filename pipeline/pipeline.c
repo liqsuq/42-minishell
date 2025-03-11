@@ -51,7 +51,7 @@ int	exec_pipeline(t_node *node)
 				close(pipefd[0]);
 				close(pipefd[1]);
 			}
-			perform_all_redirects(node->redirects);
+			redirect(node->redirects, NULL);
 			expand(node);
 			char	**argv = new_argv(node->args);
 			if (!argv[0])

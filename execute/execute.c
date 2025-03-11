@@ -42,7 +42,7 @@ int	execute(t_node *node)
 		return (exec_pipeline(node));
 	else
 	{
-		perform_all_redirects(node->redirects);
+		redirect(node->redirects, NULL);
 		char	**argv = new_argv(node->args);
 		if (!argv[0])
 		{

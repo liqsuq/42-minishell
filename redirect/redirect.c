@@ -16,58 +16,7 @@ static void open_redirect(t_node *node, int fd, int flags, mode_t mode)
 	node->filefd = -1;
 }
 
-void	perform_redirect(t_node *node, t_env **env)
-{
-	if (node->kind == ND_REDIR_OUT)
-		open_redirect(node, STDOUT_FILENO, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	else if (node->kind == ND_REDIR_IN)
-		open_redirect(node, STDIN_FILENO, O_RDONLY, 0644);
-	else if (node->kind == ND_REDIR_APPEND)
-		open_redirect(node, STDOUT_FILENO, O_CREAT | O_WRONLY | O_APPEND, 0644);
-	else if (node->kind == ND_REDIR_HEREDOC)
-		redirect_heredoc(node, env);
-}
-
-void	perform_all_redirects(t_node *redirects)
-{
-	t_node	*cur;
-
-	cur = redirects;
-	while (cur)
-	{
-		perform_redirect(cur, NULL);
-		cur = cur->next;
-	}
-}
-
-void	redirect_heredoc(t_node *node, t_env **env)
-{
-	// node->filename(or node->delimiter)->word にはヒアドキュメントのデリミタが入っている想定
-	// 例: "EOF" など
-	// heredocで入力をpipeにためて、その読み口をSTDINに差し替え
-	// printf("%s\n", node->delimiter->word);
-	node->filefd = read_heredoc("EOF", false, env); // "EOF あとで置き換える元々(node->delimiter->word)
-	if (node->filefd < 0)
-	{
-		perror("heredoc");
-		exit(EXIT_FAILURE);
-	}
-	node->stashed_std_fd = dup(STDIN_FILENO);
-	if (node->stashed_std_fd < 0)
-	{
-		perror("dup");
-		exit(EXIT_FAILURE);
-	}
-	if (dup2(node->filefd, STDIN_FILENO) < 0)
-	{
-		perror("dup2");
-		exit(EXIT_FAILURE);
-	}
-	close(node->filefd);
-	node->filefd = -1;
-}
-
-int	read_heredoc(const char *delimiter, bool is_delimiter_quote, void *env)
+static int	read_heredoc(const char *delimiter, bool is_delimiter_quote, void *env)
 {
 	int		pipefd[2];
 	char	*line;
@@ -94,4 +43,46 @@ int	read_heredoc(const char *delimiter, bool is_delimiter_quote, void *env)
 	}
 	close(pipefd[1]);
 	return (pipefd[0]);
+}
+
+static void	redirect_heredoc(t_node *node, t_env **env)
+{
+	// node->filename(or node->delimiter)->word にはヒアドキュメントのデリミタが入っている想定
+	// 例: "EOF" など
+	// heredocで入力をpipeにためて、その読み口をSTDINに差し替え
+	// printf("%s\n", node->delimiter->word);
+	node->filefd = read_heredoc("EOF", false, env); // "EOF あとで置き換える元々(node->delimiter->word)
+	if (node->filefd < 0)
+	{
+		perror("heredoc");
+		exit(EXIT_FAILURE);
+	}
+	node->stashed_std_fd = dup(STDIN_FILENO);
+	if (node->stashed_std_fd < 0)
+	{
+		perror("dup");
+		exit(EXIT_FAILURE);
+	}
+	if (dup2(node->filefd, STDIN_FILENO) < 0)
+	{
+		perror("dup2");
+		exit(EXIT_FAILURE);
+	}
+	close(node->filefd);
+	node->filefd = -1;
+}
+
+void	redirect(t_node *redi, t_env **env)
+{
+	if (redi == NULL)
+		return ;
+	if (redi->kind == ND_REDIR_OUT)
+		open_redirect(redi, STDOUT_FILENO, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	else if (redi->kind == ND_REDIR_IN)
+		open_redirect(redi, STDIN_FILENO, O_RDONLY, 0644);
+	else if (redi->kind == ND_REDIR_APPEND)
+		open_redirect(redi, STDOUT_FILENO, O_CREAT | O_WRONLY | O_APPEND, 0644);
+	else if (redi->kind == ND_REDIR_HEREDOC)
+		redirect_heredoc(redi, env);
+	return (redirect(redi->next, env));
 }

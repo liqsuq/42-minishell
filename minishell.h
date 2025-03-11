@@ -122,10 +122,7 @@ void	free_argv(char **argv);
 char	*resolve_path(char *line);
 
 // redirect/redirect.c
-void	perform_redirect(t_node *node, t_env **env);
-void	perform_all_redirects(t_node *redirects);
-int		read_heredoc(const char *delimiter, bool is_delimiter_quote, void *env);
-void	redirect_heredoc(t_node *node, t_env **env);
+void	redirect(t_node *node, t_env **env);
 
 // redirect/reset_redirect.c
 void	reset_redirect(t_node *node);
