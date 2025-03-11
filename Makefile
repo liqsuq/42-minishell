@@ -5,7 +5,7 @@ EXPSRC := $(addprefix expand/, expand.c expand_variable.c)
 EXESRC := $(addprefix execute/, execute.c)
 REDSRC := $(addprefix redirect/, redirect.c reset_redirect.c)
 PIPSRC := $(addprefix pipeline/, pipeline.c)
-MSCSRC := $(addprefix misc/, error.c debug_print.c)
+MSCSRC := $(addprefix misc/, error.c debug.c)
 SOURCE := main.c \
 	$(TOKSRC) $(PARSRC) $(EXPSRC) $(EXESRC) $(REDSRC) $(PIPSRC) $(MSCSRC)
 OBJECT := $(SOURCE:.c=.o)
