@@ -41,20 +41,19 @@ void	free_argv(char **argv)
 static int	process_line(char *line)
 {
 	int		status;
-	t_token	*tokens;
-	t_node	*nodes;
+	t_token	*token;
+	t_node	*node;
 
 	status = 0;
-	tokens = tokenize(line);
-	nodes = parse(tokens);
+	token = tokenize(line);
+	node = parse(token);
+	expand(node);
 	if (syntax_error == 1)
 		status = ERROR_SYNTAX;
 	else
-	{
-		status = exec_nodes(nodes);
-	}
-	free_node(nodes);
-	free_token(tokens);
+		status = exec_nodes(node);
+	free_node(node);
+	free_token(token);
 	return (status);
 }
 

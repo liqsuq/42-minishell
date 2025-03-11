@@ -39,12 +39,9 @@ int	exec_nodes(t_node *node)
 	if (!node)
 		return (0);
 	if (has_pipe(node))
-	{
 		return (exec_pipeline(node));
-	}
 	else
 	{
-		expand(node);
 		perform_all_redirects(node->redirects);
 		char	**argv = tokens2argv(node->args);
 		if (!argv[0])
@@ -55,9 +52,7 @@ int	exec_nodes(t_node *node)
 		}
 		char	*path = resolve_path(argv[0]);
 		if (!path)
-		{
 			status = 127;
-		}
 		else
 		{
 			status = exec_command(path, argv);
