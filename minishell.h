@@ -67,7 +67,17 @@ typedef struct s_node
 	struct s_node	*command;			// コマンドノード
 	//int				inpipe[2];		// パイプの入力
 	//int				outpipe[2];		// パイプの出力
-}							t_node;
+}					t_node;
+
+typedef struct s_redir
+{
+	int				fd;
+	t_token			*filename;
+	int				stashed_fd;
+	t_token			*delimiter;
+	int				is_quoted;
+	struct s_redir	*next;
+}					t_redir;
 
 // 環境変数のキーと値を格納するリスト構造体
 typedef struct s_env
