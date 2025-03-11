@@ -1,4 +1,4 @@
-//debug_print.c
+// debug.c
 
 #include "minishell.h"
 

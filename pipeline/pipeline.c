@@ -1,4 +1,4 @@
-// pipe.c
+// pipeline.c
 
 #include "minishell.h"
 

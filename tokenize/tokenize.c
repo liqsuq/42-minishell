@@ -1,4 +1,4 @@
-// tokenizer.c
+// tokenize.c
 
 #include "minishell.h"
 

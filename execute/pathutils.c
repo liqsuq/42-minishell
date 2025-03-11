@@ -1,4 +1,4 @@
-// search_path.c
+// pathutils.c
 
 #include "minishell.h"
 
