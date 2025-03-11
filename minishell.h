@@ -112,7 +112,7 @@ void	append_char(char **s, char c);
 void	expand_variable(t_node *node);
 
 // execute/execute.c
-int		exec_nodes(t_node *node);
+int		execute(t_node *node);
 
 // execute/argvutils.c
 char	**tokens2argv(t_token *tokens);

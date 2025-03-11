@@ -15,7 +15,7 @@ static int	process_line(char *line)
 	if (syntax_error == 1)
 		status = ERROR_SYNTAX;
 	else
-		status = exec_nodes(node);
+		status = execute(node);
 	free_node(node);
 	free_token(token);
 	return (status);

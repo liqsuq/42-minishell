@@ -31,7 +31,7 @@ static int	exec_command(char *path, char **argv)
 	}
 }
 
-int	exec_nodes(t_node *node)
+int	execute(t_node *node)
 {
 	int	status;
 
