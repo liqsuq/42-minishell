@@ -89,33 +89,20 @@ extern int	syntax_error;
 char	**tokens2argv(t_token *tokens);
 void	free_argv(char **argv);
 
-// tokenizer.c
+// tokenize/tokenize.c
 int		is_metacharacter(char c);
 t_token	*tokenize(char *line);
 
-// tokenuil.c
+// tokenize/tokenuils.c
 t_token	*new_token(char *word, t_token_kind kind);
 void	add_token(t_token **head, t_token *new);
 void	free_tokens(t_token *token);
 void	print_tokens(t_token *tokens);
 
-// expand.c
-void	expand(t_node *node);
-void	append_char(char **s, char c);
-
-// expand_variable.c
-void	expand_variable(t_node *node);
-
-// error.c
-void	fatal_error(const char *msg);
-void	assert_error(const char *msg);
-void	tokenize_error(const char *msg, char **rest, char *line);
-void	parse_error(const char *msg, t_token **rest, t_token *token);
-
-// parse.c
+// parse/parse.c
 t_node	*parse(t_token *tok);
 
-// nodeutils.c
+// parse/nodeutils.c
 t_node	*new_node(t_node_kind kind);
 void	add_node(t_node **head, t_node *new);
 void	append_token(t_token **tokens, t_token *tok);
@@ -123,18 +110,12 @@ t_token	*tokdup(t_token *tok);
 void	free_nodes(t_node *node);
 void	print_nodes(t_node *nodes);
 
-// redirection.c
-void	reset_redirect(t_node *node);
-void	perform_redirect(t_node *node, t_env **env);
-int		read_heredoc(const char *delimiter, bool is_delimiter_quote, void *env);
-void	redirect_heredoc(t_node *node, t_env **env);
+// expand/expand.c
+void	expand(t_node *node);
+void	append_char(char **s, char c);
 
-// reset_redirect.c
-void	perform_all_redirects(t_node *redirects);
-void	reset_all_redirects(t_node *redirects);
-
-// debug_print.c
-void	print_token(t_token *token);
+// expand/expand_variable.c
+void	expand_variable(t_node *node);
 
 // execute/execute.c
 int		exec_nodes(t_node *node);
@@ -142,8 +123,29 @@ int		exec_nodes(t_node *node);
 // execute/pathutils.c
 char	*resolve_path(char *line);
 
-// pipe.c
+// redirect/redirect.c
+void	reset_redirect(t_node *node);
+void	perform_redirect(t_node *node, t_env **env);
+int		read_heredoc(const char *delimiter, bool is_delimiter_quote, void *env);
+void	redirect_heredoc(t_node *node, t_env **env);
+
+// redirect/reset_redirect.c
+void	perform_all_redirects(t_node *redirects);
+void	reset_all_redirects(t_node *redirects);
+
+// pipeline/pipeline.c
 int		has_pipe(t_node *node);
 int		exec_pipeline(t_node *node /*, t_env *env*/);
+
+// misc/error.c
+void	fatal_error(const char *msg);
+void	assert_error(const char *msg);
+void	tokenize_error(const char *msg, char **rest, char *line);
+void	parse_error(const char *msg, t_token **rest, t_token *token);
+
+// misc/debug.c
+void	print_token(t_token *token);
+
+
 
 #endif
