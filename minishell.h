@@ -85,10 +85,6 @@ typedef struct s_data
 
 extern int	syntax_error;
 
-// main.c
-char	**tokens2argv(t_token *tokens);
-void	free_argv(char **argv);
-
 // tokenize/tokenize.c
 int		is_metacharacter(char c);
 t_token	*tokenize(char *line);
@@ -117,6 +113,10 @@ void	expand_variable(t_node *node);
 
 // execute/execute.c
 int		exec_nodes(t_node *node);
+
+// execute/argvutils.c
+char	**tokens2argv(t_token *tokens);
+void	free_argv(char **argv);
 
 // execute/pathutils.c
 char	*resolve_path(char *line);
