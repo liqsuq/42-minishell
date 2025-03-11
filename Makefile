@@ -5,7 +5,7 @@ EXPSRC := $(addprefix expand/, expand.c expand_variable.c)
 REDSRC := $(addprefix redirect/, redirect.c reset_redirect.c)
 PIPSRC := $(addprefix pipeline/, pipe.c)
 ERRSRC := $(addprefix error/, error.c)
-SOURCE := main.c interpret.c search_path.c debug_print.c execution/exec.c \
+SOURCE := main.c debug_print.c execution/exec.c \
 			$(TOKSRC) $(PARSRC) $(EXPSRC) $(REDSRC) $(PIPSRC) $(ERRSRC)
 OBJECT := $(SOURCE:.c=.o)
 LFTDIR := libft
