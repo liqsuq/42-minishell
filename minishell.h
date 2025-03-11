@@ -88,9 +88,6 @@ extern int	syntax_error;
 // main.c
 char	**tokens2argv(t_token *tokens);
 void	free_argv(char **argv);
-char	*resolve_path(char *line);
-int		exec_command(char *path, char **argv);
-char	*search_path(const char *filename);
 
 // tokenizer.c
 int		is_metacharacter(char c);
@@ -139,10 +136,13 @@ void	reset_all_redirects(t_node *redirects);
 // debug_print.c
 void	print_token(t_token *token);
 
-// exec.c
+// execute/execute.c
 int		exec_nodes(t_node *node);
 
-//pipe.c
+// execute/pathutils.c
+char	*resolve_path(char *line);
+
+// pipe.c
 int		has_pipe(t_node *node);
 int		exec_pipeline(t_node *node /*, t_env *env*/);
 

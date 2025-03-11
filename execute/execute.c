@@ -1,6 +1,35 @@
-// exec.c
+// execute.c
 
 #include "minishell.h"
+
+static int	exec_command(char *path, char **argv)
+{
+	extern char	**environ;
+	pid_t		pid;
+	int			wstatus;
+
+	pid = fork();
+	if (pid < 0)
+	{
+		perror("fork error:");
+		exit(EXIT_FAILURE);
+	}
+	else if (pid == 0)
+	{
+		execve(path, argv, environ);
+		if (errno == ENOENT)
+			exit(127);
+		else if (errno == EACCES || errno == ENOEXEC)
+			exit(126);
+		else
+			exit(EXIT_FAILURE);
+	}
+	else
+	{
+		wait(&wstatus);
+		return (WEXITSTATUS(wstatus));
+	}
+}
 
 int	exec_nodes(t_node *node)
 {
