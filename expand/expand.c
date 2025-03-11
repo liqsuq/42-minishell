@@ -26,6 +26,7 @@ void	remove_quotes(t_token *tokens)
 {
 	char	*new_word;
 	char	*str;
+	char	c;
 
 	if (tokens == NULL)
 		return ;
@@ -35,24 +36,13 @@ void	remove_quotes(t_token *tokens)
 		new_word = NULL;
 		while (*str != '\0' && !is_metacharacter(*str))
 		{
-			if (*str == SQUOTE)
+			if (*str == SQUOTE || *str == DQUOTE)
 			{
-				str++;
-				while (*str != SQUOTE)
+				c = *str++;
+				while (*str != c)
 				{
 					if (*str == '\0')
 						assert_error("unmatched single quote");
-					append_char(&new_word, *str++);
-				}
-				str++;
-			}
-			else if (*str == DQUOTE)
-			{
-				str++;
-				while (*str != DQUOTE)
-				{
-					if (*str == '\0')
-						assert_error("unmatched double quote");
 					append_char(&new_word, *str++);
 				}
 				str++;

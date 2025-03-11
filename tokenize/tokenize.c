@@ -71,13 +71,14 @@ t_token	*word(char **rest, char *line)
 {
 	const char	*start = line;
 	char		*word;
+	char		c;
 
 	while (*line != '\0' && !is_metacharacter(*line))
 	{
-		if (*line == SQUOTE)
+		if (*line == SQUOTE || *line == DQUOTE)
 		{
-			line++;
-			while (*line != SQUOTE)
+			c = *line++;
+			while (*line != c)
 			{
 				if (*line == '\0')
 				{
@@ -86,24 +87,8 @@ t_token	*word(char **rest, char *line)
 				}
 				line++;
 			}
-			line++;
 		}
-		else if (*line == DQUOTE)
-		{
-			line++;
-			while (*line != DQUOTE)
-			{
-				if (*line == '\0')
-				{
-					tokenize_error("unmatched double quote", &line, line);
-					break ;
-				}
-				line++;
-			}
-			line++;
-		}
-		else
-			line++;
+		line++;
 	}
 	word = strndup(start, line - start);
 	if (word == NULL)
