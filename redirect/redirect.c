@@ -2,71 +2,16 @@
 
 #include "../minishell.h"
 
-static void	redirect_output(t_node *node)
+static void open_redirect(t_node *node, int fd, int flags, mode_t mode)
 {
-	node->filefd = open(node->filename->word, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	node->filefd = open(node->filename->word, flags, mode);
 	if (node->filefd < 0)
-	{
-		perror("open");
-		exit(EXIT_FAILURE);
-	}
-	node->stashed_std_fd = dup(STDOUT_FILENO);
+		fatal_error("open");
+	node->stashed_std_fd = dup(fd);
 	if (node->stashed_std_fd < 0)
-	{
-		perror("dup");
-		exit(EXIT_FAILURE);
-	}
-	if (dup2(node->filefd, STDOUT_FILENO) < 0)
-	{
-		perror("dup2");
-		exit(EXIT_FAILURE);
-	}
-	close(node->filefd);
-	node->filefd = -1;
-}
-
-static void	redirect_input(t_node *node)
-{
-	node->filefd = open(node->filename->word, O_RDONLY);
-	if (node->filefd < 0)
-	{
-		perror("open");
-		exit(EXIT_FAILURE);
-	}
-	node->stashed_std_fd = dup(STDIN_FILENO);
-	if (node->stashed_std_fd < 0)
-	{
-		perror("dup");
-		exit(EXIT_FAILURE);
-	}
-	if (dup2(node->filefd, STDIN_FILENO) < 0)
-	{
-		perror("dup2");
-		exit(EXIT_FAILURE);
-	}
-	close(node->filefd);
-	node->filefd = -1;
-}
-
-static void	redirect_append(t_node *node)
-{
-	node->filefd = open(node->filename->word, O_CREAT | O_WRONLY | O_APPEND, 0644);
-	if (node->filefd < 0)
-	{
-		perror("open");
-		exit(EXIT_FAILURE);
-	}
-	node->stashed_std_fd = dup(STDOUT_FILENO);
-	if (node->stashed_std_fd < 0)
-	{
-		perror("dup");
-		exit(EXIT_FAILURE);
-	}
-	if (dup2(node->filefd, STDOUT_FILENO) < 0)
-	{
-		perror("dup2");
-		exit(EXIT_FAILURE);
-	}
+		fatal_error("dup");
+	if (dup2(node->filefd, fd) < 0)
+		fatal_error("dup2");
 	close(node->filefd);
 	node->filefd = -1;
 }
@@ -74,11 +19,11 @@ static void	redirect_append(t_node *node)
 void	perform_redirect(t_node *node, t_env **env)
 {
 	if (node->kind == ND_REDIR_OUT)
-		redirect_output(node);
+		open_redirect(node, STDOUT_FILENO, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	else if (node->kind == ND_REDIR_IN)
-		redirect_input(node);
+		open_redirect(node, STDIN_FILENO, O_RDONLY, 0644);
 	else if (node->kind == ND_REDIR_APPEND)
-		redirect_append(node);
+		open_redirect(node, STDOUT_FILENO, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else if (node->kind == ND_REDIR_HEREDOC)
 		redirect_heredoc(node, env);
 }
