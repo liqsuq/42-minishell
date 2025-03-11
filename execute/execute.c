@@ -43,7 +43,7 @@ int	execute(t_node *node)
 	else
 	{
 		perform_all_redirects(node->redirects);
-		char	**argv = tokens2argv(node->args);
+		char	**argv = new_argv(node->args);
 		if (!argv[0])
 		{
 			reset_all_redirects(node->redirects);

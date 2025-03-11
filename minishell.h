@@ -115,7 +115,7 @@ void	expand_variable(t_node *node);
 int		execute(t_node *node);
 
 // execute/argvutils.c
-char	**tokens2argv(t_token *tokens);
+char	**new_argv(t_token *tokens);
 void	free_argv(char **argv);
 
 // execute/pathutils.c
@@ -143,7 +143,5 @@ void	parse_error(const char *msg, t_token **rest, t_token *token);
 
 // misc/debug.c
 void	print_token(t_token *token);
-
-
 
 #endif

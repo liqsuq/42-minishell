@@ -53,7 +53,7 @@ int	exec_pipeline(t_node *node)
 			}
 			perform_all_redirects(node->redirects);
 			expand(node);
-			char	**argv = tokens2argv(node->args);
+			char	**argv = new_argv(node->args);
 			if (!argv[0])
 				_exit(0);
 			char	*path = resolve_path(argv[0]);

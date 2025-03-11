@@ -2,14 +2,14 @@
 
 #include "minishell.h"
 
-char	**tokens2argv(t_token *tokens)
+char	**new_argv(t_token *token)
 {
 	t_token	*cur;
 	char	**argv;
 	int		i;
 
 	i = 0;
-	cur = tokens;
+	cur = token;
 	while (cur != NULL)
 	{
 		cur = cur->next;
@@ -19,7 +19,7 @@ char	**tokens2argv(t_token *tokens)
 	if (argv == NULL)
 		fatal_error("malloc");
 	i = 0;
-	cur = tokens;
+	cur = token;
 	while (cur != NULL)
 	{
 		argv[i++] = ft_strdup(cur->word);
