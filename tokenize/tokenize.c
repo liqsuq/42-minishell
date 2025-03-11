@@ -82,7 +82,7 @@ t_token	*word(char **rest, char *line)
 				if (*line == '\0')
 				{
 					tokenize_error("unmatched single quote", &line, line);
-					break;
+					break ;
 				}
 				line++;
 			}
@@ -96,7 +96,7 @@ t_token	*word(char **rest, char *line)
 				if (*line == '\0')
 				{
 					tokenize_error("unmatched double quote", &line, line);
-					break;
+					break ;
 				}
 				line++;
 			}

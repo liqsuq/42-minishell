@@ -2,7 +2,7 @@
 
 #include "minishell.h"
 
-t_token *new_token(char *word, t_token_kind kind)
+t_token	*new_token(char *word, t_token_kind kind)
 {
 	t_token	*token;
 
@@ -15,7 +15,7 @@ t_token *new_token(char *word, t_token_kind kind)
 	return (token);
 }
 
-void add_token(t_token **head, t_token *new)
+void	add_token(t_token **head, t_token *new)
 {
 	t_token	*last;
 
@@ -30,7 +30,7 @@ void add_token(t_token **head, t_token *new)
 	last->next = new;
 }
 
-void free_tokens(t_token *token)
+void	free_tokens(t_token *token)
 {
 	t_token	*next;
 
@@ -43,7 +43,7 @@ void free_tokens(t_token *token)
 	}
 }
 
-void print_tokens(t_token *tokens)
+void	print_tokens(t_token *tokens)
 {
 	t_token	*cur;
 

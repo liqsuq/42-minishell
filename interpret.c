@@ -24,11 +24,11 @@ char	*resolve_path(char *line)
 	return (path);
 }
 
-int exec_command(char *path, char **argv)
+int	exec_command(char *path, char **argv)
 {
-	extern char **environ;
-	pid_t pid;
-	int wstatus;
+	extern char	**environ;
+	pid_t		pid;
+	int			wstatus;
 
 	pid = fork();
 	if (pid < 0)
@@ -45,13 +45,15 @@ int exec_command(char *path, char **argv)
 			exit(126);
 		else
 			exit(EXIT_FAILURE);
-	} else {
+	}
+	else
+	{
 		wait(&wstatus);
 		return (WEXITSTATUS(wstatus));
 	}
 }
 
-char **tokens2argv(t_token *tokens)
+char	**tokens2argv(t_token *tokens)
 {
 	t_token	*cur;
 	char	**argv;
@@ -78,9 +80,9 @@ char **tokens2argv(t_token *tokens)
 	return (argv);
 }
 
-void free_argv(char **argv)
+void	free_argv(char **argv)
 {
-	char **cur;
+	char	**cur;
 
 	cur = argv;
 	while (*cur != NULL)
@@ -88,23 +90,22 @@ void free_argv(char **argv)
 	free(argv);
 }
 
-int interpret(char *line)
+int	interpret(char *line)
 {
-  int     status;
-  t_token *tokens;
-  t_node  *nodes;
+	int		status;
+	t_token	*tokens;
+	t_node	*nodes;
 
-  status = 0;
-  tokens = tokenize(line);
-  nodes = parse(tokens);
-
-  if (syntax_error == 1)
-    status = ERROR_SYNTAX;
-  else
-  {
-    status = exec_nodes(nodes); 
-  }
-  free_nodes(nodes);
-  free_tokens(tokens);
-  return status;
+	status = 0;
+	tokens = tokenize(line);
+	nodes = parse(tokens);
+	if (syntax_error == 1)
+		status = ERROR_SYNTAX;
+	else
+	{
+		status = exec_nodes(nodes);
+	}
+	free_nodes(nodes);
+	free_tokens(tokens);
+	return (status);
 }

@@ -8,8 +8,9 @@
 // この関数はデバッグ用であり、コメントアウトされているため、実行されません。
 void	print_argv(char **str)
 {
-	int	i = 0;
+	int	i;
 
+	i = 0;
 	// str 配列の各要素を順に表示
 	while (str[i])
 	{

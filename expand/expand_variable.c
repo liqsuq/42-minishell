@@ -22,7 +22,7 @@ int	is_name(const char *s)
 	return (1);
 }
 
-int is_variable(const char *s)
+int	is_variable(const char *s)
 {
 	return (s[0] == '$' && is_namehead(s[1]));
 }
