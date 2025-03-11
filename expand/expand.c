@@ -22,7 +22,7 @@ void	append_char(char **s, char c)
 	*s = new;
 }
 
-void	remove_quotes(t_token *tokens)
+static void	remove_quote(t_token *tokens)
 {
 	char	*new_word;
 	char	*str;
@@ -53,19 +53,19 @@ void	remove_quotes(t_token *tokens)
 		free(tokens->word);
 		tokens->word = new_word;
 	}
-	remove_quotes(tokens->next);
+	remove_quote(tokens->next);
 }
 
-void	expand_quotes_removal(t_node *node)
+static void	expand_quote(t_node *node)
 {
 	if (node == NULL)
 		return ;
-	remove_quotes(node->args);
-	expand_quotes_removal(node->next);
+	remove_quote(node->args);
+	expand_quote(node->next);
 }
 
 void	expand(t_node *node)
 {
 	expand_variable(node);
-	expand_quotes_removal(node);
+	expand_quote(node);
 }
