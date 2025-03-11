@@ -30,7 +30,7 @@ void	add_token(t_token **head, t_token *new)
 	last->next = new;
 }
 
-void	free_tokens(t_token *token)
+void	free_token(t_token *token)
 {
 	t_token	*next;
 
@@ -40,17 +40,5 @@ void	free_tokens(t_token *token)
 		free(token->word);
 		free(token);
 		token = next;
-	}
-}
-
-void	print_tokens(t_token *tokens)
-{
-	t_token	*cur;
-
-	cur = tokens;
-	while (cur)
-	{
-		printf("kind: %d, word: %s\n", cur->kind, cur->word);
-		cur = cur->next;
 	}
 }

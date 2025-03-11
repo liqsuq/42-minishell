@@ -49,28 +49,28 @@ t_token	*tokdup(t_token *tok)
 	return (new_token(word, tok->kind));
 }
 
-void	free_nodes(t_node *node)
+void	free_node(t_node *node)
 {
 	t_node	*next;
 
 	while (node != NULL)
 	{
 		next = node->next;
-		free_tokens(node->args);
+		free_token(node->args);
 		free(node);
 		node = next;
 	}
 }
 
-void	print_nodes(t_node *nodes)
-{
-	t_node	*cur;
+// void	print_nodes(t_node *nodes)
+// {
+// 	t_node	*cur;
 
-	cur = nodes;
-	while (cur)
-	{
-		printf("kind: %d\n", cur->kind);
-		print_tokens(cur->args);
-		cur = cur->next;
-	}
-}
+// 	cur = nodes;
+// 	while (cur)
+// 	{
+// 		printf("kind: %d\n", cur->kind);
+// 		print_tokens(cur->args);
+// 		cur = cur->next;
+// 	}
+// }

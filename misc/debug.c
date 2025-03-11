@@ -19,16 +19,11 @@ void	print_argv(char **str)
 	}
 }
 
-// print_token 関数
-// 与えられたトークンリストを順番に表示します。トークンの word プロパティを表示します。
-// `TK_EOF`（トークンの終端）までループし、各トークンの `word` を出力します。
-// この関数もデバッグ用であり、コメントアウトされています。
 void	print_token(t_token *token)
 {
-	// トークンリストをループして各トークンの `word` を表示
 	while (token != NULL)
 	{
-		printf("token_word: %s\n", token->word);
+		printf("kind: %d, word: %s\n", token->kind, token->word);
 		token = token->next;
 	}
 }

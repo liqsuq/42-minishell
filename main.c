@@ -53,8 +53,8 @@ static int	process_line(char *line)
 	{
 		status = exec_nodes(nodes);
 	}
-	free_nodes(nodes);
-	free_tokens(tokens);
+	free_node(nodes);
+	free_token(tokens);
 	return (status);
 }
 
