@@ -2,16 +2,25 @@
 
 #include "minishell.h"
 
-void	perform_all_redirects(t_node *redirects)
+void	reset_redirect(t_node *node)
 {
-	t_node	*cur;
-
-	cur = redirects;
-	while (cur)
+	if (node->kind == ND_REDIR_OUT || node->kind == ND_REDIR_APPEND)
 	{
-		perform_redirect(cur, NULL);
-		cur = cur->next;
+		if (dup2(node->stashed_std_fd, STDOUT_FILENO) < 0)
+		{
+			perror("dup2");
+			exit(EXIT_FAILURE);
+		}
 	}
+	else if (node->kind == ND_REDIR_IN || node->kind == ND_REDIR_HEREDOC)
+	{
+		if (dup2(node->stashed_std_fd, STDIN_FILENO) < 0)
+		{
+			perror("dup2");
+			exit(EXIT_FAILURE);
+		}
+	}
+	close(node->stashed_std_fd);
 }
 
 void	reset_all_redirects(t_node *redirects)

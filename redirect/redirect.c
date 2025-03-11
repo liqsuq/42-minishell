@@ -28,25 +28,16 @@ void	perform_redirect(t_node *node, t_env **env)
 		redirect_heredoc(node, env);
 }
 
-void	reset_redirect(t_node *node)
+void	perform_all_redirects(t_node *redirects)
 {
-	if (node->kind == ND_REDIR_OUT || node->kind == ND_REDIR_APPEND)
+	t_node	*cur;
+
+	cur = redirects;
+	while (cur)
 	{
-		if (dup2(node->stashed_std_fd, STDOUT_FILENO) < 0)
-		{
-			perror("dup2");
-			exit(EXIT_FAILURE);
-		}
+		perform_redirect(cur, NULL);
+		cur = cur->next;
 	}
-	else if (node->kind == ND_REDIR_IN || node->kind == ND_REDIR_HEREDOC)
-	{
-		if (dup2(node->stashed_std_fd, STDIN_FILENO) < 0)
-		{
-			perror("dup2");
-			exit(EXIT_FAILURE);
-		}
-	}
-	close(node->stashed_std_fd);
 }
 
 void	redirect_heredoc(t_node *node, t_env **env)
