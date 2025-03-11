@@ -85,14 +85,11 @@ typedef struct s_data
 
 extern int	syntax_error;
 
-// interpret.c
-int		interpret(char *line);
+// main.c
 char	**tokens2argv(t_token *tokens);
 void	free_argv(char **argv);
 char	*resolve_path(char *line);
 int		exec_command(char *path, char **argv);
-
-// search_path.c
 char	*search_path(const char *filename);
 
 // tokenizer.c

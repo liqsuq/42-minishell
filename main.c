@@ -159,7 +159,7 @@ void	free_argv(char **argv)
 	free(argv);
 }
 
-int	interpret(char *line)
+static int	process_line(char *line)
 {
 	int		status;
 	t_token	*tokens;
@@ -194,7 +194,7 @@ int	main(void)
 		if (*line)
 		{
 			add_history(line);
-			last_status = interpret(line);
+			last_status = process_line(line);
 		}
 		free(line);
 	}
