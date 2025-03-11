@@ -122,10 +122,7 @@ char	*resolve_path(char *line);
 
 // redirect/redirect.c
 void	redirect(t_node *node, t_env **env);
-
-// redirect/reset_redirect.c
 void	reset_redirect(t_node *node);
-void	reset_all_redirects(t_node *redirects);
 
 // pipeline/pipeline.c
 int		has_pipe(t_node *node);

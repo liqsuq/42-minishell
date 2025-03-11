@@ -46,7 +46,7 @@ int	execute(t_node *node)
 		char	**argv = new_argv(node->args);
 		if (!argv[0])
 		{
-			reset_all_redirects(node->redirects);
+			reset_redirect(node->redirects);
 			free_argv(argv);
 			return (0);
 		}
@@ -59,7 +59,7 @@ int	execute(t_node *node)
 			free(path);
 		}
 		free_argv(argv);
-		reset_all_redirects(node->redirects);
+		reset_redirect(node->redirects);
 		return (status);
 	}
 }

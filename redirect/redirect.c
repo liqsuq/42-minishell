@@ -76,3 +76,21 @@ void	redirect(t_node *redi, t_env **env)
 		open_heredoc(redi, env);
 	return (redirect(redi->next, env));
 }
+
+void	reset_redirect(t_node *node)
+{
+	if (node == NULL)
+		return ;
+	reset_redirect(node->next);
+	if (node->kind == ND_REDIR_OUT || node->kind == ND_REDIR_APPEND)
+	{
+		if (dup2(node->stashed_std_fd, STDOUT_FILENO) < 0)
+			fatal_error("dup2");
+	}
+	else if (node->kind == ND_REDIR_IN || node->kind == ND_REDIR_HEREDOC)
+	{
+		if (dup2(node->stashed_std_fd, STDIN_FILENO) < 0)
+			fatal_error("dup2");
+	}
+	close(node->stashed_std_fd);
+}
