@@ -2,6 +2,13 @@
 
 #include "minishell.h"
 
+int tokensize(t_token *token)
+{
+	if (token == NULL)
+		return (0);
+	return (1 + tokensize(token->next));
+}
+
 t_token	*new_token(char *word, t_token_kind kind)
 {
 	t_token	*token;

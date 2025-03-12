@@ -2,30 +2,22 @@
 
 #include "minishell.h"
 
-char	**new_argv(t_token *token)
+static void trans_args(char **argv, t_token *args)
 {
-	t_token	*cur;
-	char	**argv;
-	int		i;
+	if (args == NULL)
+		return ;
+	*argv = ft_strdup(args->word);
+	trans_args(argv + 1, args->next);
+}
 
-	i = 0;
-	cur = token;
-	while (cur != NULL)
-	{
-		cur = cur->next;
-		i++;
-	}
-	argv = malloc((i + 1) * sizeof(char *));
+char	**new_argv(t_token *args)
+{
+	char	**argv;
+
+	argv = ft_calloc((tokensize(args) + 1), sizeof(char *));
 	if (argv == NULL)
 		fatal_error("malloc");
-	i = 0;
-	cur = token;
-	while (cur != NULL)
-	{
-		argv[i++] = ft_strdup(cur->word);
-		cur = cur->next;
-	}
-	argv[i] = NULL;
+	trans_args(argv, args);
 	return (argv);
 }
 

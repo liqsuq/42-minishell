@@ -99,6 +99,7 @@ int		is_metacharacter(char c);
 t_token	*tokenize(char *line);
 
 // tokenize/tokenuils.c
+int		tokensize(t_token *token);
 t_token	*new_token(char *word, t_token_kind kind);
 void	add_token(t_token **head, t_token *new);
 void	free_token(t_token *token);
