@@ -123,6 +123,7 @@ void	expand_variable(t_node *node);
 
 // execute/execute.c
 int		execute(t_node *node);
+void	execcmd(t_node *node);
 
 // execute/argvutils.c
 char	**new_argv(t_token *tokens);

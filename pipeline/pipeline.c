@@ -17,22 +17,21 @@ int	exec_pipeline(t_node *node)
 {
 	int		pipefd[2];
 	int		prev_fd;
-	int		status;
 	pid_t	pid;
+	int		status;
 
 	prev_fd = -1;
 	status = 0;
 	while (node != NULL)
 	{
 		if (node->next != NULL)
-		{
 			if (pipe(pipefd) < 0)
 				fatal_error("pipe");
-		}
+		redirect(node->redirects, NULL);
 		pid = fork();
 		if (pid < 0)
 			fatal_error("fork");
-		else if (pid == 0)
+		if (pid == 0)
 		{
 			if (prev_fd != -1)
 			{
@@ -45,28 +44,16 @@ int	exec_pipeline(t_node *node)
 				close(pipefd[0]);
 				close(pipefd[1]);
 			}
-			redirect(node->redirects, NULL);
-			expand(node);
-			char	**argv = new_argv(node->args);
-			if (!argv[0])
-				_exit(0);
-			char	*path = resolve_path(argv[0]);
-			if (!path)
-				_exit(127);
-			execve(path, argv, NULL);
-			perror("execve");
-			_exit(1);
+			execcmd(node);
 		}
-		else
+		waitpid(pid, &status, 0);
+		reset_redirect(node->redirects);
+		if (prev_fd != -1)
+			close(prev_fd);
+		if (node->next != NULL)
 		{
-			waitpid(pid, &status, 0);
-			if (prev_fd != -1)
-				close(prev_fd);
-			if (node->next != NULL)
-			{
-				close(pipefd[1]);
-				prev_fd = pipefd[0];
-			}
+			close(pipefd[1]);
+			prev_fd = pipefd[0];
 		}
 		node = node->next;
 	}

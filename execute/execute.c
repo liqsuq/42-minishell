@@ -2,7 +2,7 @@
 
 #include "minishell.h"
 
-static void execcmd(t_node *node)
+void execcmd(t_node *node)
 {
 	char **argv;
 	char *path;
