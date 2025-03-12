@@ -4,13 +4,7 @@
 
 int	has_pipe(t_node *node)
 {
-	while (node != NULL)
-	{
-		if (node->next != NULL)
-			return (1);
-		node = node->next;
-	}
-	return (0);
+	return (node->next != NULL);
 }
 
 int	exec_pipeline(t_node *node)
