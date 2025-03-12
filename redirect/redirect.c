@@ -77,20 +77,18 @@ void	redirect(t_node *redi, t_env **env)
 	return (redirect(redi->next, env));
 }
 
-void	reset_redirect(t_node *node)
+void	reset_redirect(t_node *redi)
 {
-	if (node == NULL)
+	int fd;
+
+	if (redi == NULL)
 		return ;
-	reset_redirect(node->next);
-	if (node->kind == ND_REDIR_OUT || node->kind == ND_REDIR_APPEND)
-	{
-		if (dup2(node->stashed_std_fd, STDOUT_FILENO) < 0)
-			fatal_error("dup2");
-	}
-	else if (node->kind == ND_REDIR_IN || node->kind == ND_REDIR_HEREDOC)
-	{
-		if (dup2(node->stashed_std_fd, STDIN_FILENO) < 0)
-			fatal_error("dup2");
-	}
-	close(node->stashed_std_fd);
+	reset_redirect(redi->next);
+	if (redi->kind == ND_REDIR_OUT || redi->kind == ND_REDIR_APPEND)
+		fd = STDOUT_FILENO;
+	else if (redi->kind == ND_REDIR_IN || redi->kind == ND_REDIR_HEREDOC)
+		fd = STDIN_FILENO;
+	if (dup2(redi->stashed_std_fd, fd) < 0)
+		fatal_error("dup2");
+	close(redi->stashed_std_fd);
 }
