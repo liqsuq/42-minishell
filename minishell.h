@@ -148,4 +148,7 @@ void	parse_error(const char *msg, t_token **rest, t_token *token);
 // misc/debug.c
 void	print_token(t_token *token);
 
+// misc/ft_strcmp.c
+int		ft_strcmp(const char *s1, const char *s2);
+
 #endif

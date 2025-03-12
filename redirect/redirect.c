@@ -31,7 +31,7 @@ static int	read_heredoc(const char *delimiter, bool is_delimiter_quote, void *en
 		line = readline("> ");
 		if (line == NULL)
 			break;
-		if (strcmp(line, delimiter) == 0)
+		if (ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
 			break;

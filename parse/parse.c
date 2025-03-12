@@ -2,20 +2,6 @@
 
 #include "minishell.h"
 
-static int	ft_strcmp(const char *s1, const char *s2)
-{
-	int	i;
-
-	i = 0;
-	while (s1[i] && s2[i])
-	{
-		if (s1[i] != s2[i])
-			return (s1[i] - s2[i]);
-		i++;
-	}
-	return (s1[i] - s2[i]);
-}
-
 static void	parse_redirection(t_node *cmdnode, t_token **rest, t_token *token)
 {
 	t_node	*redir_node;
