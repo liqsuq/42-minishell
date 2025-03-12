@@ -6,15 +6,12 @@ static int	exec_command(char *path, char **argv)
 {
 	extern char	**environ;
 	pid_t		pid;
-	int			wstatus;
+	int			status;
 
 	pid = fork();
 	if (pid < 0)
-	{
-		perror("fork error:");
-		exit(EXIT_FAILURE);
-	}
-	else if (pid == 0)
+		fatal_error("fork");
+	if (pid == 0)
 	{
 		execve(path, argv, environ);
 		if (errno == ENOENT)
@@ -24,32 +21,29 @@ static int	exec_command(char *path, char **argv)
 		else
 			exit(EXIT_FAILURE);
 	}
-	else
-	{
-		wait(&wstatus);
-		return (WEXITSTATUS(wstatus));
-	}
+	waitpid(pid, &status, 0);
+	return (WEXITSTATUS(status));
 }
 
 int	execute(t_node *node)
 {
 	int	status;
+	char **argv;
 
-	status = 0;
 	if (!node)
 		return (0);
+	argv = new_argv(node->args);
+	if (!argv[0])
+	{
+		free_argv(argv);
+		return (0);
+	}
+	status = 0;
 	if (has_pipe(node))
 		return (exec_pipeline(node));
 	else
 	{
 		redirect(node->redirects, NULL);
-		char	**argv = new_argv(node->args);
-		if (!argv[0])
-		{
-			reset_redirect(node->redirects);
-			free_argv(argv);
-			return (0);
-		}
 		char	*path = resolve_path(argv[0]);
 		if (!path)
 			status = 127;

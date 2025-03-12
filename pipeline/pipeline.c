@@ -27,17 +27,11 @@ int	exec_pipeline(t_node *node)
 		if (node->next != NULL)
 		{
 			if (pipe(pipefd) < 0)
-			{
-				perror("pipe");
-				return (1);
-			}
+				fatal_error("pipe");
 		}
 		pid = fork();
 		if (pid < 0)
-		{
-			perror("fork");
-			return (1);
-		}
+			fatal_error("fork");
 		else if (pid == 0)
 		{
 			if (prev_fd != -1)
