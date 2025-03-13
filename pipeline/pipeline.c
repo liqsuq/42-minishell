@@ -2,7 +2,7 @@
 
 #include "minishell.h"
 
-int	has_pipe(t_node *node)
+static int	has_pipe(t_node *node)
 {
 	return (node->next != NULL);
 }
@@ -38,7 +38,7 @@ int	pipeline(t_node *node, int prev_pipeout)
 			close_fd(pipefd[0]);
 			move_fd(pipefd[1], STDOUT_FILENO);
 		}
-		execcmd(node);
+		execute_command(node);
 	}
 	if (prev_pipeout != -1)
 		close_fd(prev_pipeout);
@@ -47,16 +47,4 @@ int	pipeline(t_node *node, int prev_pipeout)
 	if (has_pipe(node))
 		return(pipeline(node->next, pipefd[0]));
 	return (pid);
-}
-
-int exec_pipeline(t_node *node)
-{
-	int	pid;
-	int	status;
-
-	if (node == NULL)
-		return (0);
-	pid = pipeline(node, -1);
-	waitpid(pid, &status, 0);
-	return (WEXITSTATUS(status));
 }

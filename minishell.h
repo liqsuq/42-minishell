@@ -123,7 +123,7 @@ void	expand_variable(t_node *node);
 
 // execute/execute.c
 int		execute(t_node *node);
-void	execcmd(t_node *node);
+void	execute_command(t_node *node);
 
 // execute/argvutils.c
 char	**new_argv(t_token *tokens);
@@ -137,8 +137,7 @@ void	redirect(t_node *node, t_env **env);
 void	reset_redirect(t_node *node);
 
 // pipeline/pipeline.c
-int		has_pipe(t_node *node);
-int		exec_pipeline(t_node *node /*, t_env *env*/);
+int		pipeline(t_node *node, int prev_pipeout);
 
 // misc/error.c
 void	fatal_error(const char *msg);
