@@ -37,8 +37,8 @@ typedef enum e_token_kind
 
 typedef struct s_token
 {
-	char			*word;
 	t_token_kind	kind;
+	char			*word;
 	struct s_token	*next;
 }					t_token;
 
@@ -56,13 +56,13 @@ typedef enum e_node_kind
 typedef struct s_node
 {
 	t_node_kind		kind;				// ノードの種類
-	struct s_node	*next;				// 次のノード
 	t_token			*args;				// 引数リスト
 	struct s_node	*redirects;			// リダイレクト
 	t_token			*filename;			// ファイル名
 	t_token			*delimiter;			// ヒアドキュメントの区切り文字
 	int				stashed_std_fd;		// 保持している標準ファイルディスクリプタ
 	bool			is_delimiter_quote;	// 区切り文字がクオートされているかどうか
+	struct s_node	*next;				// 次のノード
 }					t_node;
 
 typedef struct s_redir
