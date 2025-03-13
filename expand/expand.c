@@ -8,17 +8,16 @@ void	append_char(char **s, char c)
 	char	*new;
 
 	size = 2;
-	if (*s)
+	if (*s != NULL)
 		size += strlen(*s);
-	new = malloc(size);
+	new = ft_realloc(*s, size);
 	if (new == NULL)
-		fatal_error("malloc");
-	if (*s)
-		ft_strlcpy(new, *s, size);
+	{
+		free(*s);
+		fatal_error("ft_realloc");
+	}
 	new[size - 2] = c;
 	new[size - 1] = '\0';
-	if (*s)
-		free(*s);
 	*s = new;
 }
 
