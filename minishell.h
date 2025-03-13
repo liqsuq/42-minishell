@@ -101,13 +101,13 @@ void	add_token(t_token **head, t_token *new);
 void	free_token(t_token *token);
 
 // parse/parse.c
-t_node	*parse(t_token *tok);
+t_node	*parse(t_token *token);
 
 // parse/nodeutils.c
 t_node	*new_node(t_node_kind kind);
 void	add_node(t_node **head, t_node *new);
 void	append_token(t_token **tokens, t_token *tok);
-t_token	*tokdup(t_token *tok);
+t_token	*tokdup(t_token *token);
 void	free_node(t_node *node);
 
 // expand/expand.c
@@ -122,15 +122,15 @@ int		execute(t_node *node);
 void	execute_command(t_node *node);
 
 // execute/argvutils.c
-char	**new_argv(t_token *tokens);
+char	**new_argv(t_token *args);
 void	free_argv(char **argv);
 
 // execute/pathutils.c
 char	*resolve_path(char *line);
 
 // redirect/redirect.c
-void	redirect(t_node *node, t_env **env);
-void	reset_redirect(t_node *node);
+void	redirect(t_node *redi, t_env **env);
+void	reset_redirect(t_node *redi);
 
 // pipeline/pipeline.c
 int		pipeline(t_node *node, int prev_pipeout);
@@ -142,7 +142,10 @@ void	tokenize_error(const char *msg, char **rest, char *line);
 void	parse_error(const char *msg, t_token **rest, t_token *token);
 
 // misc/debug.c
+void	print_argv(char **str);
 void	print_token(t_token *token);
+void	print_env(t_env *env);
+void	print_node(t_node *node);
 
 // misc/ft_strcmp.c
 int		ft_strcmp(const char *s1, const char *s2);

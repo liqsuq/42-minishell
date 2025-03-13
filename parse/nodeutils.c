@@ -33,14 +33,14 @@ void	append_token(t_token **tokens, t_token *tok)
 	append_token(&(*tokens)->next, tok);
 }
 
-t_token	*tokdup(t_token *tok)
+t_token	*tokdup(t_token *token)
 {
 	char	*word;
 
-	word = strdup(tok->word);
+	word = strdup(token->word);
 	if (word == NULL)
 		fatal_error("strdup");
-	return (new_token(word, tok->kind));
+	return (new_token(word, token->kind));
 }
 
 void	free_node(t_node *node)
