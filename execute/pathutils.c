@@ -61,13 +61,7 @@ static char	*search_path(const char *filename)
 			break ;
 		join_filename(dir, filename);
 		if (access(dir, X_OK) == 0)
-		{
-			char	*dup_path;
-			dup_path = ft_strdup(dir);
-			if (!dup_path)
-				fatal_error("strdup");
-			return (dup_path);
-		}
+			return (ft_strdup(dir));
 	}
 	return (NULL);
 }
@@ -77,19 +71,9 @@ char	*resolve_path(char *line)
 	char	*path;
 
 	if (ft_strchr(line, '/'))
-	{
-		path = ft_strdup(line);
-		if (!path)
-			return (NULL);
-	}
-	else
-	{
-		path = search_path(line);
-		if (!path)
-		{
-			dprintf(STDERR_FILENO, "%s: command not found\n", line);
-			return (NULL);
-		}
-	}
+		return (ft_strdup(line));
+	path = search_path(line);
+	if (path == NULL)
+		dprintf(STDERR_FILENO, "%s: command not found\n", line);
 	return (path);
 }
