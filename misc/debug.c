@@ -14,18 +14,17 @@ void	print_argv(char **str)
 	// str 配列の各要素を順に表示
 	while (str[i])
 	{
-		printf("str[%d]:%s\n", i, str[i]);
+		printf("str[%d]: %s\n", i, str[i]);
 		i++;
 	}
 }
 
 void	print_token(t_token *token)
 {
-	while (token != NULL)
-	{
-		printf("kind: %d, word: %s\n", token->kind, token->word);
-		token = token->next;
-	}
+	if (token == NULL)
+		return ;
+	printf("kind: %d, word: %s\n", token->kind, token->word);
+	print_token(token->next);
 }
 
 // print_env 関数
@@ -39,7 +38,7 @@ void	print_env(t_env *env)
 	printf("=======================================================\n");
 	while (env)
 	{
-		printf("env->key:%s, env->value:%s\n", env->key, env->value);
+		printf("env->key: %s, env->value: %s\n", env->key, env->value);
 		env = env->next;
 	}
 }
@@ -50,21 +49,21 @@ void	print_env(t_env *env)
 // デバッグ用に使用される関数で、コメントアウトされています。
 void	print_node(t_node *node)
 {
+	if (node == NULL)
+		return ;
 	// コマンドの引数が存在する場合、引数を表示
-	if (node->command->args)
+	if (node->args)
 	{
-		printf("node->command->args\n");
-		print_token(node->command->args);
+		printf("node->args:\n");
+		print_token(node->args);
 	}
 	// コマンドのリダイレクトが存在する場合、リダイレクト情報を表示
-	if (node->command->redirects)
+	if (node->redirects)
 	{
-		printf("node->command->redirects\n");
-		print_token(node->command->args);
-		print_token(node->command->redirects->filename);
-		print_token(node->command->redirects->delimiter);
+		printf("node->redirects:\n");
+		print_token(node->redirects->filename);
+		print_token(node->redirects->delimiter);
 	}
-	// 次のノードが存在する場合、再帰的に呼び出して表示
-	if (node->next)
-		print_node(node->next);
+	// 再帰的に呼び出して表示
+	print_node(node->next);
 }

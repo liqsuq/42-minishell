@@ -59,14 +59,10 @@ typedef struct s_node
 	struct s_node	*next;				// 次のノード
 	t_token			*args;				// 引数リスト
 	struct s_node	*redirects;			// リダイレクト
-	//int				std_fd;			// 標準ファイルディスクリプタ
 	t_token			*filename;			// ファイル名
 	t_token			*delimiter;			// ヒアドキュメントの区切り文字
 	int				stashed_std_fd;		// 保持している標準ファイルディスクリプタ
 	bool			is_delimiter_quote;	// 区切り文字がクオートされているかどうか
-	struct s_node	*command;			// コマンドノード
-	//int				inpipe[2];		// パイプの入力
-	//int				outpipe[2];		// パイプの出力
 }					t_node;
 
 typedef struct s_redir
