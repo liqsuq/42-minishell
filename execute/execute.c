@@ -19,7 +19,7 @@ void execute_command(t_node *node)
 		free_argv(argv);
 		exit (127);
 	}
-	redirect(node, NULL);
+	redirect(node->redirects, NULL);
 	execve(path, argv, NULL);
 	reset_redirect(node->redirects);
 	free_argv(argv);
