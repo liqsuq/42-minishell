@@ -16,19 +16,17 @@ static void	parse_redirection(t_node *cmdnode, t_token **rest, t_token *token)
 	else if (!ft_strcmp(token->word, "<<"))
 		redir_node = new_node(ND_REDIR_HEREDOC);
 	else
-		parse_error("unexpected redirection operator", rest, token);
+		parse_error("unexpected operator", rest, token);
 	token = token->next;
 	if (!token || token->kind != TK_WORD)
-		parse_error("expected filename (or 'EOF') after redirection", rest, token);
+		parse_error("expected filename after redirection", rest, token);
 	if (redir_node->kind == ND_REDIR_HEREDOC)
 	{
 		if (ft_strcmp(token->word, "EOF") != 0)
-		parse_error("this minishell only supports '<<EOF' heredoc", rest, token);
+			parse_error("minishell only supports '<<EOF'", rest, token);
 	}
 	else
-	{
 		redir_node->filename = tokdup(token);
-	}
 	add_node(&cmdnode->redirects, redir_node);
 	token = token->next;
 	*rest = token;

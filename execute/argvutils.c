@@ -2,7 +2,7 @@
 
 #include "minishell.h"
 
-static void trans_args(char **argv, t_token *args)
+static void	trans_args(char **argv, t_token *args)
 {
 	if (args == NULL)
 		return ;

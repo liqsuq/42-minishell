@@ -2,10 +2,10 @@
 
 #include "minishell.h"
 
-void execute_command(t_node *node)
+void	execute_command(t_node *node)
 {
-	char **argv;
-	char *path;
+	char	**argv;
+	char	*path;
 
 	argv = new_argv(node->args);
 	if (!argv[0])

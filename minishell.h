@@ -85,8 +85,8 @@ typedef struct s_env
 
 typedef struct s_data
 {
-	int	exit_status;
-}		t_data;
+	int				exit_status;
+}					t_data;
 
 extern int	syntax_error;
 

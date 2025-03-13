@@ -48,9 +48,10 @@ int	is_word(const char *s)
 t_token	*operator(char **rest, char *line)
 {
 	char *const	ops[] = {">>", "<<", "||", "&&", ";;", ">", "<", "|", "&", ";", "(", ")"};
-	size_t		i = 0;
+	size_t		i;
 	char		*op;
 
+	i = 0;
 	while (i < sizeof(ops) / sizeof(*ops))
 	{
 		if (ft_strncmp(line, ops[i], ft_strlen(ops[i])) == 0)

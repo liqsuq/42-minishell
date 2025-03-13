@@ -7,12 +7,12 @@ static int	has_pipe(t_node *node)
 	return (node->next != NULL);
 }
 
-static void close_fd(int fd)
+static void	close_fd(int fd)
 {
 	close(fd);
 }
 
-static void move_fd(int src, int dst)
+static void	move_fd(int src, int dst)
 {
 	dup2(src, dst);
 	close_fd(src);
@@ -45,6 +45,6 @@ int	pipeline(t_node *node, int prev_pipeout)
 	if (has_pipe(node))
 		close_fd(pipefd[1]);
 	if (has_pipe(node))
-		return(pipeline(node->next, pipefd[0]));
+		return (pipeline(node->next, pipefd[0]));
 	return (pid);
 }

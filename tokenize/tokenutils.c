@@ -2,7 +2,7 @@
 
 #include "minishell.h"
 
-int tokenlen(t_token *token)
+int	tokenlen(t_token *token)
 {
 	if (token == NULL)
 		return (0);
