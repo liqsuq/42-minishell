@@ -14,7 +14,7 @@ char	**new_argv(t_token *args)
 {
 	char	**argv;
 
-	argv = ft_calloc((tokensize(args) + 1), sizeof(char *));
+	argv = ft_calloc((tokenlen(args) + 1), sizeof(char *));
 	if (argv == NULL)
 		fatal_error("malloc");
 	trans_args(argv, args);

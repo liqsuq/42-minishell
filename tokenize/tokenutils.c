@@ -2,11 +2,11 @@
 
 #include "minishell.h"
 
-int tokensize(t_token *token)
+int tokenlen(t_token *token)
 {
 	if (token == NULL)
 		return (0);
-	return (1 + tokensize(token->next));
+	return (1 + tokenlen(token->next));
 }
 
 t_token	*new_token(char *word, t_token_kind kind)
@@ -24,28 +24,19 @@ t_token	*new_token(char *word, t_token_kind kind)
 
 void	add_token(t_token **head, t_token *new)
 {
-	t_token	*last;
-
 	if (*head == NULL)
 	{
 		*head = new;
 		return ;
 	}
-	last = *head;
-	while (last->next)
-		last = last->next;
-	last->next = new;
+	add_token(&(*head)->next, new);
 }
 
 void	free_token(t_token *token)
 {
-	t_token	*next;
-
-	while (token != NULL)
-	{
-		next = token->next;
-		free(token->word);
-		free(token);
-		token = next;
-	}
+	if (token == NULL)
+		return ;
+	free_token(token->next);
+	free(token->word);
+	free(token);
 }
