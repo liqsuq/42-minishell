@@ -7,49 +7,56 @@ int	has_pipe(t_node *node)
 	return (node->next != NULL);
 }
 
-int	exec_pipeline(t_node *node)
+static void close_fd(int fd)
+{
+	close(fd);
+}
+
+static void move_fd(int src, int dst)
+{
+	dup2(src, dst);
+	close_fd(src);
+}
+
+int	pipeline(t_node *node, int prev_pipeout)
 {
 	int		pipefd[2];
-	int		prev_fd;
 	pid_t	pid;
-	int		status;
 
-	prev_fd = -1;
-	status = 0;
-	while (node != NULL)
+	if (has_pipe(node))
+		if (pipe(pipefd) < 0)
+			fatal_error("pipe");
+	pid = fork();
+	if (pid < 0)
+		fatal_error("fork");
+	if (pid == 0)
 	{
-		if (node->next != NULL)
-			if (pipe(pipefd) < 0)
-				fatal_error("pipe");
-		redirect(node->redirects, NULL);
-		pid = fork();
-		if (pid < 0)
-			fatal_error("fork");
-		if (pid == 0)
+		if (prev_pipeout != -1)
+			move_fd(prev_pipeout, STDIN_FILENO);
+		if (has_pipe(node))
 		{
-			if (prev_fd != -1)
-			{
-				dup2(prev_fd, STDIN_FILENO);
-				close(prev_fd);
-			}
-			if (node->next != NULL)
-			{
-				dup2(pipefd[1], STDOUT_FILENO);
-				close(pipefd[0]);
-				close(pipefd[1]);
-			}
-			execcmd(node);
+			close_fd(pipefd[0]);
+			move_fd(pipefd[1], STDOUT_FILENO);
 		}
-		waitpid(pid, &status, 0);
-		reset_redirect(node->redirects);
-		if (prev_fd != -1)
-			close(prev_fd);
-		if (node->next != NULL)
-		{
-			close(pipefd[1]);
-			prev_fd = pipefd[0];
-		}
-		node = node->next;
+		execcmd(node);
 	}
+	if (prev_pipeout != -1)
+		close_fd(prev_pipeout);
+	if (has_pipe(node))
+		close_fd(pipefd[1]);
+	if (has_pipe(node))
+		return(pipeline(node->next, pipefd[0]));
+	return (pid);
+}
+
+int exec_pipeline(t_node *node)
+{
+	int	pid;
+	int	status;
+
+	if (node == NULL)
+		return (0);
+	pid = pipeline(node, -1);
+	waitpid(pid, &status, 0);
 	return (WEXITSTATUS(status));
 }
