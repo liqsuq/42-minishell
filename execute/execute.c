@@ -6,7 +6,8 @@ void execcmd(t_node *node)
 {
 	char **argv;
 	char *path;
-	
+
+	redirect(node->redirects, NULL);
 	argv = new_argv(node->args);
 	if (!argv[0])
 	{
@@ -21,6 +22,7 @@ void execcmd(t_node *node)
 	}
 	if (execve(path, argv, NULL))
 	{
+		reset_redirect(node->redirects);
 		free_argv(argv);
 		free(path);
 		if (errno == ENOENT)
@@ -42,13 +44,11 @@ int	execute(t_node *node)
 	status = 0;
 	if (has_pipe(node))
 		return (exec_pipeline(node));
-	redirect(node->redirects, NULL);
 	pid = fork();
 	if (pid < 0)
 		fatal_error("fork");
 	if (pid == 0)
 		execcmd(node);
 	waitpid(pid, &status, 0);
-	reset_redirect(node->redirects);
 	return (WEXITSTATUS(status));
 }
