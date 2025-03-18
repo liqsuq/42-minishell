@@ -26,7 +26,7 @@ static void	parse_redirection(t_node *cmdnode, t_token **rest, t_token *token)
 			parse_error("minishell only supports '<<EOF'", rest, token);
 	}
 	else
-		redir_node->filename = tokdup(token);
+		redir_node->filename = dup_token(token);
 	add_node(&cmdnode->redirects, redir_node);
 	token = token->next;
 	*rest = token;
@@ -45,7 +45,7 @@ t_node	*parse(t_token *token)
 	{
 		if (token->kind == TK_WORD)
 		{
-			add_token(&current->args, tokdup(token));
+			add_token(&current->args, dup_token(token));
 			token = token->next;
 		}
 		else if (token->kind == TK_OP)

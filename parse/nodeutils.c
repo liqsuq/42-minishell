@@ -23,16 +23,6 @@ void	add_node(t_node **head, t_node *new)
 	add_node(&(*head)->next, new);
 }
 
-t_token	*tokdup(t_token *token)
-{
-	char	*word;
-
-	word = strdup(token->word);
-	if (word == NULL)
-		fatal_error("strdup");
-	return (new_token(word, token->kind));
-}
-
 void	free_node(t_node *node)
 {
 	if (node == NULL)

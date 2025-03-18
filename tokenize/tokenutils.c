@@ -32,6 +32,16 @@ void	add_token(t_token **head, t_token *new)
 	add_token(&(*head)->next, new);
 }
 
+t_token	*dup_token(t_token *token)
+{
+	char	*word;
+
+	word = strdup(token->word);
+	if (word == NULL)
+		fatal_error("strdup");
+	return (new_token(word, token->kind));
+}
+
 void	free_token(t_token *token)
 {
 	if (token == NULL)
