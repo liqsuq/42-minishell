@@ -71,7 +71,6 @@ typedef struct s_node
 
 typedef struct s_redir
 {
-	int				fd;
 	t_token			*filename;
 	int				stashed_fd;
 	t_token			*delimiter;
