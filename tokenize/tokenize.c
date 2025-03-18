@@ -78,16 +78,12 @@ t_token	*word(char **rest, char *line)
 	{
 		if (*line == SQUOTE || *line == DQUOTE)
 		{
-			c = *line++;
-			while (*line != c)
-			{
+			c = *line;
+			while (*++line != c)
 				if (*line == '\0')
-				{
-					tokenize_error("unmatched single quote", &line, line);
-					break ;
-				}
-				line++;
-			}
+					break;
+			if (*line == '\0')
+				tokenize_error("unmatched single quote", &line, line);
 		}
 		line++;
 	}
