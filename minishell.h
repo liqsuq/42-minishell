@@ -101,7 +101,7 @@ t_token	*tokenize(char *line);
 // tokenize/tokenuils.c
 int		tokenlen(t_token *token);
 t_token	*new_token(char *word, t_token_kind kind);
-void	add_token(t_token **head, t_token *new);
+t_token	*add_token(t_token **head, t_token *new);
 t_token	*dup_token(t_token *token);
 void	free_token(t_token *token);
 
@@ -110,7 +110,7 @@ t_node	*parse(t_token *token);
 
 // parse/nodeutils.c
 t_node	*new_node(t_node_kind kind);
-void	add_node(t_node **head, t_node *new);
+t_node	*add_node(t_node **head, t_node *new);
 void	free_node(t_node *node);
 
 // expand/expand.c

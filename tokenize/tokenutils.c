@@ -22,14 +22,14 @@ t_token	*new_token(char *word, t_token_kind kind)
 	return (token);
 }
 
-void	add_token(t_token **head, t_token *new)
+t_token	*add_token(t_token **head, t_token *new)
 {
 	if (*head == NULL)
 	{
 		*head = new;
-		return ;
+		return (new);
 	}
-	add_token(&(*head)->next, new);
+	return (add_token(&(*head)->next, new));
 }
 
 t_token	*dup_token(t_token *token)

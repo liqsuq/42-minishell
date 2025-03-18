@@ -13,14 +13,14 @@ t_node	*new_node(t_node_kind kind)
 	return (node);
 }
 
-void	add_node(t_node **head, t_node *new)
+t_node	*add_node(t_node **head, t_node *new)
 {
 	if (*head == NULL)
 	{
 		*head = new;
-		return ;
+		return (new);
 	}
-	add_node(&(*head)->next, new);
+	return (add_node(&(*head)->next, new));
 }
 
 void	free_node(t_node *node)

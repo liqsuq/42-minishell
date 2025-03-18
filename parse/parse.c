@@ -2,64 +2,72 @@
 
 #include "minishell.h"
 
-static void	parse_redirection(t_node *cmdnode, t_token **rest, t_token *token)
+static int	is_redirect(t_token *token)
 {
-	t_node	*redir_node;
+	char *const	ops[] = {">>", "<<", ">", "<"};
+	size_t		i;
 
-	redir_node = NULL;
-	if (!ft_strcmp(token->word, ">"))
-		redir_node = new_node(ND_REDIR_OUT);
-	else if (!ft_strcmp(token->word, ">>"))
-		redir_node = new_node(ND_REDIR_APPEND);
-	else if (!ft_strcmp(token->word, "<"))
-		redir_node = new_node(ND_REDIR_IN);
-	else if (!ft_strcmp(token->word, "<<"))
-		redir_node = new_node(ND_REDIR_HEREDOC);
-	else
-		parse_error("unexpected operator", rest, token);
-	token = token->next;
-	if (!token || token->kind != TK_WORD)
-		parse_error("expected filename after redirection", rest, token);
-	if (redir_node->kind == ND_REDIR_HEREDOC)
+	i = -1;
+	if (token->next == NULL || token->next->kind != TK_WORD)
+		return (0);
+	while (++i < sizeof(ops) / sizeof(*ops))
+		if (!ft_strcmp(token->word, ops[i]))
+				return (1);
+	return (0);	
+}
+
+static void	parse_redirect(t_node *node, t_token **token)
+{
+	t_node	*redir;
+	t_token	*tok;
+
+	tok = *token;
+	if (!ft_strcmp(tok->word, ">"))
+		redir = add_node(&node->redirects, new_node(ND_REDIR_OUT));
+	else if (!ft_strcmp(tok->word, ">>"))
+		redir = add_node(&node->redirects, new_node(ND_REDIR_APPEND));
+	else if (!ft_strcmp(tok->word, "<"))
+		redir = add_node(&node->redirects, new_node(ND_REDIR_IN));
+	else if (!ft_strcmp(tok->word, "<<"))
+		redir = add_node(&node->redirects, new_node(ND_REDIR_HEREDOC));
+	tok = tok->next;
+	if (redir->kind == ND_REDIR_HEREDOC)
 	{
-		if (ft_strcmp(token->word, "EOF") != 0)
-			parse_error("minishell only supports '<<EOF'", rest, token);
+		if (ft_strcmp(tok->word, "EOF") != 0)
+			parse_error("minishell only supports '<<EOF'", token, tok);
+		//redir->delimiter = dup_token(tok);
 	}
 	else
-		redir_node->filename = dup_token(token);
-	add_node(&cmdnode->redirects, redir_node);
-	token = token->next;
-	*rest = token;
+		redir->filename = dup_token(tok);
+	tok = tok->next;
+	*token = tok;
 }
 
 t_node	*parse(t_token *token)
 {
 	t_node	*head;
-	t_node	*current;
+	t_node	*cur;
 
 	if (!token)
 		return (NULL);
 	head = new_node(ND_SIMPLE_CMD);
-	current = head;
+	cur = head;
 	while (token)
 	{
 		if (token->kind == TK_WORD)
 		{
-			add_token(&current->args, dup_token(token));
+			add_token(&cur->args, dup_token(token));
 			token = token->next;
 		}
 		else if (token->kind == TK_OP)
 		{
 			if (!ft_strcmp(token->word, "|"))
 			{
+				cur = add_node(&head, new_node(ND_SIMPLE_CMD));
 				token = token->next;
-				t_node	*newcmd = new_node(ND_SIMPLE_CMD);
-				current->next = newcmd;
-				current = newcmd;
-			}
-			else if (!ft_strcmp(token->word, ">") || !ft_strcmp(token->word, ">>")
-				|| !ft_strcmp(token->word, "<") || !ft_strcmp(token->word, "<<"))
-				parse_redirection(current, &token, token);
+			}	
+			else if (is_redirect(token))
+				parse_redirect(cur, &token);
 			else
 				parse_error("unexpected token", &token, token);
 		}
