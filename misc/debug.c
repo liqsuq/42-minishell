@@ -14,7 +14,7 @@ void	print_argv(char **str)
 	// str 配列の各要素を順に表示
 	while (str[i])
 	{
-		printf("str[%d]: %s\n", i, str[i]);
+		ft_printf("str[%d]: %s\n", i, str[i]);
 		i++;
 	}
 }
@@ -23,7 +23,7 @@ void	print_token(t_token *token)
 {
 	if (token == NULL)
 		return ;
-	printf("kind: %d, word: %s\n", token->kind, token->word);
+	ft_printf("kind: %d, word: %s\n", token->kind, token->word);
 	print_token(token->next);
 }
 
@@ -34,13 +34,24 @@ void	print_token(t_token *token)
 void	print_env(t_env *env)
 {
 	// 環境変数のリストの先頭から順に key と value を表示
-	printf("start print_env\n");
-	printf("=======================================================\n");
+	ft_printf("start print_env\n");
+	ft_printf("=======================================================\n");
 	while (env)
 	{
-		printf("env->key: %s, env->value: %s\n", env->key, env->value);
+		ft_printf("env->key: %s, env->value: %s\n", env->key, env->value);
 		env = env->next;
 	}
+}
+
+void	print_redir(t_node *redir)
+{
+	if (redir == NULL)
+		return ;
+	if (redir->kind == ND_REDIR_HEREDOC)
+		ft_printf("kind: %d, delim: %s\n", redir->kind, redir->delimiter->word);
+	else
+		ft_printf("kind: %d, fname: %s\n", redir->kind, redir->filename->word);	
+	print_redir(redir->next);
 }
 
 // print_node 関数
@@ -61,8 +72,7 @@ void	print_node(t_node *node)
 	if (node->redirects)
 	{
 		printf("node->redirects:\n");
-		print_token(node->redirects->filename);
-		print_token(node->redirects->delimiter);
+		print_redir(node->redirects);
 	}
 	// 再帰的に呼び出して表示
 	print_node(node->next);

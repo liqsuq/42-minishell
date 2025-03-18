@@ -148,6 +148,7 @@ void	parse_error(const char *msg, t_token **token);
 void	print_argv(char **str);
 void	print_token(t_token *token);
 void	print_env(t_env *env);
+void	print_redir(t_node *redir);
 void	print_node(t_node *node);
 
 // misc/ft_strcmp.c
