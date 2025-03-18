@@ -89,9 +89,9 @@ static t_token	*word(char **line)
 		}
 		cur++;
 	}
-	word = strndup(*line, cur - *line);
+	word = ft_substr(*line, 0, cur - *line);
 	if (word == NULL)
-		fatal_error("strndup");
+		fatal_error("ft_substr");
 	*line = cur;
 	return (new_token(word, TK_WORD));
 }
