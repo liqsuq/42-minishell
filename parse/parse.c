@@ -45,7 +45,7 @@ t_node	*parse(t_token *token)
 	{
 		if (token->kind == TK_WORD)
 		{
-			append_token(&current->args, tokdup(token));
+			add_token(&current->args, tokdup(token));
 			token = token->next;
 		}
 		else if (token->kind == TK_OP)
@@ -59,9 +59,7 @@ t_node	*parse(t_token *token)
 			}
 			else if (!ft_strcmp(token->word, ">") || !ft_strcmp(token->word, ">>")
 				|| !ft_strcmp(token->word, "<") || !ft_strcmp(token->word, "<<"))
-			{
 				parse_redirection(current, &token, token);
-			}
 			else
 				parse_error("unexpected token", &token, token);
 		}

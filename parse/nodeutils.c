@@ -23,16 +23,6 @@ void	add_node(t_node **head, t_node *new)
 	add_node(&(*head)->next, new);
 }
 
-void	append_token(t_token **tokens, t_token *tok)
-{
-	if (*tokens == NULL)
-	{
-		*tokens = tok;
-		return ;
-	}
-	append_token(&(*tokens)->next, tok);
-}
-
 t_token	*tokdup(t_token *token)
 {
 	char	*word;

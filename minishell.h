@@ -110,7 +110,6 @@ t_node	*parse(t_token *token);
 // parse/nodeutils.c
 t_node	*new_node(t_node_kind kind);
 void	add_node(t_node **head, t_node *new);
-void	append_token(t_token **tokens, t_token *tok);
 t_token	*tokdup(t_token *token);
 void	free_node(t_node *node);
 
