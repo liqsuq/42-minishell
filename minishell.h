@@ -89,13 +89,12 @@ typedef struct s_env
 typedef struct s_data
 {
 	int				exit_status;
+	int				syntax_error;
 }					t_data;
-
-extern int	syntax_error;
 
 // tokenize/tokenize.c
 int		is_metacharacter(char c);
-t_token	*tokenize(char *line);
+t_token	*tokenize(t_data *data, char *line);
 
 // tokenize/tokenuils.c
 int		tokenlen(t_token *token);
@@ -105,7 +104,7 @@ t_token	*dup_token(t_token *token);
 void	free_token(t_token *token);
 
 // parse/parse.c
-t_node	*parse(t_token *token);
+t_node	*parse(t_data *data, t_token *token);
 
 // parse/nodeutils.c
 t_node	*new_node(t_node_kind kind);
@@ -120,7 +119,7 @@ void	append_char(char **s, char c);
 void	expand_variable(t_node *node);
 
 // execute/execute.c
-int		execute(t_node *node);
+void	execute(t_data *data, t_node *node);
 void	execute_command(t_node *node);
 
 // execute/argvutils.c
@@ -140,8 +139,8 @@ int		pipeline(t_node *node, int prev_pipeout);
 // misc/error.c
 void	fatal_error(const char *msg);
 void	assert_error(const char *msg);
-void	tokenize_error(const char *msg, char **line);
-void	parse_error(const char *msg, t_token **token);
+void	tokenize_error(const char *msg, t_data *data, char **line);
+void	parse_error(const char *msg, t_data *data, t_token **token);
 
 // misc/debug.c
 void	print_argv(char **str);

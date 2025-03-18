@@ -45,7 +45,7 @@ static int	is_word(const char *s)
 	return (*s != '\0' && !is_metacharacter(*s));
 }
 
-static t_token	*operator(char **line)
+static t_token	*operator(t_data *data, char **line)
 {
 	char *const	ops[] = {">>", "<<", "||", "&&", ";;", ">", "<", "|", "&", ";", "(", ")"};
 	char 		*cur;
@@ -65,10 +65,10 @@ static t_token	*operator(char **line)
 			return (new_token(op, TK_OP));
 		}
 	}
-	return (tokenize_error("unexpected operator", line), NULL);
+	return (tokenize_error("unexpected operator", data, line), NULL);
 }
 
-static t_token	*word(char **line)
+static t_token	*word(t_data *data, char **line)
 {
 	char 	*cur;
 	char	*word;
@@ -84,7 +84,7 @@ static t_token	*word(char **line)
 				if (*cur == '\0')
 					break;
 			if (*cur == '\0')
-				return (tokenize_error("unmatched quote", line), NULL);
+				return (tokenize_error("unmatched quote", data, line), NULL);
 		}
 		cur++;
 	}
@@ -95,7 +95,7 @@ static t_token	*word(char **line)
 	return (new_token(word, TK_WORD));
 }
 
-t_token	*tokenize(char *line)
+t_token	*tokenize(t_data *data, char *line)
 {
 	t_token	*head;
 
@@ -105,11 +105,11 @@ t_token	*tokenize(char *line)
 		if (skip_blank(&line))
 			continue ;
 		else if (is_operator(line))
-			add_token(&head, operator(&line));
+			add_token(&head, operator(data, &line));
 		else if (is_word(line))
-			add_token(&head, word(&line));
+			add_token(&head, word(data, &line));
 		else
-			tokenize_error("tokenize error", &line);
+			tokenize_error("tokenize error", data, &line);
 	}
 	return (head);
 }

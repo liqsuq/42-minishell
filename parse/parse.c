@@ -16,7 +16,7 @@ static int	is_redirect(t_token *token)
 	return (0);	
 }
 
-static void	parse_redirect(t_node *node, t_token **token)
+static void	parse_redirect(t_data *data, t_node *node, t_token **token)
 {
 	t_node	*redir;
 	t_token	*tok;
@@ -34,7 +34,7 @@ static void	parse_redirect(t_node *node, t_token **token)
 	if (redir->kind == ND_REDIR_HEREDOC)
 	{
 		if (ft_strcmp(tok->word, "EOF") != 0)
-			parse_error("minishell only supports '<<EOF'", token);
+			parse_error("minishell only supports '<<EOF'", data, token);
 		//redir->delimiter = dup_token(tok);
 	}
 	else
@@ -43,7 +43,7 @@ static void	parse_redirect(t_node *node, t_token **token)
 	*token = tok;
 }
 
-t_node	*parse(t_token *token)
+t_node	*parse(t_data *data, t_token *token)
 {
 	t_node	*head;
 	t_node	*cur;
@@ -67,12 +67,12 @@ t_node	*parse(t_token *token)
 				token = token->next;
 			}	
 			else if (is_redirect(token))
-				parse_redirect(cur, &token);
+				parse_redirect(data, cur, &token);
 			else
-				parse_error("unexpected token", &token);
+				parse_error("unexpected token", data, &token);
 		}
 		else
-			parse_error("unexpected token", &token);
+			parse_error("unexpected token", data, &token);
 	}
 	return (head);
 }

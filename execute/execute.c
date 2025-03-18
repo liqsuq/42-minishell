@@ -29,14 +29,17 @@ void	execute_command(t_node *node)
 		exit(EXIT_FAILURE);
 }
 
-int	execute(t_node *node)
+void	execute(t_data *data, t_node *node)
 {
 	pid_t	pid;
 	int		status;
 
 	if (node == NULL)
-		return (1);
+	{
+		data->exit_status = 1;
+		return ;
+	}
 	pid = pipeline(node, -1);
 	waitpid(pid, &status, 0);
-	return (WEXITSTATUS(status));
+	data->exit_status = WEXITSTATUS(status);
 }
