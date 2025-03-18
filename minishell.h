@@ -141,8 +141,8 @@ int		pipeline(t_node *node, int prev_pipeout);
 // misc/error.c
 void	fatal_error(const char *msg);
 void	assert_error(const char *msg);
-void	tokenize_error(const char *msg, char **rest, char *line);
-void	parse_error(const char *msg, t_token **rest, t_token *token);
+void	tokenize_error(const char *msg, char **line);
+void	parse_error(const char *msg, t_token **token);
 
 // misc/debug.c
 void	print_argv(char **str);

@@ -16,20 +16,26 @@ void	assert_error(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
-void	tokenize_error(const char *msg, char **rest, char *line)
+void	tokenize_error(const char *msg, char **line)
 {
+	char *cur;
+
+	cur = *line;
 	syntax_error = 1;
 	ft_dprintf(STDERR_FILENO, HEADER "syntax error: %s\n", msg);
-	while (*line)
-		line++;
-	*rest = line;
+	while (*cur != '\0')
+		cur++;
+	*line = cur;
 }
 
-void	parse_error(const char *msg, t_token **rest, t_token *token)
+void	parse_error(const char *msg, t_token **token)
 {
+	t_token *cur;
+
+	cur = *token;
 	syntax_error = 1;
 	ft_dprintf(STDERR_FILENO, HEADER "syntax error: %s\n", msg);
-	while (token != NULL)
-		token = token->next;
-	*rest = token;
+	while (cur != NULL)
+		cur = cur->next;
+	*token = cur;
 }

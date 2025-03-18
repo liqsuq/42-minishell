@@ -7,16 +7,19 @@ static int	is_blank(char c)
 	return (c == ' ' || c == '\t' || c == '\n');
 }
 
-static int	skip_blank(char **rest, char *line)
+static int	skip_blank(char **line)
 {
-	if (is_blank(*line))
+	char	*cur;
+
+	cur = *line;
+	if (is_blank(*cur))
 	{
-		while (*line && is_blank(*line))
-			line++;
-		*rest = line;
+		while (*cur && is_blank(*cur))
+			cur++;
+		*line = cur;
 		return (1);
 	}
-	*rest = line;
+	*line = cur;
 	return (0);
 }
 
@@ -42,21 +45,23 @@ static int	is_word(const char *s)
 	return (*s != '\0' && !is_metacharacter(*s));
 }
 
-static t_token	*operator(char **rest, char *line)
+static t_token	*operator(char **line)
 {
 	char *const	ops[] = {">>", "<<", "||", "&&", ";;", ">", "<", "|", "&", ";", "(", ")"};
+	char 		*cur;
 	size_t		i;
-	char		*op;
+	char		*op;	
 
+	cur = *line;
 	i = -1;
 	while (++i < sizeof(ops) / sizeof(*ops))
 	{
-		if (ft_strncmp(line, ops[i], ft_strlen(ops[i])) == 0)
+		if (ft_strncmp(cur, ops[i], ft_strlen(ops[i])) == 0)
 		{
 			op = ft_strdup(ops[i]);
 			if (op == NULL)
 				fatal_error("strdup");
-			*rest = line + ft_strlen(op);
+			*line = cur + ft_strlen(op);
 			return (new_token(op, TK_OP));
 		}
 	}
@@ -64,29 +69,30 @@ static t_token	*operator(char **rest, char *line)
 	return (NULL);
 }
 
-static t_token	*word(char **rest, char *line)
+static t_token	*word(char **line)
 {
-	const char	*start = line;
-	char		*word;
-	char		c;
+	char 	*cur;
+	char	*word;
+	char	c;
 
-	while (*line != '\0' && !is_metacharacter(*line))
+	cur = *line;
+	while (*cur != '\0' && !is_metacharacter(*cur))
 	{
-		if (*line == SQUOTE || *line == DQUOTE)
+		if (*cur == SQUOTE || *cur == DQUOTE)
 		{
-			c = *line;
-			while (*++line != c)
-				if (*line == '\0')
+			c = *cur;
+			while (*++cur != c)
+				if (*cur == '\0')
 					break;
-			if (*line == '\0')
-				tokenize_error("unmatched single quote", &line, line);
+			if (*cur == '\0')
+				tokenize_error("unmatched single quote", line);
 		}
-		line++;
+		cur++;
 	}
-	word = strndup(start, line - start);
+	word = strndup(*line, cur - *line);
 	if (word == NULL)
 		fatal_error("strndup");
-	*rest = line;
+	*line = cur;
 	return (new_token(word, TK_WORD));
 }
 
@@ -97,14 +103,14 @@ t_token	*tokenize(char *line)
 	head = NULL;
 	while (*line != '\0')
 	{
-		if (skip_blank(&line, line))
+		if (skip_blank(&line))
 			continue ;
 		else if (is_operator(line))
-			add_token(&head, operator(&line, line));
+			add_token(&head, operator(&line));
 		else if (is_word(line))
-			add_token(&head, word(&line, line));
+			add_token(&head, word(&line));
 		else
-			tokenize_error("tokernize error", &line, line);
+			tokenize_error("tokernize error", &line);
 	}
 	return (head);
 }
