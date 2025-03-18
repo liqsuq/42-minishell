@@ -2,7 +2,7 @@
 
 #include "minishell.h"
 
-static void init_data(t_data *data)
+static void	init_data(t_data *data)
 {
 	data->exit_status = 0;
 	data->syntax_error = 0;

@@ -48,7 +48,7 @@ static int	is_word(const char *s)
 static t_token	*operator(t_data *data, char **line)
 {
 	char *const	ops[] = {">>", "<<", "||", "&&", ";;", ">", "<", "|", "&", ";", "(", ")"};
-	char 		*cur;
+	char		*cur;
 	size_t		i;
 	char		*op;	
 
@@ -70,7 +70,7 @@ static t_token	*operator(t_data *data, char **line)
 
 static t_token	*word(t_data *data, char **line)
 {
-	char 	*cur;
+	char	*cur;
 	char	*word;
 	char	c;
 
@@ -82,7 +82,7 @@ static t_token	*word(t_data *data, char **line)
 			c = *cur;
 			while (*++cur != c)
 				if (*cur == '\0')
-					break;
+					break ;
 			if (*cur == '\0')
 				return (tokenize_error("unmatched quote", data, line), NULL);
 		}

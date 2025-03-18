@@ -50,7 +50,7 @@ void	print_redir(t_node *redir)
 	if (redir->kind == ND_REDIR_HEREDOC)
 		ft_printf("kind: %d, delim: %s\n", redir->kind, redir->delimiter->word);
 	else
-		ft_printf("kind: %d, fname: %s\n", redir->kind, redir->filename->word);	
+		ft_printf("kind: %d, fname: %s\n", redir->kind, redir->filename->word);
 	print_redir(redir->next);
 }
 

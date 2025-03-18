@@ -16,7 +16,7 @@ void	assert_error(const char *msg)
 
 void	tokenize_error(const char *msg, t_data *data, char **line)
 {
-	char *cur;
+	char	*cur;
 
 	cur = *line;
 	data->syntax_error = 1;
@@ -26,9 +26,9 @@ void	tokenize_error(const char *msg, t_data *data, char **line)
 	*line = cur;
 }
 
-void	parse_error(const char *msg, t_data *data,t_token **token)
+void	parse_error(const char *msg, t_data *data, t_token **token)
 {
-	t_token *cur;
+	t_token	*cur;
 
 	cur = *token;
 	data->syntax_error = 1;

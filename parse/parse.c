@@ -12,8 +12,8 @@ static int	is_redirect(t_token *token)
 		return (0);
 	while (++i < sizeof(ops) / sizeof(*ops))
 		if (!ft_strcmp(token->word, ops[i]))
-				return (1);
-	return (0);	
+			return (1);
+	return (0);
 }
 
 static void	parse_redirect(t_data *data, t_node *node, t_token **token)
@@ -65,7 +65,7 @@ t_node	*parse(t_data *data, t_token *token)
 			{
 				cur = add_node(&head, new_node(ND_SIMPLE_CMD));
 				token = token->next;
-			}	
+			}
 			else if (is_redirect(token))
 				parse_redirect(data, cur, &token);
 			else
