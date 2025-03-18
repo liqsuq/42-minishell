@@ -2,12 +2,12 @@
 
 #include "minishell.h"
 
-int	is_blank(char c)
+static int	is_blank(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\n');
 }
 
-int	consume_blank(char **rest, char *line)
+static int	skip_blank(char **rest, char *line)
 {
 	if (is_blank(*line))
 	{
@@ -20,18 +20,15 @@ int	consume_blank(char **rest, char *line)
 	return (0);
 }
 
-int	is_operator(const char *s)
+static int	is_operator(const char *s)
 {
 	char *const	ops[] = {">>", "<<", "||", "&&", ";;", ">", "<", "|", "&", ";", "(", ")"};
 	size_t		i;
 
-	i = 0;
-	while (i < sizeof(ops) / sizeof(*ops))
-	{
+	i = -1;
+	while (++i < sizeof(ops) / sizeof(*ops))
 		if (ft_strncmp(s, ops[i], ft_strlen(ops[i])) == 0)
 			return (1);
-		i++;
-	}
 	return (0);
 }
 
@@ -40,19 +37,19 @@ int	is_metacharacter(char c)
 	return (c != '\0' && ft_strchr("|&;()<> \t\n", c));
 }
 
-int	is_word(const char *s)
+static int	is_word(const char *s)
 {
-	return (*s && !is_metacharacter(*s));
+	return (*s != '\0' && !is_metacharacter(*s));
 }
 
-t_token	*operator(char **rest, char *line)
+static t_token	*operator(char **rest, char *line)
 {
 	char *const	ops[] = {">>", "<<", "||", "&&", ";;", ">", "<", "|", "&", ";", "(", ")"};
 	size_t		i;
 	char		*op;
 
-	i = 0;
-	while (i < sizeof(ops) / sizeof(*ops))
+	i = -1;
+	while (++i < sizeof(ops) / sizeof(*ops))
 	{
 		if (ft_strncmp(line, ops[i], ft_strlen(ops[i])) == 0)
 		{
@@ -62,13 +59,12 @@ t_token	*operator(char **rest, char *line)
 			*rest = line + ft_strlen(op);
 			return (new_token(op, TK_OP));
 		}
-		i++;
 	}
 	assert_error("unexpected operator");
 	return (NULL);
 }
 
-t_token	*word(char **rest, char *line)
+static t_token	*word(char **rest, char *line)
 {
 	const char	*start = line;
 	char		*word;
@@ -101,7 +97,7 @@ t_token	*tokenize(char *line)
 	head = NULL;
 	while (*line != '\0')
 	{
-		if (consume_blank(&line, line))
+		if (skip_blank(&line, line))
 			continue ;
 		else if (is_operator(line))
 			add_token(&head, operator(&line, line));
