@@ -8,16 +8,13 @@ void	execute_command(t_node *node)
 	char	*path;
 
 	argv = new_argv(node->args);
-	if (!argv[0])
-	{
-		free_argv(argv);
-		exit (1);
-	}
+	if (argv == NULL)
+		exit(1);
 	path = resolve_path(argv[0]);
-	if (!path)
+	if (path == NULL)
 	{
 		free_argv(argv);
-		exit (127);
+		exit(127);
 	}
 	redirect(node->redirects, NULL);
 	execve(path, argv, NULL);

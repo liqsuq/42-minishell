@@ -4,64 +4,57 @@
 
 static int	get_next_dir(const char **env_path, char *buf)
 {
-	const char	*start;
 	const char	*p;
 	size_t		len;
 
-	start = *env_path;
-	if (!*start)
-		return (0);
-	p = start;
-	while (*p && *p != ':')
+	if (*env_path == NULL || **env_path == '\0')
+		return (1);
+	p = *env_path;
+	while (*p != '\0' && *p != ':')
 		p++;
-	len = p - start;
+	len = p - *env_path;
 	if (len >= PATH_MAX)
 		len = PATH_MAX - 1;
-	ft_memcpy(buf, start, len);
+	ft_memcpy(buf, *env_path, len);
 	buf[len] = '\0';
-	if (*p == ':')
-		*env_path = p + 1;
-	else
-		*env_path = p;
-	return (1);
+	*env_path = p;
+	if (**env_path == ':')
+		(*env_path)++;
+	return (0);
 }
 
-static void	join_filename(char *dir, const char *filename)
+static void	join_filename(char *dirname, const char *filename)
 {
-	size_t	i;
-	size_t	fn;
+	int	i;
+	int	j;
 
 	i = 0;
-	fn = 0;
-	while (dir[i] != '\0' && i < PATH_MAX - 1)
+	while (dirname[i] != '\0' && i < PATH_MAX - 1)
 		i++;
 	if (i < PATH_MAX - 1)
-		dir[i++] = '/';
-	while (filename[fn] && i < PATH_MAX - 1)
-	{
-		dir[i] = filename[fn];
-		i++;
-		fn++;
-	}
-	dir[i] = '\0';
+		dirname[i++] = '/';
+	j = 0;
+	while (filename[j] && i < PATH_MAX - 1)
+		dirname[i++] = filename[j++];
+	dirname[i] = '\0';
 }
 
 static char	*search_path(const char *filename)
 {
-	char		dir[PATH_MAX];
+	char		dirname[PATH_MAX];
 	const char	*env_value;
 
 	env_value = getenv("PATH");
-	if (!env_value || !*env_value)
+	if (env_value == NULL || *env_value == '\0')
 		return (NULL);
 	while (1)
 	{
-		ft_memset(dir, 0, PATH_MAX);
-		if (!get_next_dir(&env_value, dir))
+		ft_memset(dirname, 0, PATH_MAX);
+		if (get_next_dir(&env_value, dirname))
 			break ;
-		join_filename(dir, filename);
-		if (access(dir, X_OK) == 0)
-			return (ft_strdup(dir));
+		join_filename(dirname, filename);
+		if (access(dirname, X_OK) == 0)
+			return (ft_strdup(dirname));
 	}
 	return (NULL);
 }

@@ -22,6 +22,10 @@
 # include <stdbool.h>
 # include "libft/libft.h"
 
+# ifndef PATH_MAX
+#  define PATH_MAX 4096
+# endif
+
 # define NAME "minishell"
 # define HEADER "minishell: "
 # define PROMPT "minish$ "
