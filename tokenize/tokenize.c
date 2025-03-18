@@ -65,8 +65,7 @@ static t_token	*operator(char **line)
 			return (new_token(op, TK_OP));
 		}
 	}
-	assert_error("unexpected operator");
-	return (NULL);
+	return (tokenize_error("unexpected operator", line), NULL);
 }
 
 static t_token	*word(char **line)
@@ -85,7 +84,7 @@ static t_token	*word(char **line)
 				if (*cur == '\0')
 					break;
 			if (*cur == '\0')
-				tokenize_error("unmatched single quote", line);
+				return (tokenize_error("unmatched quote", line), NULL);
 		}
 		cur++;
 	}
@@ -110,7 +109,7 @@ t_token	*tokenize(char *line)
 		else if (is_word(line))
 			add_token(&head, word(&line));
 		else
-			tokenize_error("tokernize error", &line);
+			tokenize_error("tokenize error", &line);
 	}
 	return (head);
 }
