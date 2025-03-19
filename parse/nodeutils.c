@@ -28,6 +28,7 @@ void	free_node(t_node *node)
 	if (node == NULL)
 		return ;
 	free_node(node->next);
+	free_node(node->redirects);
 	free_token(node->args);
 	free(node);
 }

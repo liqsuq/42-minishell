@@ -102,7 +102,6 @@ void	expand_variable(t_node *node)
 	if (node == NULL)
 		return ;
 	expand_variable_token(node->args);
-	expand_variable_token(node->filename);
 	expand_variable(node->redirects);
 	expand_variable(node->next);
 }

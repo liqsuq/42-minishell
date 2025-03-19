@@ -35,10 +35,10 @@ static void	parse_redirect(t_data *data, t_node *node, t_token **token)
 	{
 		if (ft_strcmp(tok->word, "EOF") != 0)
 			parse_error("minishell only supports '<<EOF'", data, token);
-		//redir->delimiter = dup_token(tok);
+		redir->args = dup_token(tok);
 	}
 	else
-		redir->filename = dup_token(tok);
+		redir->args = dup_token(tok);
 	tok = tok->next;
 	*token = tok;
 }

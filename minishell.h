@@ -60,23 +60,12 @@ typedef enum e_node_kind
 typedef struct s_node
 {
 	t_node_kind		kind;				// ノードの種類
-	t_token			*args;				// 引数リスト
-	struct s_node	*redirects;			// リダイレクト
-	t_token			*filename;			// ファイル名
-	t_token			*delimiter;			// ヒアドキュメントの区切り文字
-	int				stashed_std_fd;		// 保持している標準ファイルディスクリプタ
-	bool			is_delimiter_quote;	// 区切り文字がクオートされているかどうか
+	t_token			*args;				// 引数リスト・リダイレクトの引数
+	struct s_node	*redirects;			// リダイレクトリスト
+	int				stashed_fd;			// 保持している標準ファイルディスクリプタ
+	bool			is_quoted;			// 区切り文字がクオートされているかどうか
 	struct s_node	*next;				// 次のノード
 }					t_node;
-
-typedef struct s_redir
-{
-	t_token			*filename;
-	int				stashed_fd;
-	t_token			*delimiter;
-	int				is_quoted;
-	struct s_redir	*next;
-}					t_redir;
 
 // 環境変数のキーと値を格納するリスト構造体
 typedef struct s_env

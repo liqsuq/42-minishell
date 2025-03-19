@@ -23,7 +23,7 @@ void	print_token(t_token *token)
 {
 	if (token == NULL)
 		return ;
-	ft_printf("kind: %d, word: %s\n", token->kind, token->word);
+	ft_printf("token: %d, word: %s\n", token->kind, token->word);
 	print_token(token->next);
 }
 
@@ -47,10 +47,7 @@ void	print_redir(t_node *redir)
 {
 	if (redir == NULL)
 		return ;
-	if (redir->kind == ND_REDIR_HEREDOC)
-		ft_printf("kind: %d, delim: %s\n", redir->kind, redir->delimiter->word);
-	else
-		ft_printf("kind: %d, fname: %s\n", redir->kind, redir->filename->word);
+	ft_printf("redirect: %d, args: %s\n", redir->args->kind, redir->args->word);
 	print_redir(redir->next);
 }
 
@@ -65,15 +62,12 @@ void	print_node(t_node *node)
 	// コマンドの引数が存在する場合、引数を表示
 	if (node->args)
 	{
-		printf("node->args:\n");
+		ft_printf("node: %d, args:\n", node->kind);
 		print_token(node->args);
 	}
 	// コマンドのリダイレクトが存在する場合、リダイレクト情報を表示
 	if (node->redirects)
-	{
-		printf("node->redirects:\n");
 		print_redir(node->redirects);
-	}
 	// 再帰的に呼び出して表示
 	print_node(node->next);
 }
