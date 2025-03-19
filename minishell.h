@@ -53,7 +53,6 @@ typedef enum e_node_kind
 	ND_REDIR_IN,		// 標準入力リダイレクト
 	ND_REDIR_APPEND,	// 出力の追加リダイレクト
 	ND_REDIR_HEREDOC,	// ヒアドキュメント
-	ND_PIPELINE,		// パイプライン
 }	t_node_kind;
 
 // コマンドやリダイレクトを表すノード構造体

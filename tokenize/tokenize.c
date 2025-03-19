@@ -45,7 +45,7 @@ static int	is_word(const char *s)
 	return (*s != '\0' && !is_metacharacter(*s));
 }
 
-static t_token	*operator(t_data *data, char **line)
+static t_token	*tokenize_operator(t_data *data, char **line)
 {
 	char *const	ops[] = {">>", "<<", "||", "&&", ";;", ">", "<", "|", "&", ";", "(", ")"};
 	char		*cur;
@@ -68,7 +68,7 @@ static t_token	*operator(t_data *data, char **line)
 	return (tokenize_error("unexpected operator", data, line), NULL);
 }
 
-static t_token	*word(t_data *data, char **line)
+static t_token	*tokenize_word(t_data *data, char **line)
 {
 	char	*cur;
 	char	*word;
@@ -105,11 +105,11 @@ t_token	*tokenize(t_data *data, char *line)
 		if (skip_blank(&line))
 			continue ;
 		else if (is_operator(line))
-			add_token(&head, operator(data, &line));
+			add_token(&head, tokenize_operator(data, &line));
 		else if (is_word(line))
-			add_token(&head, word(data, &line));
+			add_token(&head, tokenize_word(data, &line));
 		else
-			tokenize_error("tokenize error", data, &line);
+			tokenize_error("unknown tokenize error", data, &line);
 	}
 	return (head);
 }

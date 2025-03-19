@@ -24,30 +24,26 @@ void	append_char(char **s, char c)
 static void	remove_quote(t_token *tokens)
 {
 	char	*new_word;
-	char	*str;
+	char	*cur;
 	char	c;
 
 	if (tokens == NULL)
 		return ;
 	if (tokens->kind == TK_WORD && tokens->word != NULL)
 	{
-		str = tokens->word;
+		cur = tokens->word;
 		new_word = NULL;
-		while (*str != '\0' && !is_metacharacter(*str))
+		while (*cur != '\0' && !is_metacharacter(*cur))
 		{
-			if (*str == SQUOTE || *str == DQUOTE)
+			if (*cur == SQUOTE || *cur == DQUOTE)
 			{
-				c = *str++;
-				while (*str != c)
-				{
-					if (*str == '\0')
-						assert_error("unmatched single quote");
-					append_char(&new_word, *str++);
-				}
-				str++;
+				c = *cur;
+				while (*++cur != c)
+					append_char(&new_word, *cur);
+				cur++;
 			}
 			else
-				append_char(&new_word, *str++);
+				append_char(&new_word, *cur++);
 		}
 		free(tokens->word);
 		tokens->word = new_word;

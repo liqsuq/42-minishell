@@ -16,63 +16,79 @@ static int	is_redirect(t_token *token)
 	return (0);
 }
 
-static void	parse_redirect(t_data *data, t_node *node, t_token **token)
+static t_token *parse_redirect(t_data *data, t_node *node, t_token *token)
 {
-	t_node	*redir;
-	t_token	*tok;
+	t_node	*nd;	
+	t_token	*tk;
 
-	tok = *token;
-	if (!ft_strcmp(tok->word, ">"))
-		redir = add_node(&node->redirects, new_node(ND_REDIR_OUT));
-	else if (!ft_strcmp(tok->word, ">>"))
-		redir = add_node(&node->redirects, new_node(ND_REDIR_APPEND));
-	else if (!ft_strcmp(tok->word, "<"))
-		redir = add_node(&node->redirects, new_node(ND_REDIR_IN));
-	else if (!ft_strcmp(tok->word, "<<"))
-		redir = add_node(&node->redirects, new_node(ND_REDIR_HEREDOC));
-	tok = tok->next;
-	if (redir->kind == ND_REDIR_HEREDOC)
+	tk = token;
+	if (!ft_strcmp(tk->word, ">"))
+		nd = add_node(&node->redirects, new_node(ND_REDIR_OUT));
+	else if (!ft_strcmp(tk->word, ">>"))
+		nd = add_node(&node->redirects, new_node(ND_REDIR_APPEND));
+	else if (!ft_strcmp(tk->word, "<"))
+		nd = add_node(&node->redirects, new_node(ND_REDIR_IN));
+	else if (!ft_strcmp(tk->word, "<<"))
+		nd = add_node(&node->redirects, new_node(ND_REDIR_HEREDOC));
+	tk = tk->next;
+	nd->args = dup_token(tk);
+	if (nd->kind == ND_REDIR_HEREDOC && ft_strcmp(tk->word, "EOF") != 0)
+		parse_error("minishell only supports '<<EOF'", data, &tk);
+	else
+		tk = tk->next;
+	return (tk);
+}
+
+static t_token	*parse_simple_cmd(t_data *data, t_node **node, t_token *token)
+{
+	t_node	*nd;
+	t_token	*tk;
+
+	tk = token;
+	nd = add_node(node, new_node(ND_SIMPLE_CMD));
+	while (tk != NULL)
 	{
-		if (ft_strcmp(tok->word, "EOF") != 0)
-			parse_error("minishell only supports '<<EOF'", data, token);
-		redir->args = dup_token(tok);
+		if (tk->kind == TK_WORD)
+		{
+			add_token(&nd->args, dup_token(tk));
+			tk = tk->next;
+		}
+		else if (is_redirect(tk))
+			tk = parse_redirect(data, nd, tk);
+		else
+			break ;
+	}
+	return (tk);
+}
+
+static t_token	*parse_pipeline(t_data *data, t_node **node, t_token *token)
+{
+	t_token *tk;
+	
+	tk = token;
+	if (tk && (tk->kind == TK_WORD || is_redirect(tk)))
+	{
+		tk = parse_simple_cmd(data, node, tk);
+		if (tk && tk->kind == TK_OP && !ft_strcmp(tk->word, "|"))
+		{
+			if (tk->next)
+				tk = parse_pipeline(data, node, tk->next);
+			else
+				parse_error("unexpected end of file", data, &tk);
+		}
 	}
 	else
-		redir->args = dup_token(tok);
-	tok = tok->next;
-	*token = tok;
+		parse_error("unexpected token", data, &tk);
+	return (tk);
 }
 
 t_node	*parse(t_data *data, t_token *token)
 {
-	t_node	*head;
-	t_node	*cur;
+	t_node	*node;
 
-	if (!token)
+	node = NULL;
+	if (token == NULL)
 		return (NULL);
-	head = new_node(ND_SIMPLE_CMD);
-	cur = head;
-	while (token)
-	{
-		if (token->kind == TK_WORD)
-		{
-			add_token(&cur->args, dup_token(token));
-			token = token->next;
-		}
-		else if (token->kind == TK_OP)
-		{
-			if (!ft_strcmp(token->word, "|"))
-			{
-				cur = add_node(&head, new_node(ND_SIMPLE_CMD));
-				token = token->next;
-			}
-			else if (is_redirect(token))
-				parse_redirect(data, cur, &token);
-			else
-				parse_error("unexpected token", data, &token);
-		}
-		else
-			parse_error("unexpected token", data, &token);
-	}
-	return (head);
+	parse_pipeline(data, &node, token);
+	return (node);
 }
