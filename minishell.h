@@ -149,10 +149,8 @@ void	print_env(t_env *env);
 void	print_redir(t_node *redir);
 void	print_node(t_node *node);
 
-// misc/ft_strcmp.c
+// misc/ft_funcs.c
 int		ft_strcmp(const char *s1, const char *s2);
-
-// misc/ft_realloc.c
 void	*ft_realloc(void *ptr, size_t size);
 
 #endif
