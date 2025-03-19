@@ -21,41 +21,43 @@ void	append_char(char **s, char c)
 	*s = new;
 }
 
-static void	remove_quote(t_token *tokens)
+static void	remove_quote(t_token *token)
 {
 	char	*new_word;
 	char	*cur;
 	char	c;
 
-	if (tokens == NULL)
-		return ;
-	if (tokens->kind == TK_WORD && tokens->word != NULL)
+	new_word = NULL;
+	cur = token->word;
+	while (*cur != '\0' && !is_metacharacter(*cur))
 	{
-		cur = tokens->word;
-		new_word = NULL;
-		while (*cur != '\0' && !is_metacharacter(*cur))
+		if (*cur == SQUOTE || *cur == DQUOTE)
 		{
-			if (*cur == SQUOTE || *cur == DQUOTE)
-			{
-				c = *cur;
-				while (*++cur != c)
-					append_char(&new_word, *cur);
-				cur++;
-			}
-			else
-				append_char(&new_word, *cur++);
+			c = *cur;
+			while (*++cur != c)
+				append_char(&new_word, *cur);
+			cur++;
 		}
-		free(tokens->word);
-		tokens->word = new_word;
+		else
+			append_char(&new_word, *cur++);
 	}
-	remove_quote(tokens->next);
+	free(token->word);
+	token->word = new_word;
 }
 
 static void	expand_quote(t_node *node)
 {
+	t_token	*tok;
+
 	if (node == NULL)
 		return ;
-	remove_quote(node->args);
+	tok = node->args;
+	while (tok != NULL)
+	{
+		if (tok->kind == TK_WORD && tok->word != NULL)
+			remove_quote(tok);
+		tok = tok->next;
+	}
 	expand_quote(node->next);
 }
 

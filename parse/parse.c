@@ -16,7 +16,7 @@ static int	is_redirect(t_token *token)
 	return (0);
 }
 
-static t_token *parse_redirect(t_data *data, t_node *node, t_token *token)
+static t_token	*parse_redirect(t_data *data, t_node *node, t_token *token)
 {
 	t_node	*nd;	
 	t_token	*tk;
@@ -63,8 +63,8 @@ static t_token	*parse_simple_cmd(t_data *data, t_node **node, t_token *token)
 
 static t_token	*parse_pipeline(t_data *data, t_node **node, t_token *token)
 {
-	t_token *tk;
-	
+	t_token	*tk;
+
 	tk = token;
 	if (tk && (tk->kind == TK_WORD || is_redirect(tk)))
 	{
