@@ -73,7 +73,7 @@ void	redirect(t_node *redi, t_env **env)
 		open_redirect(redi, STDIN_FILENO, O_RDONLY, 0644);
 	else if (redi->kind == ND_REDIR_APPEND)
 		open_redirect(redi, STDOUT_FILENO, O_CREAT | O_WRONLY | O_APPEND, 0644);
-	else if (redi->kind == ND_REDIR_HEREDOC)
+	else
 		open_heredoc(redi, env);
 	return (redirect(redi->next, env));
 }
@@ -85,10 +85,10 @@ void	reset_redirect(t_node *redi)
 	if (redi == NULL)
 		return ;
 	reset_redirect(redi->next);
-	if (redi->kind == ND_REDIR_OUT || redi->kind == ND_REDIR_APPEND)
-		fd = STDOUT_FILENO;
-	else if (redi->kind == ND_REDIR_IN || redi->kind == ND_REDIR_HEREDOC)
+	if (redi->kind == ND_REDIR_IN || redi->kind == ND_REDIR_HEREDOC)
 		fd = STDIN_FILENO;
+	else
+		fd = STDOUT_FILENO;
 	if (dup2(redi->stashed_fd, fd) < 0)
 		fatal_error("dup2");
 	close(redi->stashed_fd);
