@@ -1,24 +1,48 @@
 // main.c
+
 #include "minishell.h"
+
+static void	init_data(t_data *data)
+{
+	data->exit_status = 0;
+	data->syntax_error = 0;
+}
+
+static void	process_line(t_data *data, char *line)
+{
+	t_token	*token;
+	t_node	*node;
+
+	data->syntax_error = 0;
+	token = tokenize(data, line);
+	node = parse(data, token);
+	expand(node);
+	if (data->syntax_error == 1)
+		data->exit_status = ERROR_SYNTAX;
+	else
+		execute(data, node);
+	free_node(node);
+	free_token(token);
+}
 
 int	main(void)
 {
+	t_data	data;
 	char	*line;
-	int	last_status;
-	
-	last_status = 0;
+
 	rl_outstream = stderr;
+	init_data(&data);
 	while (1)
 	{
 		line = readline(PROMPT);
 		if (line == NULL)
-		break ;
+			break ;
 		if (*line)
 		{
 			add_history(line);
-			last_status = interpret(line);
+			process_line(&data, line);
 		}
 		free(line);
 	}
-	return (last_status);
+	return (data.exit_status);
 }

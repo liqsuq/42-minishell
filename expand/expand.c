@@ -8,74 +8,61 @@ void	append_char(char **s, char c)
 	char	*new;
 
 	size = 2;
-	if (*s)
+	if (*s != NULL)
 		size += strlen(*s);
-	new = malloc(size);
+	new = ft_realloc(*s, size);
 	if (new == NULL)
-		fatal_error("malloc");
-	if (*s)
-		ft_strlcpy(new, *s, size);
+	{
+		free(*s);
+		fatal_error("ft_realloc");
+	}
 	new[size - 2] = c;
 	new[size - 1] = '\0';
-	if (*s)
-		free(*s);
 	*s = new;
 }
 
-void	remove_quotes(t_token *tokens)
+static void	remove_quote(t_token *token)
 {
 	char	*new_word;
-	char	*str;
+	char	*cur;
+	char	c;
 
-	if (tokens == NULL)
-		return ;
-	if (tokens->kind == TK_WORD && tokens->word != NULL)
+	new_word = NULL;
+	cur = token->word;
+	while (*cur != '\0' && !is_metacharacter(*cur))
 	{
-		str = tokens->word;
-		new_word = NULL;
-		while (*str != '\0' && !is_metacharacter(*str))
+		if (*cur == SQUOTE || *cur == DQUOTE)
 		{
-			if (*str == SQUOTE)
-			{
-				str++;
-				while (*str != SQUOTE)
-				{
-					if (*str == '\0')
-						assert_error("unmatched single quote");
-					append_char(&new_word, *str++);
-				}
-				str++;
-			}
-			else if (*str == DQUOTE)
-			{
-				str++;
-				while (*str != DQUOTE)
-				{
-					if (*str == '\0')
-						assert_error("unmatched double quote");
-					append_char(&new_word, *str++);
-				}
-				str++;
-			}
-			else
-				append_char(&new_word, *str++);
+			c = *cur;
+			while (*++cur != c)
+				append_char(&new_word, *cur);
+			cur++;
 		}
-		free(tokens->word);
-		tokens->word = new_word;
+		else
+			append_char(&new_word, *cur++);
 	}
-	remove_quotes(tokens->next);
+	free(token->word);
+	token->word = new_word;
 }
 
-void	expand_quotes_removal(t_node *node)
+static void	expand_quote(t_node *node)
 {
+	t_token	*tok;
+
 	if (node == NULL)
 		return ;
-	remove_quotes(node->args);
-	expand_quotes_removal(node->next);
+	tok = node->args;
+	while (tok != NULL)
+	{
+		if (tok->kind == TK_WORD && tok->word != NULL)
+			remove_quote(tok);
+		tok = tok->next;
+	}
+	expand_quote(node->next);
 }
 
 void	expand(t_node *node)
 {
 	expand_variable(node);
-	expand_quotes_removal(node);
+	expand_quote(node);
 }

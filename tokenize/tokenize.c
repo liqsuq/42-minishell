@@ -1,37 +1,37 @@
-// tokenizer.c
+// tokenize.c
 
 #include "minishell.h"
 
-int	is_blank(char c)
+static int	is_blank(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\n');
 }
 
-int	consume_blank(char **rest, char *line)
+static int	skip_blank(char **line)
 {
-	if (is_blank(*line))
+	char	*cur;
+
+	cur = *line;
+	if (is_blank(*cur))
 	{
-		while (*line && is_blank(*line))
-			line++;
-		*rest = line;
+		while (*cur && is_blank(*cur))
+			cur++;
+		*line = cur;
 		return (1);
 	}
-	*rest = line;
+	*line = cur;
 	return (0);
 }
 
-int	is_operator(const char *s)
+static int	is_operator(const char *s)
 {
 	char *const	ops[] = {">>", "<<", "||", "&&", ";;", ">", "<", "|", "&", ";", "(", ")"};
 	size_t		i;
 
-	i = 0;
-	while (i < sizeof(ops) / sizeof(*ops))
-	{
+	i = -1;
+	while (++i < sizeof(ops) / sizeof(*ops))
 		if (ft_strncmp(s, ops[i], ft_strlen(ops[i])) == 0)
 			return (1);
-		i++;
-	}
 	return (0);
 }
 
@@ -40,94 +40,76 @@ int	is_metacharacter(char c)
 	return (c != '\0' && ft_strchr("|&;()<> \t\n", c));
 }
 
-int	is_word(const char *s)
+static int	is_word(const char *s)
 {
-	return (*s && !is_metacharacter(*s));
+	return (*s != '\0' && !is_metacharacter(*s));
 }
 
-t_token	*operator(char **rest, char *line)
+static t_token	*tokenize_operator(t_data *data, char **line)
 {
 	char *const	ops[] = {">>", "<<", "||", "&&", ";;", ">", "<", "|", "&", ";", "(", ")"};
-	size_t		i = 0;
-	char		*op;
+	char		*cur;
+	size_t		i;
+	char		*op;	
 
-	while (i < sizeof(ops) / sizeof(*ops))
+	cur = *line;
+	i = -1;
+	while (++i < sizeof(ops) / sizeof(*ops))
 	{
-		if (ft_strncmp(line, ops[i], ft_strlen(ops[i])) == 0)
+		if (ft_strncmp(cur, ops[i], ft_strlen(ops[i])) == 0)
 		{
 			op = ft_strdup(ops[i]);
 			if (op == NULL)
 				fatal_error("strdup");
-			*rest = line + ft_strlen(op);
+			*line = cur + ft_strlen(op);
 			return (new_token(op, TK_OP));
 		}
-		i++;
 	}
-	assert_error("unexpected operator");
-	return (NULL);
+	return (tokenize_error("unexpected operator", data, line), NULL);
 }
 
-t_token	*word(char **rest, char *line)
+static t_token	*tokenize_word(t_data *data, char **line)
 {
-	const char	*start = line;
-	char		*word;
+	char	*cur;
+	char	*word;
+	char	c;
 
-	while (*line != '\0' && !is_metacharacter(*line))
+	cur = *line;
+	while (*cur != '\0' && !is_metacharacter(*cur))
 	{
-		if (*line == SQUOTE)
+		if (*cur == SQUOTE || *cur == DQUOTE)
 		{
-			line++;
-			while (*line != SQUOTE)
-			{
-				if (*line == '\0')
-				{
-					tokenize_error("unmatched single quote", &line, line);
-					break;
-				}
-				line++;
-			}
-			line++;
+			c = *cur;
+			while (*++cur != c)
+				if (*cur == '\0')
+					break ;
+			if (*cur == '\0')
+				return (tokenize_error("unmatched quote", data, line), NULL);
 		}
-		else if (*line == DQUOTE)
-		{
-			line++;
-			while (*line != DQUOTE)
-			{
-				if (*line == '\0')
-				{
-					tokenize_error("unmatched double quote", &line, line);
-					break;
-				}
-				line++;
-			}
-			line++;
-		}
-		else
-			line++;
+		cur++;
 	}
-	word = strndup(start, line - start);
+	word = ft_substr(*line, 0, cur - *line);
 	if (word == NULL)
-		fatal_error("strndup");
-	*rest = line;
+		fatal_error("ft_substr");
+	*line = cur;
 	return (new_token(word, TK_WORD));
 }
 
-t_token	*tokenize(char *line)
+t_token	*tokenize(t_data *data, char *line)
 {
 	t_token	*head;
 
-	syntax_error = 0;
 	head = NULL;
 	while (*line != '\0')
 	{
-		if (consume_blank(&line, line))
+		if (skip_blank(&line))
 			continue ;
 		else if (is_operator(line))
-			add_token(&head, operator(&line, line));
+			add_token(&head, tokenize_operator(data, &line));
 		else if (is_word(line))
-			add_token(&head, word(&line, line));
+			add_token(&head, tokenize_word(data, &line));
 		else
-			tokenize_error("tokernize error", &line, line);
+			tokenize_error("unknown tokenize error", data, &line);
 	}
 	return (head);
 }

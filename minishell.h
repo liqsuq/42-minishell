@@ -22,8 +22,12 @@
 # include <stdbool.h>
 # include "libft/libft.h"
 
+# ifndef PATH_MAX
+#  define PATH_MAX 4096
+# endif
+
 # define NAME "minishell"
-# define HEADER NAME ": "
+# define HEADER "minishell: "
 # define PROMPT "minish$ "
 # define SQUOTE '\''
 # define DQUOTE '\"'
@@ -37,116 +41,104 @@ typedef enum e_token_kind
 
 typedef struct s_token
 {
-	char			*word;
 	t_token_kind	kind;
+	char			*word;
 	struct s_token	*next;
 }					t_token;
 
 typedef enum e_node_kind
 {
-	ND_SIMPLE_CMD,    // 単純なコマンド
-	ND_REDIR_OUT,     // 標準出力リダイレクト
-	ND_REDIR_IN,      // 標準入力リダイレクト
-	ND_REDIR_APPEND,  // 出力の追加リダイレクト
-	ND_REDIR_HEREDOC, // ヒアドキュメント
-	ND_PIPELINE       // パイプライン
+	ND_SIMPLE_CMD,		// 単純なコマンド
+	ND_REDIR_OUT,		// 標準出力リダイレクト
+	ND_REDIR_IN,		// 標準入力リダイレクト
+	ND_REDIR_APPEND,	// 出力の追加リダイレクト
+	ND_REDIR_HEREDOC,	// ヒアドキュメント
 }	t_node_kind;
 
 // コマンドやリダイレクトを表すノード構造体
 typedef struct s_node
 {
-	t_node_kind		kind;               // ノードの種類
-	struct s_node	*next;              // 次のノード
-	t_token			*args;                // 引数リスト
-	struct s_node	*redirects;         // リダイレクト
-	//int				std_fd;               // 標準ファイルディスクリプタ
-	t_token			*filename;            // ファイル名
-	t_token			*delimiter;           // ヒアドキュメントの区切り文字
-	int				filefd;                 // ファイルディスクリプタ
-	int				stashed_std_fd;         // 保持している標準ファイルディスクリプタ
-	bool			is_delimiter_quote;     // 区切り文字がクオートされているかどうか
-	struct s_node	*command;           // コマンドノード
-	//int				inpipe[2];            // パイプの入力
-	//int				outpipe[2];           // パイプの出力
-}							t_node;
+	t_node_kind		kind;				// ノードの種類
+	t_token			*args;				// 引数リスト・リダイレクトの引数
+	struct s_node	*redirects;			// リダイレクトリスト
+	int				stashed_fd;			// 保持している標準ファイルディスクリプタ
+	bool			is_quoted;			// 区切り文字がクオートされているかどうか
+	struct s_node	*next;				// 次のノード
+}					t_node;
 
 // 環境変数のキーと値を格納するリスト構造体
 typedef struct s_env
 {
-	char			*key;   // 環境変数のキー
-	char			*value; // 環境変数の値
-	struct s_env	*next;  // 次の環境変数
+	char			*key;	// 環境変数のキー
+	char			*value;	// 環境変数の値
+	struct s_env	*next;	// 次の環境変数
 }					t_env;
 
 typedef struct s_data
 {
-	int	exit_status;
-}		t_data;
+	int				exit_status;
+	int				syntax_error;
+}					t_data;
 
-extern int syntax_error;
-
-// interpret.c
-int		interpret(char *line);
-char	**tokens2argv(t_token *tokens);
-void	free_argv(char **argv);
-char	*resolve_path(char *line);
-int 	exec_command(char *path, char **argv);
-
-// search_path.c
-char	*search_path(const char *filename);
-
-// tokenizer.c
+// tokenize/tokenize.c
 int		is_metacharacter(char c);
-t_token	*tokenize(char *line);
+t_token	*tokenize(t_data *data, char *line);
 
-// tokenuil.c
+// tokenize/tokenuils.c
+int		tokenlen(t_token *token);
 t_token	*new_token(char *word, t_token_kind kind);
-void	add_token(t_token **head, t_token *new);
-void	free_tokens(t_token *token);
-void	print_tokens(t_token *tokens);
+t_token	*add_token(t_token **head, t_token *new);
+t_token	*dup_token(t_token *token);
+void	free_token(t_token *token);
 
-// expand.c
+// parse/parse.c
+t_node	*parse(t_data *data, t_token *token);
+
+// parse/nodeutils.c
+t_node	*new_node(t_node_kind kind);
+t_node	*add_node(t_node **head, t_node *new);
+void	free_node(t_node *node);
+
+// expand/expand.c
 void	expand(t_node *node);
 void	append_char(char **s, char c);
 
-// expand_variable.c
+// expand/expand_variable.c
 void	expand_variable(t_node *node);
 
-// error.c
+// execute/execute.c
+void	execute(t_data *data, t_node *node);
+void	execute_command(t_node *node);
+
+// execute/argvutils.c
+char	**new_argv(t_token *args);
+void	free_argv(char **argv);
+
+// execute/pathutils.c
+char	*resolve_path(char *line);
+
+// redirect/redirect.c
+void	redirect(t_node *redi, t_env **env);
+void	reset_redirect(t_node *redi);
+
+// pipeline/pipeline.c
+int		pipeline(t_node *node, int prev_pipeout);
+
+// misc/error.c
 void	fatal_error(const char *msg);
 void	assert_error(const char *msg);
-void	tokenize_error(const char *msg, char **rest, char *line);
-void	parse_error(const char *msg, t_token **rest, t_token *token);
+void	tokenize_error(const char *msg, t_data *data, char **line);
+void	parse_error(const char *msg, t_data *data, t_token **token);
 
-// parse.c
-t_node	*parse(t_token *tok);
-
-// nodeutils.c
-t_node	*new_node(t_node_kind kind);
-void	add_node(t_node **head, t_node *new);
-void	append_token(t_token **tokens, t_token *tok);
-t_token	*tokdup(t_token *tok);
-void	free_nodes(t_node *node);
-void	print_nodes(t_node *nodes);
-
-// redirection.c
-void	reset_redirect(t_node *node);
-void	perform_redirect(t_node *node, t_env **env);
-int read_heredoc(const char *delimiter, bool is_delimiter_quote, void *env);
-void redirect_heredoc(t_node *node, t_env **env);
-
-// reset_redirect.c
-void perform_all_redirects(t_node *redirects);
-void reset_all_redirects(t_node *redirects);
-
-// debug_print.c
+// misc/debug.c
+void	print_argv(char **str);
 void	print_token(t_token *token);
+void	print_env(t_env *env);
+void	print_redir(t_node *redir);
+void	print_node(t_node *node);
 
-// exec.c
-int exec_nodes(t_node *node);
-
-//piep.c
-int has_pipe(t_node *node);
-int exec_pipeline(t_node *node /*, t_env *env*/);
+// misc/ft_funcs.c
+int		ft_strcmp(const char *s1, const char *s2);
+void	*ft_realloc(void *ptr, size_t size);
 
 #endif

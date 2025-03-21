@@ -22,7 +22,7 @@ int	is_name(const char *s)
 	return (1);
 }
 
-int is_variable(const char *s)
+int	is_variable(const char *s)
 {
 	return (s[0] == '$' && is_namehead(s[1]));
 }
@@ -102,8 +102,6 @@ void	expand_variable(t_node *node)
 	if (node == NULL)
 		return ;
 	expand_variable_token(node->args);
-	expand_variable_token(node->filename);
 	expand_variable(node->redirects);
-	expand_variable(node->command);
 	expand_variable(node->next);
 }

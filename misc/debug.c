@@ -1,4 +1,4 @@
-//debug_print.c
+// debug.c
 
 #include "minishell.h"
 
@@ -8,28 +8,23 @@
 // この関数はデバッグ用であり、コメントアウトされているため、実行されません。
 void	print_argv(char **str)
 {
-	int	i = 0;
+	int	i;
 
+	i = 0;
 	// str 配列の各要素を順に表示
 	while (str[i])
 	{
-		printf("str[%d]:%s\n", i, str[i]);
+		ft_printf("str[%d]: %s\n", i, str[i]);
 		i++;
 	}
 }
 
-// print_token 関数
-// 与えられたトークンリストを順番に表示します。トークンの word プロパティを表示します。
-// `TK_EOF`（トークンの終端）までループし、各トークンの `word` を出力します。
-// この関数もデバッグ用であり、コメントアウトされています。
 void	print_token(t_token *token)
 {
-	// トークンリストをループして各トークンの `word` を表示
-	while (token != NULL)
-	{
-		printf("token_word: %s\n", token->word);
-		token = token->next;
-	}
+	if (token == NULL)
+		return ;
+	ft_printf("token: %d, word: %s\n", token->kind, token->word);
+	print_token(token->next);
 }
 
 // print_env 関数
@@ -39,13 +34,21 @@ void	print_token(t_token *token)
 void	print_env(t_env *env)
 {
 	// 環境変数のリストの先頭から順に key と value を表示
-	printf("start print_env\n");
-	printf("=======================================================\n");
+	ft_printf("start print_env\n");
+	ft_printf("=======================================================\n");
 	while (env)
 	{
-		printf("env->key:%s, env->value:%s\n", env->key, env->value);
+		ft_printf("env->key: %s, env->value: %s\n", env->key, env->value);
 		env = env->next;
 	}
+}
+
+void	print_redir(t_node *redir)
+{
+	if (redir == NULL)
+		return ;
+	ft_printf("redirect: %d, args: %s\n", redir->args->kind, redir->args->word);
+	print_redir(redir->next);
 }
 
 // print_node 関数
@@ -54,21 +57,17 @@ void	print_env(t_env *env)
 // デバッグ用に使用される関数で、コメントアウトされています。
 void	print_node(t_node *node)
 {
+	if (node == NULL)
+		return ;
 	// コマンドの引数が存在する場合、引数を表示
-	if (node->command->args)
+	if (node->args)
 	{
-		printf("node->command->args\n");
-		print_token(node->command->args);
+		ft_printf("node: %d, args:\n", node->kind);
+		print_token(node->args);
 	}
 	// コマンドのリダイレクトが存在する場合、リダイレクト情報を表示
-	if (node->command->redirects)
-	{
-		printf("node->command->redirects\n");
-		print_token(node->command->args);
-		print_token(node->command->redirects->filename);
-		print_token(node->command->redirects->delimiter);
-	}
-	// 次のノードが存在する場合、再帰的に呼び出して表示
-	if (node->next)
-		print_node(node->next);
+	if (node->redirects)
+		print_redir(node->redirects);
+	// 再帰的に呼び出して表示
+	print_node(node->next);
 }

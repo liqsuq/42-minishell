@@ -2,162 +2,94 @@
 
 #include "../minishell.h"
 
-static void redirect_output(t_node *node)
+static void	open_redirect(t_node *redi, int srcfd, int flags, mode_t mode)
 {
-	node->filefd = open(node->filename->word, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (node->filefd < 0)
-	{
-		perror("open");
-		exit(EXIT_FAILURE);
-	}
-	node->stashed_std_fd = dup(STDOUT_FILENO);
-	if (node->stashed_std_fd < 0)
-	{
-		perror("dup");
-		exit(EXIT_FAILURE);
-	}
-	if (dup2(node->filefd, STDOUT_FILENO) < 0)
-	{
-		perror("dup2");
-		exit(EXIT_FAILURE);
-	}
-	close(node->filefd);
-	node->filefd = -1;
+	int	dstfd;
+
+	dstfd = open(redi->args->word, flags, mode);
+	if (dstfd < 0)
+		fatal_error("open");
+	redi->stashed_fd = dup(srcfd);
+	if (redi->stashed_fd < 0)
+		fatal_error("dup");
+	if (dup2(dstfd, srcfd) < 0)
+		fatal_error("dup2");
+	close(dstfd);
 }
 
-static void redirect_input(t_node *node)
+static int	read_heredoc(const char *delim, bool is_quoted, void *env)
 {
-	node->filefd = open(node->filename->word, O_RDONLY);
-	if (node->filefd < 0)
-	{
-		perror("open");
-		exit(EXIT_FAILURE);
-	}
-	node->stashed_std_fd = dup(STDIN_FILENO);
-	if (node->stashed_std_fd < 0)
-	{
-		perror("dup");
-		exit(EXIT_FAILURE);
-	}
-	if (dup2(node->filefd, STDIN_FILENO) < 0)
-	{
-		perror("dup2");
-		exit(EXIT_FAILURE);
-	}
-	close(node->filefd);
-	node->filefd = -1;
-}
+	int		pipefd[2];
+	char	*line;
 
-static void redirect_append(t_node *node)
-{
-	node->filefd = open(node->filename->word, O_CREAT | O_WRONLY | O_APPEND, 0644);
-	if (node->filefd < 0)
+	// 今は使わないので無視
+	(void)env;
+	(void)is_quoted;
+	if (pipe(pipefd) < 0)
+		fatal_error("pipe");
+	while (1)
 	{
-		perror("open");
-		exit(EXIT_FAILURE);
-	}
-	node->stashed_std_fd = dup(STDOUT_FILENO);
-	if (node->stashed_std_fd < 0)
-	{
-		perror("dup");
-		exit(EXIT_FAILURE);
-	}
-	if (dup2(node->filefd, STDOUT_FILENO) < 0)
-	{
-		perror("dup2");
-		exit(EXIT_FAILURE);
-	}
-	close(node->filefd);
-	node->filefd = -1;
-}
-
-void perform_redirect(t_node *node, t_env **env)
-{
-	if (node->kind == ND_REDIR_OUT)
-		redirect_output(node);
-	else if (node->kind == ND_REDIR_IN)
-		redirect_input(node);
-    else if (node->kind == ND_REDIR_APPEND)
-		redirect_append(node);
-	else if (node->kind == ND_REDIR_HEREDOC)
-		redirect_heredoc(node, env);
-}
-
-void reset_redirect(t_node *node)
-{
-	if (node->kind == ND_REDIR_OUT || node->kind == ND_REDIR_APPEND)
-	{
-		if (dup2(node->stashed_std_fd, STDOUT_FILENO) < 0)
+		line = readline("> ");
+		if (line == NULL)
+			break ;
+		if (ft_strcmp(line, delim) == 0)
 		{
-			perror("dup2");
-			exit(EXIT_FAILURE);
+			free(line);
+			break ;
 		}
+		ft_dprintf(pipefd[1], "%s\n", line);
+		free(line);
 	}
-	else if (node->kind == ND_REDIR_IN || node->kind == ND_REDIR_HEREDOC)
-	{
-		if (dup2(node->stashed_std_fd, STDIN_FILENO) < 0)
-		{
-			perror("dup2");
-			exit(EXIT_FAILURE);
-		}
-	}
-	close(node->stashed_std_fd);
+	close(pipefd[1]);
+	return (pipefd[0]);
 }
 
-void redirect_heredoc(t_node *node, t_env **env)
+// node->args->word にはヒアドキュメントのデリミタが入っている想定
+// 例: "EOF" など
+// heredocで入力をpipeにためて、その読み口をSTDINに差し替え
+// printf("%s\n", node->args->word);
+static void	open_heredoc(t_node *redi, t_env **env)
 {
-    // node->filename(or node->delimiter)->word にはヒアドキュメントのデリミタが入っている想定
-    // 例: "EOF" など
-    // heredocで入力をpipeにためて、その読み口をSTDINに差し替え
-		// printf("%s\n", node->delimiter->word);
-    node->filefd = read_heredoc("EOF", false, env); // "EOF あとで置き換える元々(node->delimiter->word)
-    if (node->filefd < 0)
-    {
-      perror("heredoc");
-      exit(EXIT_FAILURE);
-    }
-    node->stashed_std_fd = dup(STDIN_FILENO);
-    if (node->stashed_std_fd < 0)
-    {
-      perror("dup");
-      exit(EXIT_FAILURE);
-    }
-    if (dup2(node->filefd, STDIN_FILENO) < 0)
-    {
-      perror("dup2");
-      exit(EXIT_FAILURE);
-    }
-    close(node->filefd);
-    node->filefd = -1;
+	int	fd;
+
+	fd = read_heredoc("EOF", false, env); // "EOF あとで置き換える元々(node->delimiter->word)
+	if (fd < 0)
+		fatal_error("read_heredoc");
+	redi->stashed_fd = dup(STDIN_FILENO);
+	if (redi->stashed_fd < 0)
+		fatal_error("dup");
+	if (dup2(fd, STDIN_FILENO) < 0)
+		fatal_error("dup2");
+	close(fd);
 }
 
-int read_heredoc(const char *delimiter, bool is_delimiter_quote, void *env)
+void	redirect(t_node *redi, t_env **env)
 {
-  int pipefd[2];
-  char *line;
+	if (redi == NULL)
+		return ;
+	if (redi->kind == ND_REDIR_OUT)
+		open_redirect(redi, STDOUT_FILENO, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	else if (redi->kind == ND_REDIR_IN)
+		open_redirect(redi, STDIN_FILENO, O_RDONLY, 0644);
+	else if (redi->kind == ND_REDIR_APPEND)
+		open_redirect(redi, STDOUT_FILENO, O_CREAT | O_WRONLY | O_APPEND, 0644);
+	else
+		open_heredoc(redi, env);
+	return (redirect(redi->next, env));
+}
 
-  (void)env;                 // 今は使わないので無視
-  (void)is_delimiter_quote;  // 今は使わないので無視
+void	reset_redirect(t_node *redi)
+{
+	int	fd;
 
-  if (pipe(pipefd) < 0)
-  {
-    perror("pipe");
-    return -1;
-  }
-
-  while (1)
-  {
-    line = readline("> ");
-    if (!line)
-      break;
-    if (strcmp(line, delimiter) == 0)
-    {
-      free(line);
-      break;
-    }
-    dprintf(pipefd[1], "%s\n", line);
-    free(line);
-  }
-  close(pipefd[1]);
-  return pipefd[0];
+	if (redi == NULL)
+		return ;
+	reset_redirect(redi->next);
+	if (redi->kind == ND_REDIR_IN || redi->kind == ND_REDIR_HEREDOC)
+		fd = STDIN_FILENO;
+	else
+		fd = STDOUT_FILENO;
+	if (dup2(redi->stashed_fd, fd) < 0)
+		fatal_error("dup2");
+	close(redi->stashed_fd);
 }
