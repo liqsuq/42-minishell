@@ -16,7 +16,7 @@ static void	process_line(t_data *data, char *line)
 	data->syntax_error = 0;
 	token = tokenize(data, line);
 	node = parse(data, token);
-	expand(node);
+	expand(data, node);
 	if (data->syntax_error == 1)
 		data->exit_status = ERROR_SYNTAX;
 	else

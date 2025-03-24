@@ -1,7 +1,7 @@
 NAME := minishell
 TOKSRC := $(addprefix tokenize/, tokenize.c tokenutils.c)
 PARSRC := $(addprefix parse/, parse.c nodeutils.c)
-EXPSRC := $(addprefix expand/, expand.c expand_variable.c)
+EXPSRC := $(addprefix expand/, expand.c expand_variable.c expand_parameter.c)
 EXESRC := $(addprefix execute/, execute.c argvutils.c pathutils.c)
 REDSRC := $(addprefix redirect/, redirect.c)
 PIPSRC := $(addprefix pipeline/, pipeline.c)

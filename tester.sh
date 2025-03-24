@@ -130,6 +130,13 @@ assert 'echo $USER'
 assert 'echo $USER$HOME$PWD'
 assert 'echo "$USER  $HOME   $PWD"'
 
+# Expand Parameter
+assert 'echo $?'
+assert 'true\necho $?'
+assert 'false\necho $?'
+assert 'true\n\necho $?'
+assert 'false\n\necho $?'
+
 echo "======================================================================"
 if [ $STATUS -eq 0 ]; then
 	echo "All tests passed"
