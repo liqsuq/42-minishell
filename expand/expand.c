@@ -10,14 +10,18 @@ void	append_char(char **s, char c)
 	size = 2;
 	if (*s != NULL)
 		size += strlen(*s);
-	new = ft_realloc(*s, size);
+	new = malloc(size * sizeof(char));
 	if (new == NULL)
 	{
 		free(*s);
-		fatal_error("ft_realloc");
+		fatal_error("malloc");
 	}
+	if (*s != NULL)
+		ft_strlcpy(new, *s, size);
 	new[size - 2] = c;
 	new[size - 1] = '\0';
+	if (*s != NULL)
+		free(*s);
 	*s = new;
 }
 
