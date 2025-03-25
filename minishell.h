@@ -81,6 +81,7 @@ typedef struct s_data
 }					t_data;
 
 // tokenize/tokenize.c
+int		is_blank(char c);
 int		is_metacharacter(char c);
 t_token	*tokenize(t_data *data, char *line);
 
@@ -108,6 +109,9 @@ void	expand_variable(t_node *node);
 
 // expand/expand_parameter.c
 void	expand_parameter(t_data *data, t_node *node);
+
+// expand/expand_word.c
+void	expand_word(t_node *node);
 
 // execute/execute.c
 void	execute(t_data *data, t_node *node);

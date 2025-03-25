@@ -137,6 +137,18 @@ assert 'false\necho $?'
 assert 'true\n\necho $?'
 assert 'false\n\necho $?'
 
+# Word Splitting
+export MINISHTESTER1="hello    world"
+export MINISHTESTER2="    hello world"
+export MINISHTESTER3="hello world    "
+assert 'echo $MINISHTESTER1 | cat -e'
+assert 'echo "$MINISHTESTER1" | cat -e'
+assert 'echo $MINISHTESTER2 | cat -e'
+assert 'echo "$MINISHTESTER2" | cat -e'
+assert 'echo $MINISHTESTER3 | cat -e'
+assert 'echo "$MINISHTESTER3" | cat -e'
+unset MINISHTESTER1 MINISHTESTER2 MINISHTESTER3
+
 echo "======================================================================"
 if [ $STATUS -eq 0 ]; then
 	echo "All tests passed"

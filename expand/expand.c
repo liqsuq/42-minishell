@@ -65,5 +65,6 @@ void	expand(t_data *data, t_node *node)
 {
 	expand_variable(node);
 	expand_parameter(data, node);
+	expand_word(node);
 	expand_quote(node);
 }
