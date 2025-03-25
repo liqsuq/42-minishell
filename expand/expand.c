@@ -63,8 +63,7 @@ static void	expand_quote(t_node *node)
 
 void	expand(t_data *data, t_node *node)
 {
-	expand_parameter(data, node);
 	expand_variable(node);
+	expand_parameter(data, node);
 	expand_quote(node);
-
 }
