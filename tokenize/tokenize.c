@@ -2,7 +2,7 @@
 
 #include "minishell.h"
 
-static int	is_blank(char c)
+int	is_blank(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\n');
 }

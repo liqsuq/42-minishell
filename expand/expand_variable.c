@@ -2,74 +2,60 @@
 
 #include "minishell.h"
 
-int	is_namehead(char c)
+static int	is_namehead(char c)
 {
 	return (ft_isalpha(c) || c == '_');
 }
 
-int	is_namebody(char c)
+static int	is_namebody(char c)
 {
 	return (is_namehead(c) || ft_isdigit(c));
 }
 
-int	is_name(const char *s)
-{
-	if (!is_namehead(*s++))
-		return (0);
-	while (*s)
-		if (!is_namebody(*s++))
-			return (0);
-	return (1);
-}
-
-int	is_variable(const char *s)
+static int	is_variable(const char *s)
 {
 	return (s[0] == '$' && is_namehead(s[1]));
 }
 
-void	expand_variable_str(char **dst, char **rest, char *str)
+static void	append_variable(char **dst, char **str)
 {
 	char	*name;
 	char	*value;
+	char	*cur;
 
 	name = NULL;
-	str++;
-	append_char(&name, *str++);
-	while (is_namebody(*str))
-		append_char(&name, *str++);
+	cur = *str + 1;
+	append_char(&name, *cur++);
+	while (is_namebody(*cur))
+		append_char(&name, *cur++);
 	value = getenv(name);
 	free(name);
 	if (value)
 		while (*value)
 			append_char(dst, *value++);
-	*rest = str;
+	*str = cur;
 }
 
-void	append_quote(char **dst, char **rest, char *str)
+static void	append_quote(char **dst, char **str)
 {
 	char	c;
+	char	*cur;
 
-	if (*str == SQUOTE || *str == DQUOTE)
+	c = **str;
+	cur = *str;
+	append_char(dst, *cur++);
+	while (*cur != c)
 	{
-		c = *str;
-		append_char(dst, *str++);
-		while (*str != c)
-		{
-			if (*str == '\0')
-				assert_error("unclosed quote");
-			else if (c == DQUOTE && is_variable(str))
-				expand_variable_str(dst, &str, str);
-			else
-				append_char(dst, *str++);
-		}
-		append_char(dst, *str++);
-		*rest = str;
+		if (c == DQUOTE && is_variable(cur))
+			append_variable(dst, &cur);
+		else
+			append_char(dst, *cur++);
 	}
-	else
-		assert_error("expected quote");
+	append_char(dst, *cur++);
+	*str = cur;
 }
 
-void	expand_variable_token(t_token *token)
+static void	expand_variable_token(t_token *token)
 {
 	char	*new_word;
 	char	*str;
@@ -81,13 +67,13 @@ void	expand_variable_token(t_token *token)
 		str = token->word;
 		new_word = ft_calloc(1, sizeof(char));
 		if (new_word == NULL)
-			fatal_error("malloc");
-		while (*str && !is_metacharacter(*str))
+			fatal_error("ft_calloc");
+		while (*str != '\0')
 		{
 			if (*str == SQUOTE || *str == DQUOTE)
-				append_quote(&new_word, &str, str);
+				append_quote(&new_word, &str);
 			else if (is_variable(str))
-				expand_variable_str(&new_word, &str, str);
+				append_variable(&new_word, &str);
 			else
 				append_char(&new_word, *str++);
 		}
