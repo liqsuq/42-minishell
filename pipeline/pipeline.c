@@ -31,6 +31,7 @@ int	pipeline(t_node *node, int prev_pipeout)
 		fatal_error("fork");
 	if (pid == 0)
 	{
+		reset_signal();
 		if (prev_pipeout != -1)
 			move_fd(prev_pipeout, STDIN_FILENO);
 		if (has_pipe(node))
@@ -40,6 +41,7 @@ int	pipeline(t_node *node, int prev_pipeout)
 		}
 		execute_command(node);
 	}
+	ignore_signal();
 	if (prev_pipeout != -1)
 		close_fd(prev_pipeout);
 	if (has_pipe(node))

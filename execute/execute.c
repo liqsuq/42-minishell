@@ -41,5 +41,14 @@ void	execute(t_data *data, t_node *node)
 	}
 	pid = pipeline(node, -1);
 	waitpid(pid, &status, 0);
-	data->exit_status = WEXITSTATUS(status);
+	if (WIFEXITED(status))
+		data->exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGINT)
+			ft_printf("\n");
+		else if (WTERMSIG(status) == SIGQUIT)
+			ft_printf("Quit\n");
+		data->exit_status = WTERMSIG(status) + 128;
+	}
 }

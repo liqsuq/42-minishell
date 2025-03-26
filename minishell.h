@@ -80,6 +80,8 @@ typedef struct s_data
 	int				syntax_error;
 }					t_data;
 
+extern volatile sig_atomic_t	g_signal;
+
 // tokenize/tokenize.c
 int		is_metacharacter(char c);
 t_token	*tokenize(t_data *data, char *line);
@@ -140,5 +142,12 @@ void	print_node(t_node *node);
 // misc/ft_funcs.c
 int		ft_strcmp(const char *s1, const char *s2);
 void	*ft_realloc(void *ptr, size_t size);
+
+// misc/signal.c
+int		check_signal_main(void);
+int		check_signal_heredoc(void);
+void	setup_signal(void);
+void	ignore_signal(void);
+void	reset_signal(void);
 
 #endif

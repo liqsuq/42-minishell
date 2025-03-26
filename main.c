@@ -30,10 +30,14 @@ int	main(void)
 	t_data	data;
 	char	*line;
 
+	g_signal = 0;
 	rl_outstream = stderr;
 	init_data(&data);
 	while (1)
 	{
+		setup_signal();
+		if (isatty(STDIN_FILENO))
+			rl_event_hook = check_signal_main;
 		line = readline(PROMPT);
 		if (line == NULL)
 			break ;
