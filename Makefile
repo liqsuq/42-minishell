@@ -1,11 +1,19 @@
 NAME := minishell
-TOKSRC := $(addprefix tokenize/, tokenize.c tokenutils.c)
-PARSRC := $(addprefix parse/, parse.c nodeutils.c)
-EXPSRC := $(addprefix expand/, expand.c expand_variable.c)
-EXESRC := $(addprefix execute/, execute.c argvutils.c pathutils.c)
-REDSRC := $(addprefix redirect/, redirect.c)
-PIPSRC := $(addprefix pipeline/, pipeline.c)
-MSCSRC := $(addprefix misc/, error.c debug.c ft_funcs.c signal.c)
+
+TOKSRC := $(addprefix tokenize/, \
+	tokenize.c tokenutils.c)
+PARSRC := $(addprefix parse/, \
+	parse.c nodeutils.c)
+EXPSRC := $(addprefix expand/, \
+	expand.c expand_variable.c expand_parameter.c expand_word.c)
+EXESRC := $(addprefix execute/, \
+	execute.c argvutils.c pathutils.c)
+REDSRC := $(addprefix redirect/, \
+	redirect.c)
+PIPSRC := $(addprefix pipeline/, \
+	pipeline.c)
+MSCSRC := $(addprefix misc/, \
+	error.c debug.c ft_funcs.c signal.c)
 SOURCE := main.c \
 	$(TOKSRC) $(PARSRC) $(EXPSRC) $(EXESRC) $(REDSRC) $(PIPSRC) $(MSCSRC)
 OBJECT := $(SOURCE:.c=.o)

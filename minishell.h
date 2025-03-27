@@ -83,6 +83,7 @@ typedef struct s_data
 extern volatile sig_atomic_t	g_signal;
 
 // tokenize/tokenize.c
+int		is_blank(char c);
 int		is_metacharacter(char c);
 t_token	*tokenize(t_data *data, char *line);
 
@@ -102,11 +103,17 @@ t_node	*add_node(t_node **head, t_node *new);
 void	free_node(t_node *node);
 
 // expand/expand.c
-void	expand(t_node *node);
+void	expand(t_data *data, t_node *node);
 void	append_char(char **s, char c);
 
 // expand/expand_variable.c
 void	expand_variable(t_node *node);
+
+// expand/expand_parameter.c
+void	expand_parameter(t_data *data, t_node *node);
+
+// expand/expand_word.c
+void	expand_word(t_node *node);
 
 // execute/execute.c
 void	execute(t_data *data, t_node *node);
@@ -141,7 +148,7 @@ void	print_node(t_node *node);
 
 // misc/ft_funcs.c
 int		ft_strcmp(const char *s1, const char *s2);
-void	*ft_realloc(void *ptr, size_t size);
+// void	*ft_realloc(void *ptr, size_t size);
 
 // misc/signal.c
 int		check_signal_main(void);
