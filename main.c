@@ -33,9 +33,10 @@ int	main(void)
 	g_signal = 0;
 	rl_outstream = stderr;
 	init_data(&data);
+	setup_signal();
 	while (1)
 	{
-		setup_signal();
+		g_signal = 0;
 		if (isatty(STDIN_FILENO))
 			rl_event_hook = check_signal_main;
 		line = readline(PROMPT);

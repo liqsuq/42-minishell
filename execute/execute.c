@@ -45,8 +45,6 @@ static void	wait_pids(t_data *data, pid_t pid)
 			{
 				if (WTERMSIG(status) == SIGQUIT)
 					ft_printf("Quit: 3\n");
-				if (WTERMSIG(status) == SIGINT)
-					ft_printf("\n");
 				data->exit_status = WTERMSIG(status) + 128;
 			}
 		}

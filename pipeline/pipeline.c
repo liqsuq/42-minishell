@@ -41,7 +41,6 @@ int	pipeline(t_node *node, int prev_pipeout)
 		}
 		execute_command(node);
 	}
-	ignore_signal();
 	if (prev_pipeout != -1)
 		close_fd(prev_pipeout);
 	if (has_pipe(node))

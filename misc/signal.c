@@ -21,6 +21,7 @@ volatile sig_atomic_t	g_signal;
 static void signal_handler(int sig)
 {
 	g_signal = sig;
+	write(1, "\n", 1);
 }
 
 int check_signal_main(void)
@@ -28,7 +29,6 @@ int check_signal_main(void)
 	if (g_signal == SIGINT)
 	{
 		g_signal = 0;
-		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
@@ -56,19 +56,6 @@ void setup_signal(void)
 	if (sigaction(SIGINT, &sigact, NULL) < 0)
 		fatal_error("sigaction");
 	sigact.sa_handler = SIG_IGN;
-	if (sigaction(SIGQUIT, &sigact, NULL) < 0)
-		fatal_error("sigaction");
-}
-
-void ignore_signal(void)
-{
-	struct sigaction	sigact;
-
-	sigemptyset(&sigact.sa_mask);
-	sigact.sa_flags = 0;
-	sigact.sa_handler = SIG_IGN;
-	if (sigaction(SIGINT, &sigact, NULL) < 0)
-		fatal_error("sigaction");
 	if (sigaction(SIGQUIT, &sigact, NULL) < 0)
 		fatal_error("sigaction");
 }
