@@ -29,10 +29,40 @@ void	execute_command(t_node *node)
 		exit(EXIT_FAILURE);
 }
 
+static void	wait_pids(t_data *data, pid_t pid)
+{
+	pid_t	wpid;
+	int 	status;
+
+	while (1)
+	{
+		wpid = wait(&status);
+		if (wpid == pid)
+		{
+			if (WIFEXITED(status))
+				data->exit_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+			{
+				if (WTERMSIG(status) == SIGQUIT)
+					ft_printf("Quit: 3\n");
+				if (WTERMSIG(status) == SIGINT)
+					ft_printf("\n");
+				data->exit_status = WTERMSIG(status) + 128;
+			}
+		}
+		else if (wpid < 0)
+		{
+			if (errno == ECHILD)
+				break ;
+			else if (errno != EINTR)
+				fatal_error("wait");
+		}
+	}
+}
+
 void	execute(t_data *data, t_node *node)
 {
 	pid_t	pid;
-	int		status;
 
 	if (node == NULL)
 	{
@@ -40,15 +70,5 @@ void	execute(t_data *data, t_node *node)
 		return ;
 	}
 	pid = pipeline(node, -1);
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		data->exit_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-	{
-		if (WTERMSIG(status) == SIGINT)
-			ft_printf("\n");
-		else if (WTERMSIG(status) == SIGQUIT)
-			ft_printf("Quit\n");
-		data->exit_status = WTERMSIG(status) + 128;
-	}
+	wait_pids(data, pid);
 }
