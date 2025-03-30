@@ -20,7 +20,7 @@ static void	open_redirect(t_node *redi, int srcfd, int flags, mode_t mode)
 void redirect(t_node *redi, t_env **env)
 {
 	if (redi == NULL)
-		return;
+		return ;
 	if (redi->kind == ND_REDIR_OUT)
 		open_redirect(redi, STDOUT_FILENO, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	else if (redi->kind == ND_REDIR_IN)
