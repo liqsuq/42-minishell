@@ -18,27 +18,26 @@ static int	is_redirect(t_token *token)
 
 static t_token *parse_redirect(t_data *data, t_node *node, t_token *token)
 {
-  t_node *nd;
-  t_token *tk;
-	(void)data;
+	t_node *nd;	
+	t_token *tk;
 
-  tk = token;
-  if (!ft_strcmp(tk->word, ">"))
-    nd = add_node(&node->redirects, new_node(ND_REDIR_OUT));
-  else if (!ft_strcmp(tk->word, ">>"))
-    nd = add_node(&node->redirects, new_node(ND_REDIR_APPEND));
-  else if (!ft_strcmp(tk->word, "<"))
-    nd = add_node(&node->redirects, new_node(ND_REDIR_IN));
+	tk = token;
+	if (!ft_strcmp(tk->word, ">"))
+		nd = add_node(&node->redirects, new_node(ND_REDIR_OUT));
+	else if (!ft_strcmp(tk->word, ">>"))
+		nd = add_node(&node->redirects, new_node(ND_REDIR_APPEND));
+	else if (!ft_strcmp(tk->word, "<"))
+		nd = add_node(&node->redirects, new_node(ND_REDIR_IN));
   else // "<<"
-    nd = add_node(&node->redirects, new_node(ND_REDIR_HEREDOC));
+		nd = add_node(&node->redirects, new_node(ND_REDIR_HEREDOC));
 
   tk = tk->next; // 次のトークンがデリミタ or ファイル名
-  nd->args = dup_token(tk);
-
-  // ここで従来の「if (nd->kind == ND_REDIR_HEREDOC && ...) parse_error...」 を削除
-
-  tk = tk->next;
-  return (tk);
+	nd->args = dup_token(tk);
+	if (nd->kind == ND_REDIR_HEREDOC)
+	tk = parse_redirect_heredoc(data, nd, token);
+	else
+		tk = tk->next;
+	return (tk);
 }
 
 
