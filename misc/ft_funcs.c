@@ -16,16 +16,16 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return (s1[i] - s2[i]);
 }
 
-void	*ft_realloc(void *ptr, size_t size)
-{
-	void	*new;
+// void	*ft_realloc(void *ptr, size_t size)
+// {
+// 	void	*new;
 
-	if (ptr == NULL)
-		return (malloc(size));
-	new = malloc(size);
-	if (new == NULL)
-		return (NULL);
-	ft_memcpy(new, ptr, size);
-	free(ptr);
-	return (new);
-}
+// 	if (ptr == NULL)
+// 		return (malloc(size));
+// 	new = malloc(size);
+// 	if (new == NULL)
+// 		return (NULL);
+// 	ft_memcpy(new, ptr, size);
+// 	free(ptr);
+// 	return (new);
+// }
