@@ -4,18 +4,23 @@ STATUS=0
 
 assert() {
 	# テストしようとしている内容をprint
-	printf '%-49s:' "\"$1\""
+	if [ $1 -eq 1 ]; then
+		printf '%-49s:' "\"$2\""
+	fi
 	# bashの出力をactualに保存
-	echo -n -e "$1" | bash >expected 2>&-
+	echo -n -e "$2" | bash >expected 2>&-
 	# bashのexit statusをexpectedに代入
 	expected=$?
 	# minishellの出力をexpectedに保存
-	echo -n -e "$1" | ./minishell >actual 2>&-
+	echo -n -e "$2" | ./minishell >actual 2>&-
 	# minishellのexit statusをactualに代入
 	actual=$?
 	# bashとminishellの出力を比較
-	diff expected actual >/dev/null && echo -n '  diff OK' || echo -n '  diff NG'
-	if [ $? -ne 0 ]; then
+	diff expected actual >/dev/null
+	if [ $? -eq 0 ]; then
+		echo -n '  diff OK'
+	else
+		echo -n '  diff NG'
 		STATUS=1
 	fi
 	# bashとminishellのexit statusを比較
@@ -26,6 +31,10 @@ assert() {
 		STATUS=1
 	fi
 	echo
+}
+
+print_desc() {
+	printf '%-49s:' "\"$1\""
 }
 
 debug() {
@@ -56,98 +65,169 @@ echo "|  minishell test                                                    |"
 echo "+--------------------------------------------------------------------+"
 
 # Empty line (EOF)
-assert ''
+assert 1 ''
 
 # Absolute path commands without args
-assert '/bin/pwd'
-assert '/bin/echo'
+assert 1 '/bin/pwd'
+assert 1 '/bin/echo'
 
 # Search command path without args
-assert 'pwd'
-assert 'echo'
-assert 'ls'
-assert './a.out'
+assert 1 'pwd'
+assert 1 'echo'
+assert 1 'ls'
+assert 1 './a.out'
 
 # no such command
-assert 'a.out'
-assert 'nosuchfile'
+assert 1 'a.out'
+assert 1 'nosuchfile'
 
 # Unquoted args
-assert 'ls /'
-assert 'echo hello    world'
+assert 1 'ls /'
+assert 1 'echo hello    world'
 
 # Single quote
-assert 'echo '\''hello   world'\'' '\''42Tokyo'\'
-assert 'echo hello'\''      world'\'
+assert 1 'echo '\''hello   world'\'' '\''42Tokyo'\'
+assert 1 'echo hello'\''      world'\'
 
 # Double quote
-assert 'echo '\"'hello   world'\"' '\"'42Tokyo'\"
-assert 'echo hello'\"'      world'\"
+assert 1 'echo '\"'hello   world'\"' '\"'42Tokyo'\"
+assert 1 'echo hello'\"'      world'\"
 
 # Combined quote
-assert 'echo '\'\"'hello   world'\"\'' '\''42Tokyo'\'
-assert 'echo '\"\''hello   world'\'\"' '\"'42Tokyo'\"
-assert 'echo hello'\''  world  '\'\"'  42Tokyo  '\"
+assert 1 'echo '\'\"'hello   world'\"\'' '\''42Tokyo'\'
+assert 1 'echo '\"\''hello   world'\'\"' '\"'42Tokyo'\"
+assert 1 'echo hello'\''  world  '\'\"'  42Tokyo  '\"
 
 ## Redirecting output
-assert 'echo hello >hello.txt'
+assert 1 'echo hello >hello.txt'
 rm -f hello.txt
-assert 'echo hello >f1>f2>f3'
+assert 1 'echo hello >f1>f2>f3'
 rm -f f1 f2 f3
-assert 'echo hello >hello.txt world'
+assert 1 'echo hello >hello.txt world'
 rm -f hello.txt
 
 ## Redirecting input
-assert 'cat <Makefile'
+assert 1 'cat <Makefile'
 echo hello >f1
 echo world >f2
 echo 42Tokyo >f3
-assert 'cat <f1<f2<f3'
+assert 1 'cat <f1<f2<f3'
 rm -f f1 f2 f3
-assert 'cat <hoge'
+assert 1 'cat <hoge'
 
 ## Here Document
-assert 'cat <<EOF\nhello\nworld\nEOF\nNOPRINT'
-assert 'cat <<EOF<<eof\nhello\nworld\nEOF\neof\nNOPRINT'
-assert 'cat <<EOF\nhello\nworld'
-# assert 'cat <<E"O"F\nhello\nworld\nEOF\nNOPRINT' //「クォートを解除して文字列を連結する」機能が未実装
-# assert 'cat <<EOF   \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF' //環境変数が必要
-# assert 'cat <<"EOF" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF' //環境変数が必要
-# assert 'cat <<EO"F" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF' //環境変数が必要
-# export EOF="eof"
-# assert 'cat <<$EOF         \neof\n$EOF\nEOF'　//環境変数が必要
-# assert 'cat <<"$EOF"       \neof\n$EOF\nEOF'　//環境変数が必要
+assert 1 'cat <<EOF\nhello\nworld\nEOF\nNOPRINT'
+assert 1 'cat <<EOF<<eof\nhello\nworld\nEOF\neof\nNOPRINT'
+assert 1 'cat <<EOF\nhello\nworld'
+# assert 1 'cat <<E"O"F\nhello\nworld\nEOF\nNOPRINT' //「クォートを解除して文字列を連結する」機能が未実装
+# assert 1 'cat <<EOF   \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF' //環境変数が必要
+# assert 1 'cat <<"EOF" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF' //環境変数が必要
+# assert 1 'cat <<EO"F" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF' //環境変数が必要
+# export 1 EOF="eof"
+# assert 1 'cat <<$EOF         \neof\n$EOF\nEOF'　//環境変数が必要
+# assert 1 'cat <<"$EOF"       \neof\n$EOF\nEOF'　//環境変数が必要
 
 # Pipe
-assert 'cat Makefile | grep minishell'
-assert 'cat | cat | ls\n\n'
-assert 'ls -l | grep test'
-assert 'echo foo | cat -e'
-assert 'pwd | cat'
+assert 1 'cat Makefile | grep minishell'
+assert 1 'cat | cat | ls\n\n'
+assert 1 'ls -l | grep test'
+assert 1 'echo foo | cat -e'
+assert 1 'pwd | cat'
 
 # Expand Variable
-assert 'echo $USER'
-assert 'echo $USER$HOME$PWD'
-assert 'echo "$USER  $HOME   $PWD"'
+assert 1 'echo $USER'
+assert 1 'echo $USER$HOME$PWD'
+assert 1 'echo "$USER  $HOME   $PWD"'
 
 # Expand Parameter
-assert 'echo $?'
-assert 'true\necho $?'
-assert 'false\necho $?'
-assert 'true\n\necho $?'
-assert 'false\n\necho $?'
+assert 1 'echo $?'
+assert 1 'true\necho $?'
+assert 1 'false\necho $?'
+assert 1 'true\n\necho $?'
+assert 1 'false\n\necho $?'
 
 # Word Splitting
 export MINISHTESTER1="hello    world"
 export MINISHTESTER2="    hello world"
 export MINISHTESTER3="hello world    "
-assert 'echo $MINISHTESTER1 | cat -e'
-assert 'echo "$MINISHTESTER1" | cat -e'
-assert 'echo $MINISHTESTER2 | cat -e'
-assert 'echo "$MINISHTESTER2" | cat -e'
-assert 'echo $MINISHTESTER3 | cat -e'
-assert 'echo "$MINISHTESTER3" | cat -e'
+assert 1 'echo $MINISHTESTER1 | cat -e'
+assert 1 'echo "$MINISHTESTER1" | cat -e'
+assert 1 'echo $MINISHTESTER2 | cat -e'
+assert 1 'echo "$MINISHTESTER2" | cat -e'
+assert 1 'echo $MINISHTESTER3 | cat -e'
+assert 1 'echo "$MINISHTESTER3" | cat -e'
 unset MINISHTESTER1 MINISHTESTER2 MINISHTESTER3
+
+# Signal
+print_desc "SIGTERM to SHELL"
+(sleep 0.01; pkill -SIGTERM bash;
+ sleep 0.01; pkill -SIGTERM minishell) &
+assert 0 'sleep 10' 2>/dev/null
+
+print_desc "SIGQUIT to SHELL"
+(sleep 0.01; pkill -SIGQUIT bash; # SIGQUIT should not kill the shell
+ sleep 0.01; pkill -SIGTERM bash;
+ sleep 0.01; pkill -SIGQUIT minishell; # SIGQUIT should not kill the shell
+ sleep 0.01; pkill -SIGTERM minishell) &
+assert 0 'sleep 10' 2>/dev/null
+
+print_desc "SIGINT to SHELL"
+(sleep 0.01; pkill -SIGINT bash; # SIGINT should not kill the shell
+ sleep 0.01; pkill -SIGTERM bash;
+ sleep 0.01; pkill -SIGINT minishell; # SIGINT should not kill the shell
+ sleep 0.01; pkill -SIGTERM minishell) &
+assert 0 'sleep 10' 2>/dev/null
+
+## Signal to child processes
+print_desc "SIGTERM to child process"
+(sleep 0.01; pkill -SIGTERM -f "sleep 10";
+ sleep 0.01; pkill -SIGTERM -f "sleep 10") &
+assert 0 'sleep 10'
+
+print_desc "SIGINT to child process"
+(sleep 0.01; pkill -SIGINT -f "sleep 10";
+ sleep 0.01; pkill -SIGINT -f "sleep 10") &
+assert 0 'sleep 10'
+
+print_desc "SIGQUIT to child process"
+(sleep 0.01; pkill -SIGQUIT -f "sleep 10";
+ sleep 0.01; pkill -SIGQUIT -f "sleep 10") &
+assert 0 'sleep 10'
+
+# Manual
+# $ ./minishell
+# $ 
+# 1. Ctrl-\ 
+# 2. Ctrl-C
+# 3. Ctrl-D
+#
+# $ ./minishell
+# $ hogehoge
+# 1. Ctrl-\ 
+# 2. Ctrl-C
+# 3. Ctrl-D
+#
+# $ ./minishell
+# $ cat <<EOF
+# >
+# 1. Ctrl-\ 
+# 2. Ctrl-C
+# 3. Ctrl-D
+#
+# $ ./minishell
+# $ cat <<EOF
+# > hoge
+# > fuga
+# 1. Ctrl-\ 
+# 2. Ctrl-C
+# 3. Ctrl-D
+# 
+# $ ./minishell
+# $ cat | cat | ls
+# 1. Ctrl-\
+# 2. Ctrl-C
+# 3. Ctrl-D
+
 
 echo "======================================================================"
 if [ $STATUS -eq 0 ]; then
