@@ -21,7 +21,7 @@ volatile sig_atomic_t	g_signal;
 static void signal_handler(int sig)
 {
 	g_signal = sig;
-	write(1, "\n", 1);
+	write(2, "\n", 1);
 }
 
 int check_signal_main(void)

@@ -178,7 +178,7 @@ print_desc "SIGINT to SHELL"
  sleep 0.01; pkill -SIGTERM minishell) &
 assert 0 'sleep 10' 2>/dev/null
 
-## Signal to child processes
+# Signal to child processes
 print_desc "SIGTERM to child process"
 (sleep 0.01; pkill -SIGTERM -f "sleep 10";
  sleep 0.01; pkill -SIGTERM -f "sleep 10") &
@@ -227,7 +227,6 @@ assert 0 'sleep 10'
 # 1. Ctrl-\
 # 2. Ctrl-C
 # 3. Ctrl-D
-
 
 echo "======================================================================"
 if [ $STATUS -eq 0 ]; then
