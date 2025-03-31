@@ -64,6 +64,7 @@ typedef struct s_node
 	int				stashed_fd;			// 保持している標準ファイルディスクリプタ
 	bool			is_quoted;			// 区切り文字がクオートされているかどうか
 	struct s_node	*next;				// 次のノード
+	char *heredoc_content; // ヒアドキュメントの内容
 }					t_node;
 
 // 環境変数のキーと値を格納するリスト構造体
@@ -79,6 +80,10 @@ typedef struct s_data
 	int				exit_status;
 	int				syntax_error;
 }					t_data;
+
+// heredoc.c
+void setup_heredoc_input(t_node *redi);
+t_token *parse_redirect_heredoc(t_data *data, t_node *node, t_token *token);
 
 // tokenize/tokenize.c
 int		is_blank(char c);

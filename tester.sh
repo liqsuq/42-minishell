@@ -4,7 +4,7 @@ STATUS=0
 
 assert() {
 	# テストしようとしている内容をprint
-	printf '%-49s:' "\"$1\""
+	printf '%-54s:' "\"$1\""
 	# bashの出力をactualに保存
 	echo -n -e "$1" | bash >expected 2>&-
 	# bashのexit statusをexpectedに代入
@@ -29,7 +29,7 @@ assert() {
 }
 
 debug() {
-	printf '%-49s:  DEBUG\n' "\"$1\""
+	printf '%-54s:  DEBUG\n' "\"$1\""
 }
 
 gen_aout() {
@@ -51,9 +51,9 @@ clean() {
 
 gen_aout
 
-echo "+--------------------------------------------------------------------+"
-echo "|  minishell test                                                    |"
-echo "+--------------------------------------------------------------------+"
+echo "+-------------------------------------------------------------------------+"
+echo "|  minishell test                                                         |"
+echo "+-------------------------------------------------------------------------+"
 
 # Empty line (EOF)
 assert ''
@@ -110,6 +110,11 @@ assert 'cat <hoge'
 assert 'cat <<EOF\nhello\nworld\nEOF\nNOPRINT'
 assert 'cat <<EOF<<eof\nhello\nworld\nEOF\neof\nNOPRINT'
 assert 'cat <<EOF\nhello\nworld'
+assert 'cat <<EOF1|cat <<EOF2|ls\nhello\n\EOF1world\nEOF2'
+assert 'cat <<EOF|"grep foo" <<EOFQ\nfoo\nEOF\nbar\nEOFQ'
+assert 'cat <<EOF\n\n\nEOF\nNOPRINT'
+assert 'cat <<EOF1 >out1 <<EOF2 >>out2\nfoo\nEOF1\nbar\nEOF2'
+rm -f out1 out2
 # assert 'cat <<E"O"F\nhello\nworld\nEOF\nNOPRINT' //「クォートを解除して文字列を連結する」機能が未実装
 # assert 'cat <<EOF   \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF' //環境変数が必要
 # assert 'cat <<"EOF" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF' //環境変数が必要
@@ -149,7 +154,7 @@ assert 'echo $MINISHTESTER3 | cat -e'
 assert 'echo "$MINISHTESTER3" | cat -e'
 unset MINISHTESTER1 MINISHTESTER2 MINISHTESTER3
 
-echo "======================================================================"
+echo "==========================================================================="
 if [ $STATUS -eq 0 ]; then
 	echo "All tests passed"
 else
