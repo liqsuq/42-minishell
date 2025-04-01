@@ -115,6 +115,10 @@ void	expand_parameter(t_data *data, t_node *node);
 // expand/expand_word.c
 void	expand_word(t_node *node);
 
+// expand/expand_quote.c
+void	expand_quote(t_node *node);
+void	expand_quote_token(t_token *token);
+
 // execute/execute.c
 void	execute(t_data *data, t_node *node);
 void	execute_command(t_node *node);

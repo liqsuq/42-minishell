@@ -1,0 +1,44 @@
+// expand_quote.c
+
+#include "minishell.h"
+
+static void	remove_quote(t_token *token)
+{
+	char	*new_word;
+	char	*cur;
+	char	c;
+
+	new_word = NULL;
+	cur = token->word;
+	while (*cur != '\0' && !is_metacharacter(*cur))
+	{
+		if (*cur == SQUOTE || *cur == DQUOTE)
+		{
+			c = *cur;
+			while (*++cur != c)
+				append_char(&new_word, *cur);
+			cur++;
+		}
+		else
+			append_char(&new_word, *cur++);
+	}
+	free(token->word);
+	token->word = new_word;
+}
+
+void	expand_quote_token(t_token *token)
+{
+	if (token == NULL)
+		return ;
+	if (token->kind == TK_WORD && token->word != NULL)
+		remove_quote(token);
+	expand_quote_token(token->next);
+}
+
+void	expand_quote(t_node *node)
+{
+	if (node == NULL)
+		return ;
+	expand_quote_token(node->args);
+	expand_quote(node->next);
+}

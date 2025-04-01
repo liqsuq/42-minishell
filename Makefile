@@ -4,7 +4,7 @@ TOKSRC := $(addprefix tokenize/, \
 PARSRC := $(addprefix parse/, \
 	parse.c nodeutils.c)
 EXPSRC := $(addprefix expand/, \
-	expand.c expand_variable.c expand_parameter.c expand_word.c)
+	expand.c expand_variable.c expand_parameter.c expand_word.c expand_quote.c)
 EXESRC := $(addprefix execute/, \
 	execute.c argvutils.c pathutils.c)
 REDSRC := $(addprefix redirect/, \
