@@ -17,18 +17,26 @@ static void	open_redirect(t_node *redi, int srcfd, int flags, mode_t mode)
 	close(dstfd);
 }
 
+static void write_heredoc(int fd, t_token *token)
+{
+	if (token == NULL)
+		return ;
+	write(fd, token->word, ft_strlen(token->word));
+	write(fd, "\n", 1);
+	write_heredoc(fd, token->next);
+}
+
 static void	open_heredoc(t_node *redi)
 {
 	int	pipefd[2];
+
 	if (pipe(pipefd) < 0)
 		fatal_error("pipe");
-
-	if (redi->heredoc_content)
-		write(pipefd[1], redi->heredoc_content, ft_strlen(redi->heredoc_content));
+	write_heredoc(pipefd[1], redi->heredoc);
 	close(pipefd[1]);
 	redi->stashed_fd = dup(STDIN_FILENO);
 	if (redi->stashed_fd < 0)
-		fatal_error("dup (stashed_fd)");
+		fatal_error("dup");
 	if (dup2(pipefd[0], STDIN_FILENO) < 0)
 		fatal_error("dup2");
 	close(pipefd[0]);

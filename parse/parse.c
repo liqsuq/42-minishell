@@ -16,49 +16,28 @@ static int	is_redirect(t_token *token)
 	return (0);
 }
 
-static void	read_heredoc_into_node(t_node *heredoc_node, const char *delim, bool is_quoted, t_env *env)
+static t_token *parse_heredoc(t_data *data, t_node *node, t_token *token)
 {
+	char *delim;
 	char *line;
-	char *buf;
-	(void)is_quoted;
-	(void)env;
 
-	heredoc_node->heredoc_content = ft_calloc(1, sizeof(char));
-	if (!heredoc_node->heredoc_content)
-		fatal_error("malloc heredoc_content");
+	(void)data;
+	delim = token->word;
+	if (ft_strchr(delim, SQUOTE) || ft_strchr(delim, DQUOTE))
+		node->is_quoted = 1;
 	while (1)
 	{
-		line = readline("> ");
-		if (!line)
+		line = readline(PROMPT_HEREDOC);
+		if (line == NULL)
 			break;
-		if (!ft_strcmp(line, delim))
+		if (ft_strcmp(line, delim) == 0)
 		{
 			free(line);
 			break;
 		}
-		buf = ft_strjoin(heredoc_node->heredoc_content, line);
-		free(heredoc_node->heredoc_content);
-		heredoc_node->heredoc_content = buf;
-		buf = ft_strjoin(heredoc_node->heredoc_content, "\n");
-		free(heredoc_node->heredoc_content);
-		heredoc_node->heredoc_content = buf;
-		free(line);
+		add_token(&node->heredoc, new_token(line, TK_WORD));
 	}
-}
-
-t_token *parse_redirect_heredoc(t_data *data, t_node *node, t_token *token)
-{
-	t_token *delim_token = token->next;
-	bool is_quoted = false;
-
-	(void)data;
-	if (ft_strchr(delim_token->word, SQUOTE) == NULL && ft_strchr(delim_token->word, DQUOTE) == NULL)
-		is_quoted = false;
-	else
-		is_quoted = true;
-
-	read_heredoc_into_node(node, delim_token->word, !is_quoted, NULL);
-	return (delim_token->next);
+	return (token->next);
 }
 
 static t_token	*parse_redirect(t_data *data, t_node *node, t_token *token)
@@ -78,7 +57,7 @@ static t_token	*parse_redirect(t_data *data, t_node *node, t_token *token)
 	tk = tk->next; // 次のトークンがデリミタ or ファイル名
 	nd->args = dup_token(tk);
 	if (nd->kind == ND_REDIR_HEREDOC)
-	tk = parse_redirect_heredoc(data, nd, token);
+		tk = parse_heredoc(data, nd, tk);
 	else
 		tk = tk->next;
 	return (tk);

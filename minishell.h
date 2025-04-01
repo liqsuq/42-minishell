@@ -29,6 +29,7 @@
 # define NAME "minishell"
 # define HEADER "minishell: "
 # define PROMPT "minish$ "
+# define PROMPT_HEREDOC "> "
 # define SQUOTE '\''
 # define DQUOTE '\"'
 # define ERROR_SYNTAX 258
@@ -62,9 +63,9 @@ typedef struct s_node
 	t_token			*args;				// 引数リスト・リダイレクトの引数
 	struct s_node	*redirects;			// リダイレクトリスト
 	int				stashed_fd;			// 保持している標準ファイルディスクリプタ
-	bool			is_quoted;			// 区切り文字がクオートされているかどうか
+	int				is_quoted;			// 区切り文字がクオートされているかどうか
 	struct s_node	*next;				// 次のノード
-	char *heredoc_content; // ヒアドキュメントの内容
+	t_token			*heredoc;			// ヒアドキュメントの内容
 }					t_node;
 
 // 環境変数のキーと値を格納するリスト構造体
