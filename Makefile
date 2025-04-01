@@ -8,7 +8,7 @@ EXPSRC := $(addprefix expand/, \
 EXESRC := $(addprefix execute/, \
 	execute.c argvutils.c pathutils.c)
 REDSRC := $(addprefix redirect/, \
-	redirect.c heredoc.c)
+	redirect.c)
 PIPSRC := $(addprefix pipeline/, \
 	pipeline.c)
 MSCSRC := $(addprefix misc/, \

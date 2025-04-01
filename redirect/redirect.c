@@ -17,6 +17,23 @@ static void	open_redirect(t_node *redi, int srcfd, int flags, mode_t mode)
 	close(dstfd);
 }
 
+static void	open_heredoc(t_node *redi)
+{
+	int	pipefd[2];
+	if (pipe(pipefd) < 0)
+		fatal_error("pipe");
+
+	if (redi->heredoc_content)
+		write(pipefd[1], redi->heredoc_content, ft_strlen(redi->heredoc_content));
+	close(pipefd[1]);
+	redi->stashed_fd = dup(STDIN_FILENO);
+	if (redi->stashed_fd < 0)
+		fatal_error("dup (stashed_fd)");
+	if (dup2(pipefd[0], STDIN_FILENO) < 0)
+		fatal_error("dup2");
+	close(pipefd[0]);
+}
+
 void redirect(t_node *redi, t_env **env)
 {
 	if (redi == NULL)
@@ -28,7 +45,7 @@ void redirect(t_node *redi, t_env **env)
 	else if (redi->kind == ND_REDIR_APPEND)
 		open_redirect(redi, STDOUT_FILENO, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else if (redi->kind == ND_REDIR_HEREDOC)
-	setup_heredoc_input(redi);
+		open_heredoc(redi);
 	return (redirect(redi->next, env));
 }
 

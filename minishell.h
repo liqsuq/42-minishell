@@ -81,10 +81,6 @@ typedef struct s_data
 	int				syntax_error;
 }					t_data;
 
-// heredoc.c
-void setup_heredoc_input(t_node *redi);
-t_token *parse_redirect_heredoc(t_data *data, t_node *node, t_token *token);
-
 // tokenize/tokenize.c
 int		is_blank(char c);
 int		is_metacharacter(char c);
