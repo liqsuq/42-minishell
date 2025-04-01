@@ -16,30 +16,6 @@ static int	is_redirect(t_token *token)
 	return (0);
 }
 
-static t_token *parse_heredoc(t_data *data, t_node *node, t_token *token)
-{
-	char *delim;
-	char *line;
-
-	(void)data;
-	delim = token->word;
-	if (ft_strchr(delim, SQUOTE) || ft_strchr(delim, DQUOTE))
-		node->is_quoted = 1;
-	while (1)
-	{
-		line = readline(PROMPT_HEREDOC);
-		if (line == NULL)
-			break;
-		if (ft_strcmp(line, delim) == 0)
-		{
-			free(line);
-			break;
-		}
-		add_token(&node->heredoc, new_token(line, TK_WORD));
-	}
-	return (token->next);
-}
-
 static t_token	*parse_redirect(t_data *data, t_node *node, t_token *token)
 {
 	t_node	*nd;	
@@ -56,10 +32,7 @@ static t_token	*parse_redirect(t_data *data, t_node *node, t_token *token)
 		nd = add_node(&node->redirects, new_node(ND_REDIR_HEREDOC));
 	tk = tk->next; // 次のトークンがデリミタ or ファイル名
 	nd->args = dup_token(tk);
-	if (nd->kind == ND_REDIR_HEREDOC)
-		tk = parse_heredoc(data, nd, tk);
-	else
-		tk = tk->next;
+	tk = tk->next;
 	return (tk);
 }
 
