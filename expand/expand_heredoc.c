@@ -2,12 +2,12 @@
 
 #include "minishell.h"
 
-static int is_delim_quoted(char *str)
+static int	is_delim_quoted(char *str)
 {
 	return (ft_strchr(str, SQUOTE) || ft_strchr(str, DQUOTE));
 }
 
-static t_token *read_heredoc(t_node *node)
+static t_token	*read_heredoc(t_node *node)
 {
 	char	*line;
 
@@ -15,11 +15,11 @@ static t_token *read_heredoc(t_node *node)
 	{
 		line = readline(PROMPT_HEREDOC);
 		if (line == NULL)
-			break;
+			break ;
 		if (ft_strcmp(line, node->args->word) == 0)
 		{
 			free(line);
-			break;
+			break ;
 		}
 		add_token(&node->args, new_token(line, TK_WORD));
 	}
@@ -34,7 +34,7 @@ void	expand_heredoc(t_data *data, t_node *node)
 		return ;
 	if (node->kind == ND_REDIR_HEREDOC && node->args != NULL)
 	{
-		is_quoted = is_delim_quoted(node->args->word);		
+		is_quoted = is_delim_quoted(node->args->word);
 		expand_quote_token(node->args);
 		read_heredoc(node);
 		if (!is_quoted)

@@ -17,7 +17,7 @@ static void	open_redirect(t_node *redi, int srcfd, int flags, mode_t mode)
 	close(dstfd);
 }
 
-static void write_heredoc(int fd, t_token *token)
+static void	write_heredoc(int fd, t_token *token)
 {
 	if (token == NULL)
 		return ;
@@ -42,7 +42,7 @@ static void	open_heredoc(t_node *redi)
 	close(pipefd[0]);
 }
 
-void redirect(t_node *redi, t_env **env)
+void	redirect(t_node *redi, t_env **env)
 {
 	if (redi == NULL)
 		return ;
