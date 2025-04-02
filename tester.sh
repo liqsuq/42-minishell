@@ -120,8 +120,8 @@ assert 'cat <<EOF   \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
 assert 'cat <<"EOF" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
 assert 'cat <<EO"F" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
 # export EOF="eof"
-# assert 'cat <<$EOF         \neof\n$EOF\nEOF'　// 環境変数が必要
-# assert 'cat <<"$EOF"       \neof\n$EOF\nEOF'　// 環境変数が必要
+# assert 'cat <<$EOF         \neof\n$EOF\nEOF'　//環境変数が必要
+# assert 'cat <<"$EOF"       \neof\n$EOF\nEOF'　//環境変数が必要
 
 # Pipe
 assert 'cat Makefile | grep minishell'
