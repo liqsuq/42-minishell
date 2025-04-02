@@ -32,7 +32,7 @@ static void	open_heredoc(t_node *redi)
 
 	if (pipe(pipefd) < 0)
 		fatal_error("pipe");
-	write_heredoc(pipefd[1], redi->heredoc);
+	write_heredoc(pipefd[1], redi->args->next);
 	close(pipefd[1]);
 	redi->stashed_fd = dup(STDIN_FILENO);
 	if (redi->stashed_fd < 0)

@@ -55,7 +55,7 @@ static void	append_quote(char **dst, char **str)
 	*str = cur;
 }
 
-static void	expand_variable_token(t_token *token)
+void	expand_variable_token(t_token *token)
 {
 	char	*new_word;
 	char	*str;
@@ -87,7 +87,8 @@ void	expand_variable(t_node *node)
 {
 	if (node == NULL)
 		return ;
-	expand_variable_token(node->args);
+	if (node->kind != ND_REDIR_HEREDOC)
+		expand_variable_token(node->args);
 	expand_variable(node->redirects);
 	expand_variable(node->next);
 }

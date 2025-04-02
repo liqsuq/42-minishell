@@ -2,43 +2,47 @@
 
 #include "minishell.h"
 
-static t_token *parse_heredoc(t_data *data, t_node *node, t_token *token)
+static int is_delim_quoted(char *str)
 {
-	char *delim;
-	char *line;
+	return (ft_strchr(str, SQUOTE) || ft_strchr(str, DQUOTE));
+}
 
-	(void)data;
-	delim = token->word;
-	if (ft_strchr(delim, SQUOTE) || ft_strchr(delim, DQUOTE))
-		node->is_quoted = 1;
+static t_token *read_heredoc(t_node *node)
+{
+	char	*line;
+
 	while (1)
 	{
 		line = readline(PROMPT_HEREDOC);
 		if (line == NULL)
 			break;
-		if (ft_strcmp(line, delim) == 0)
+		if (ft_strcmp(line, node->args->word) == 0)
 		{
 			free(line);
 			break;
 		}
-		add_token(&node->heredoc, new_token(line, TK_WORD));
+		add_token(&node->args, new_token(line, TK_WORD));
 	}
-	return (token->next);
+	return (node->args->next);
 }
 
-
-static void	expand_quote_redirects(t_node *redirects)
+void	expand_heredoc(t_data *data, t_node *node)
 {
-	if (redirects == NULL)
-		return ;
-	expand_quote_token(redirects->args);
-	expand_quote_redirects(redirects->next);
-}
+	int	is_quoted;
 
-void	expand_quote(t_node *node)
-{
 	if (node == NULL)
 		return ;
-	expand_quote_redirects(node->redirects);
-	expand_quote(node->next);
+	if (node->kind == ND_REDIR_HEREDOC && node->args != NULL)
+	{
+		is_quoted = is_delim_quoted(node->args->word);		
+		expand_quote_token(node->args);
+		read_heredoc(node);
+		if (!is_quoted)
+		{
+			expand_variable_token(node->args->next);
+			expand_parameter_token(data, node->args->next);
+		}
+	}
+	expand_heredoc(data, node->redirects);
+	expand_heredoc(data, node->next);
 }

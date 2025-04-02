@@ -18,9 +18,10 @@ static int	is_redirect(t_token *token)
 
 static t_token	*parse_redirect(t_data *data, t_node *node, t_token *token)
 {
-	t_node	*nd;	
+	t_node	*nd;
 	t_token	*tk;
 
+	(void)data;
 	tk = token;
 	if (!ft_strcmp(tk->word, ">"))
 		nd = add_node(&node->redirects, new_node(ND_REDIR_OUT));

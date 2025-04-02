@@ -39,6 +39,8 @@ void	expand_quote(t_node *node)
 {
 	if (node == NULL)
 		return ;
-	expand_quote_token(node->args);
+	if (node->kind != ND_REDIR_HEREDOC)
+		expand_quote_token(node->args);
+	expand_quote(node->redirects);
 	expand_quote(node->next);
 }

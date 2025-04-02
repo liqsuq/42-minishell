@@ -115,13 +115,13 @@ assert 'cat <<EOF|"grep foo" <<EOFQ\nfoo\nEOF\nbar\nEOFQ'
 assert 'cat <<EOF\n\n\nEOF\nNOPRINT'
 assert 'cat <<EOF1 >out1 <<EOF2 >>out2\nfoo\nEOF1\nbar\nEOF2'
 rm -f out1 out2
-# assert 'cat <<E"O"F\nhello\nworld\nEOF\nNOPRINT' //「クォートを解除して文字列を連結する」機能が未実装
-# assert 'cat <<EOF   \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF' //環境変数が必要
-# assert 'cat <<"EOF" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF' //環境変数が必要
-# assert 'cat <<EO"F" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF' //環境変数が必要
+assert 'cat <<E"O"F\nhello\nworld\nEOF\nNOPRINT'
+assert 'cat <<EOF   \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
+assert 'cat <<"EOF" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
+assert 'cat <<EO"F" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
 # export EOF="eof"
-# assert 'cat <<$EOF         \neof\n$EOF\nEOF'　//環境変数が必要
-# assert 'cat <<"$EOF"       \neof\n$EOF\nEOF'　//環境変数が必要
+# assert 'cat <<$EOF         \neof\n$EOF\nEOF'　// 環境変数が必要
+# assert 'cat <<"$EOF"       \neof\n$EOF\nEOF'　// 環境変数が必要
 
 # Pipe
 assert 'cat Makefile | grep minishell'

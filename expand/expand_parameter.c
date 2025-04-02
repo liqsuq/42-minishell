@@ -17,7 +17,7 @@ static void	append_status(char **dst, char **str, t_data *data)
 	*str += 2;
 }
 
-static void	expand_parameter_token(t_data *data, t_token *token)
+void	expand_parameter_token(t_data *data, t_token *token)
 {
 	char	*new_word;
 	char	*str;
@@ -47,7 +47,8 @@ void	expand_parameter(t_data *data, t_node *node)
 {
 	if (node == NULL)
 		return ;
-	expand_parameter_token(data, node->args);
+	if (node->kind != ND_REDIR_HEREDOC)
+		expand_parameter_token(data, node->args);
 	expand_parameter(data, node->redirects);
 	expand_parameter(data, node->next);
 }
