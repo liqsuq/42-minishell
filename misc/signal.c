@@ -2,20 +2,6 @@
 
 #include "minishell.h"
 
-// rl_event_hook
-// rl_signal_event_hook
-// rl_done
-// rl_clear_history()
-// rl_on_new_line()
-// rl_replace_line()
-// rl_redisplay()
-
-// check_signal_main()
-// check_signal_heredoc()
-// setup_signal()
-// ignore_signal()
-// reset_signal()
-
 volatile sig_atomic_t	g_signal;
 
 static void signal_handler(int sig)
