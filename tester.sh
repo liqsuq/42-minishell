@@ -231,6 +231,13 @@ assert 0 'sleep 10'
 # 3. Ctrl-D
 #
 # $ ./minishell
+# $ cat <<EOF <<EOF
+# >
+# 1. Ctrl-\
+# 2. Ctrl-C
+# 3. Ctrl-D
+#
+# $ ./minishell
 # $ cat <<EOF
 # > hoge
 # > fuga
