@@ -32,7 +32,7 @@ void	execute_command(t_node *node)
 static void	wait_pids(t_data *data, pid_t pid)
 {
 	pid_t	wpid;
-	int 	status;
+	int		status;
 
 	while (1)
 	{

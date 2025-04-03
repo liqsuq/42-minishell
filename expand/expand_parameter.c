@@ -17,7 +17,26 @@ static void	append_status(char **dst, char **str, t_data *data)
 	*str += 2;
 }
 
-static void	expand_parameter_token(t_data *data, t_token *token)
+static void	append_quote_para(char **dst, char **str, t_data *data)
+{
+	char	c;
+	char	*cur;
+
+	c = **str;
+	cur = *str;
+	append_char(dst, *cur++);
+	while (*cur != c)
+	{
+		if (c == DQUOTE && (*str)[0] == '$' && (*str)[1] == '?')
+			append_status(dst, &cur, data);
+		else
+			append_char(dst, *cur++);
+	}
+	append_char(dst, *cur++);
+	*str = cur;
+}
+
+void	expand_parameter_token(t_data *data, t_token *token, int force)
 {
 	char	*new_word;
 	char	*str;
@@ -32,7 +51,9 @@ static void	expand_parameter_token(t_data *data, t_token *token)
 			fatal_error("ft_calloc");
 		while (*str != '\0')
 		{
-			if (str[0] == '$' && str[1] == '?')
+			if (!force && (*str == SQUOTE || *str == DQUOTE))
+				append_quote_para(&new_word, &str, data);
+			else if (str[0] == '$' && str[1] == '?')
 				append_status(&new_word, &str, data);
 			else
 				append_char(&new_word, *str++);
@@ -40,14 +61,15 @@ static void	expand_parameter_token(t_data *data, t_token *token)
 		free(token->word);
 		token->word = new_word;
 	}
-	expand_parameter_token(data, token->next);
+	expand_parameter_token(data, token->next, force);
 }
 
 void	expand_parameter(t_data *data, t_node *node)
 {
 	if (node == NULL)
 		return ;
-	expand_parameter_token(data, node->args);
+	if (node->kind != ND_REDIR_HEREDOC)
+		expand_parameter_token(data, node->args, 0);
 	expand_parameter(data, node->redirects);
 	expand_parameter(data, node->next);
 }

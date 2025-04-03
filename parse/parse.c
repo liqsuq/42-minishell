@@ -18,9 +18,10 @@ static int	is_redirect(t_token *token)
 
 static t_token	*parse_redirect(t_data *data, t_node *node, t_token *token)
 {
-	t_node	*nd;	
+	t_node	*nd;
 	t_token	*tk;
 
+	(void)data;
 	tk = token;
 	if (!ft_strcmp(tk->word, ">"))
 		nd = add_node(&node->redirects, new_node(ND_REDIR_OUT));
@@ -28,15 +29,11 @@ static t_token	*parse_redirect(t_data *data, t_node *node, t_token *token)
 		nd = add_node(&node->redirects, new_node(ND_REDIR_APPEND));
 	else if (!ft_strcmp(tk->word, "<"))
 		nd = add_node(&node->redirects, new_node(ND_REDIR_IN));
-  else
-		nd = add_node(&node->redirects, new_node(ND_REDIR_HEREDOC));
-
-  tk = tk->next; // 次のトークンがデリミタ or ファイル名
-	nd->args = dup_token(tk);
-	if (nd->kind == ND_REDIR_HEREDOC)
-	tk = parse_redirect_heredoc(data, nd, token);
 	else
-		tk = tk->next;
+		nd = add_node(&node->redirects, new_node(ND_REDIR_HEREDOC));
+	tk = tk->next; // 次のトークンがデリミタ or ファイル名
+	nd->args = dup_token(tk);
+	tk = tk->next;
 	return (tk);
 }
 

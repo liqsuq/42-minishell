@@ -29,6 +29,7 @@
 # define NAME "minishell"
 # define HEADER "minishell: "
 # define PROMPT "minish$ "
+# define PROMPT_HEREDOC "> "
 # define SQUOTE '\''
 # define DQUOTE '\"'
 # define ERROR_SYNTAX 258
@@ -62,9 +63,7 @@ typedef struct s_node
 	t_token			*args;				// 引数リスト・リダイレクトの引数
 	struct s_node	*redirects;			// リダイレクトリスト
 	int				stashed_fd;			// 保持している標準ファイルディスクリプタ
-	bool			is_quoted;			// 区切り文字がクオートされているかどうか
 	struct s_node	*next;				// 次のノード
-	char *heredoc_content; // ヒアドキュメントの内容
 }					t_node;
 
 // 環境変数のキーと値を格納するリスト構造体
@@ -82,10 +81,6 @@ typedef struct s_data
 }					t_data;
 
 extern volatile sig_atomic_t	g_signal;
-
-// heredoc.c
-void setup_heredoc_input(t_node *redi);
-t_token *parse_redirect_heredoc(t_data *data, t_node *node, t_token *token);
 
 // tokenize/tokenize.c
 int		is_blank(char c);
@@ -113,12 +108,21 @@ void	append_char(char **s, char c);
 
 // expand/expand_variable.c
 void	expand_variable(t_node *node);
+void	expand_variable_token(t_token *token, int force);
 
 // expand/expand_parameter.c
 void	expand_parameter(t_data *data, t_node *node);
+void	expand_parameter_token(t_data *data, t_token *token, int force);
 
 // expand/expand_word.c
 void	expand_word(t_node *node);
+
+// expand/expand_quote.c
+void	expand_quote(t_node *node);
+void	expand_quote_token(t_token *token);
+
+// expand/expand_heredoc.c
+void	expand_heredoc(t_data *data, t_node *node);
 
 // execute/execute.c
 void	execute(t_data *data, t_node *node);

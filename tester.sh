@@ -116,18 +116,29 @@ rm -f f1 f2 f3
 assert 1 'cat <hoge'
 
 ## Here Document
+assert 1 'cat <<EOF\nEOF'
+assert 1 'cat <<EOF\nhello\nworld\nEOF'
+assert 1 'cat <<EOF\nhello\nworld'
 assert 1 'cat <<EOF\nhello\nworld\nEOF\nNOPRINT'
 assert 1 'cat <<EOF<<eof\nhello\nworld\nEOF\neof\nNOPRINT'
-assert 1 'cat <<EOF\nhello\nworld'
 assert 1 'cat <<EOF1|cat <<EOF2|ls\nhello\n\EOF1world\nEOF2'
 assert 1 'cat <<EOF|"grep foo" <<EOFQ\nfoo\nEOF\nbar\nEOFQ'
 assert 1 'cat <<EOF\n\n\nEOF\nNOPRINT'
 assert 1 'cat <<EOF1 >out1 <<EOF2 >>out2\nfoo\nEOF1\nbar\nEOF2'
 rm -f out1 out2
-# assert 1 'cat <<E"O"F\nhello\nworld\nEOF\nNOPRINT' //「クォートを解除して文字列を連結する」機能が未実装
-# assert 1 'cat <<EOF   \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF' //環境変数が必要
-# assert 1 'cat <<"EOF" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF' //環境変数が必要
-# assert 1 'cat <<EO"F" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF' //環境変数が必要
+assert 1 'cat <<EOF\n$USER $HOME $PWD\nEOF'
+assert 1 'cat <<EOF\n'\"'$USER $HOME $PWD'\"'\nEOF'
+assert 1 'cat <<EOF\n'\''$USER $HOME $PWD'\''\nEOF'
+assert 1 'cat <<'\"'EOF'\"'\n$USER $HOME $PWD\nEOF'
+assert 1 'cat <<'\"'EOF'\"'\n'\"'$USER $HOME $PWD'\"'\nEOF'
+assert 1 'cat <<'\"'EOF'\"'\n'\''$USER $HOME $PWD'\''\nEOF'
+assert 1 'cat <<'\''EOF'\''\n$USER $HOME $PWD\nEOF'
+assert 1 'cat <<'\''EOF'\''\n'\"'$USER $HOME $PWD'\"'\nEOF'
+assert 1 'cat <<'\''EOF'\''\n'\''$USER $HOME $PWD'\''\nEOF'
+assert 1 'cat <<E"O"F\nhello\nworld\nEOF\nNOPRINT'
+assert 1 'cat <<EOF   \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
+assert 1 'cat <<"EOF" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
+assert 1 'cat <<EO"F" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
 # export EOF="eof"
 # assert 1 'cat <<$EOF         \neof\n$EOF\nEOF'　//環境変数が必要
 # assert 1 'cat <<"$EOF"       \neof\n$EOF\nEOF'　//環境変数が必要
