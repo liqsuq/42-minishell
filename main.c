@@ -49,5 +49,6 @@ int	main(void)
 		}
 		free(line);
 	}
+	ft_dprintf(STDERR_FILENO, "exit\n");
 	return (data.exit_status);
 }
