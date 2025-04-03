@@ -39,8 +39,8 @@ void	expand_heredoc(t_data *data, t_node *node)
 		read_heredoc(node);
 		if (!is_quoted)
 		{
-			expand_variable_token(node->args->next);
-			expand_parameter_token(data, node->args->next);
+			expand_variable_token(node->args->next, 1);
+			expand_parameter_token(data, node->args->next, 1);
 		}
 	}
 	expand_heredoc(data, node->redirects);

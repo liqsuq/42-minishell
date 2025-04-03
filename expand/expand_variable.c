@@ -36,7 +36,7 @@ static void	append_variable(char **dst, char **str)
 	*str = cur;
 }
 
-static void	append_quote(char **dst, char **str)
+static void	append_quote_var(char **dst, char **str)
 {
 	char	c;
 	char	*cur;
@@ -55,7 +55,7 @@ static void	append_quote(char **dst, char **str)
 	*str = cur;
 }
 
-void	expand_variable_token(t_token *token)
+void	expand_variable_token(t_token *token, int force)
 {
 	char	*new_word;
 	char	*str;
@@ -70,8 +70,8 @@ void	expand_variable_token(t_token *token)
 			fatal_error("ft_calloc");
 		while (*str != '\0')
 		{
-			if (*str == SQUOTE || *str == DQUOTE)
-				append_quote(&new_word, &str);
+			if (!force &&(*str == SQUOTE || *str == DQUOTE))
+				append_quote_var(&new_word, &str);
 			else if (is_variable(str))
 				append_variable(&new_word, &str);
 			else
@@ -80,7 +80,7 @@ void	expand_variable_token(t_token *token)
 		free(token->word);
 		token->word = new_word;
 	}
-	expand_variable_token(token->next);
+	expand_variable_token(token->next, force);
 }
 
 void	expand_variable(t_node *node)
@@ -88,7 +88,7 @@ void	expand_variable(t_node *node)
 	if (node == NULL)
 		return ;
 	if (node->kind != ND_REDIR_HEREDOC)
-		expand_variable_token(node->args);
+		expand_variable_token(node->args, 0);
 	expand_variable(node->redirects);
 	expand_variable(node->next);
 }
