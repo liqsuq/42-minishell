@@ -26,6 +26,11 @@ static t_token	*read_heredoc(t_node *node)
 	return (node->args->next);
 }
 
+// expand_heredoc()
+// This function handles the expansion of heredoc nodes in the tree.
+// It checks if the node is a heredoc and if so, it reads and expands the input.
+// Note that the read input is stored in the heardoc node args->next.
+// Args contains the delimiter of heredoc and the input is linked to the next.
 void	expand_heredoc(t_data *data, t_node *node)
 {
 	int	is_quoted;
