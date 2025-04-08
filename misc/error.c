@@ -19,8 +19,10 @@ void	tokenize_error(const char *msg, t_data *data, char **line)
 	char	*cur;
 
 	cur = *line;
-	data->syntax_error = 1;
-	ft_dprintf(STDERR_FILENO, HEADER "syntax error: %s\n", msg);
+	data->abort = 1;
+	data->exit_status = ERROR_SYNTAX;
+	if (msg != NULL)
+		ft_dprintf(STDERR_FILENO, HEADER "syntax error: %s\n", msg);
 	while (*cur != '\0')
 		cur++;
 	*line = cur;
@@ -31,9 +33,18 @@ void	parse_error(const char *msg, t_data *data, t_token **token)
 	t_token	*cur;
 
 	cur = *token;
-	data->syntax_error = 1;
-	ft_dprintf(STDERR_FILENO, HEADER "syntax error: %s\n", msg);
+	data->abort = 1;
+	data->exit_status = ERROR_SYNTAX;
+	if (msg != NULL)
+		ft_dprintf(STDERR_FILENO, HEADER "syntax error: %s\n", msg);
 	while (cur != NULL)
 		cur = cur->next;
 	*token = cur;
+}
+
+void	expand_error(const char *msg, t_data *data)
+{
+	data->abort = 1;
+	if (msg != NULL)
+		ft_dprintf(STDERR_FILENO, HEADER "%s\n", msg);
 }

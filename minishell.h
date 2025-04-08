@@ -77,7 +77,7 @@ typedef struct s_env
 typedef struct s_data
 {
 	int				exit_status;
-	int				syntax_error;
+	int				abort;
 }					t_data;
 
 extern volatile sig_atomic_t	g_signal;
@@ -147,6 +147,7 @@ void	fatal_error(const char *msg);
 void	assert_error(const char *msg);
 void	tokenize_error(const char *msg, t_data *data, char **line);
 void	parse_error(const char *msg, t_data *data, t_token **token);
+void	expand_error(const char *msg, t_data *data);
 
 // misc/debug.c
 void	print_argv(char **str);
