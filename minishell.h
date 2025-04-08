@@ -77,7 +77,7 @@ typedef struct s_env
 typedef struct s_data
 {
 	int				exit_status;
-	int				abort;
+	int				is_abort;
 }					t_data;
 
 extern volatile sig_atomic_t	g_signal;

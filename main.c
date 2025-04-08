@@ -5,7 +5,7 @@
 static void	init_data(t_data *data)
 {
 	data->exit_status = 0;
-	data->abort = 0;
+	data->is_abort = 0;
 }
 
 static void	process_line(t_data *data, char *line)
@@ -13,11 +13,11 @@ static void	process_line(t_data *data, char *line)
 	t_token	*token;
 	t_node	*node;
 
-	data->abort = 0;
+	data->is_abort = 0;
 	token = tokenize(data, line);
 	node = parse(data, token);
 	expand(data, node);
-	if (!data->abort)
+	if (!data->is_abort)
 		execute(data, node);
 	free_node(node);
 	free_token(token);

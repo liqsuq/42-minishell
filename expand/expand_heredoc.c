@@ -10,7 +10,7 @@ static int	is_delim_quoted(char *str)
 static void	interrupt_heredoc(t_data *data)
 {
 	g_signal = 0;
-	data->abort = 1;
+	data->is_abort = 1;
 	data->exit_status = SIGINT + 128;
 }
 
@@ -45,14 +45,14 @@ void	expand_heredoc(t_data *data, t_node *node)
 {
 	int	is_quoted;
 
-	if (node == NULL || data->abort)
+	if (node == NULL || data->is_abort)
 		return ;
 	if (node->kind == ND_REDIR_HEREDOC && node->args != NULL)
 	{
 		is_quoted = is_delim_quoted(node->args->word);
 		expand_quote_token(node->args);
 		read_heredoc(data, &node);
-		if (!is_quoted && !data->abort)
+		if (!is_quoted && !data->is_abort)
 		{
 			expand_variable_token(node->args->next, 1);
 			expand_parameter_token(data, node->args->next, 1);

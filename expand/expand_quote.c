@@ -37,7 +37,7 @@ void	expand_quote_token(t_token *token)
 
 void	expand_quote(t_data *data, t_node *node)
 {
-	if (node == NULL || data->abort)
+	if (node == NULL || data->is_abort)
 		return ;
 	if (node->kind != ND_REDIR_HEREDOC)
 		expand_quote_token(node->args);

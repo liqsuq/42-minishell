@@ -85,7 +85,7 @@ void	expand_variable_token(t_token *token, int force)
 
 void	expand_variable(t_data *data, t_node *node)
 {
-	if (node == NULL || data->abort)
+	if (node == NULL || data->is_abort)
 		return ;
 	if (node->kind != ND_REDIR_HEREDOC)
 		expand_variable_token(node->args, 0);

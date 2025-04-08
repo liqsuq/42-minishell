@@ -93,7 +93,7 @@ static void	expand_word_token(t_token *token)
 
 void	expand_word(t_data *data, t_node *node)
 {
-	if (node == NULL || data->abort)
+	if (node == NULL || data->is_abort)
 		return ;
 	expand_word_token(node->args);
 	expand_word(data, node->next);

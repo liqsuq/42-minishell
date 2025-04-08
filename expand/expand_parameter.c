@@ -66,7 +66,7 @@ void	expand_parameter_token(t_data *data, t_token *token, int force)
 
 void	expand_parameter(t_data *data, t_node *node)
 {
-	if (node == NULL || data->abort)
+	if (node == NULL || data->is_abort)
 		return ;
 	if (node->kind != ND_REDIR_HEREDOC)
 		expand_parameter_token(data, node->args, 0);
