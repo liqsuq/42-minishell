@@ -38,7 +38,6 @@ int	main(void)
 		if (isatty(STDIN_FILENO))
 			rl_event_hook = check_signal_main;
 		line = readline(PROMPT);
-		//printf("test\n");
 		if (line == NULL)
 			break ;
 		if (*line)
