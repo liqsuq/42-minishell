@@ -28,7 +28,7 @@ static void	read_heredoc(t_data *data, t_node **node)
 	if (g_signal == SIGINT)
 	{
 		g_signal = 0;
-		data->exit_status = 130;
+		data->exit_status = SIGINT + 128;
 		expand_error(NULL, data);
 	}
 }
