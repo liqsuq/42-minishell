@@ -164,7 +164,6 @@ int		ft_strcmp(const char *s1, const char *s2);
 int		check_signal_main(void);
 int		check_signal_heredoc(void);
 void	setup_signal(void);
-void	ignore_signal(void);
 void	reset_signal(void);
 
 #endif
