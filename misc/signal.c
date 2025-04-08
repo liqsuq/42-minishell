@@ -4,12 +4,12 @@
 
 volatile sig_atomic_t	g_signal;
 
-static void signal_handler(int sig)
+static void	signal_handler(int sig)
 {
 	g_signal = sig;
 }
 
-int check_signal_main(void)
+int	check_signal_main(void)
 {
 	if (g_signal == SIGINT)
 	{
@@ -22,7 +22,7 @@ int check_signal_main(void)
 	return (0);
 }
 
-int check_signal_heredoc(void)
+int	check_signal_heredoc(void)
 {
 	if (g_signal == SIGINT)
 	{
@@ -32,7 +32,7 @@ int check_signal_heredoc(void)
 	return (0);
 }
 
-void setup_signal(void)
+void	setup_signal(void)
 {
 	struct sigaction	sigact;
 
@@ -46,7 +46,7 @@ void setup_signal(void)
 		fatal_error("sigaction");
 }
 
-void reset_signal(void)
+void	reset_signal(void)
 {
 	struct sigaction	sigact;
 

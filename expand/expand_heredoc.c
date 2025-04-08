@@ -7,7 +7,7 @@ static int	is_delim_quoted(char *str)
 	return (ft_strchr(str, SQUOTE) || ft_strchr(str, DQUOTE));
 }
 
-static void interrupt_heredoc(t_data *data)
+static void	interrupt_heredoc(t_data *data)
 {
 	g_signal = 0;
 	data->abort = 1;

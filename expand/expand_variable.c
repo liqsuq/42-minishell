@@ -70,7 +70,7 @@ void	expand_variable_token(t_token *token, int force)
 			fatal_error("ft_calloc");
 		while (*str != '\0')
 		{
-			if (!force &&(*str == SQUOTE || *str == DQUOTE))
+			if (!force && (*str == SQUOTE || *str == DQUOTE))
 				append_quote_var(&new_word, &str);
 			else if (is_variable(str))
 				append_variable(&new_word, &str);
