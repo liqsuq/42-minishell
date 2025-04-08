@@ -44,7 +44,7 @@ static void	wait_pids(t_data *data, pid_t pid)
 			else if (WIFSIGNALED(status))
 			{
 				if (WTERMSIG(status) == SIGQUIT)
-					write(2, "Quit: 3\n", 8);
+					write(STDERR_FILENO, "Quit\n", 5);
 				data->exit_status = WTERMSIG(status) + 128;
 			}
 		}
@@ -52,8 +52,8 @@ static void	wait_pids(t_data *data, pid_t pid)
 		{
 			if (errno == ECHILD)
 				break ;
-			else if (errno != EINTR)
-				fatal_error("wait");
+			else if (errno == EINTR)
+				write(STDERR_FILENO, "\n", 1);
 		}
 	}
 }

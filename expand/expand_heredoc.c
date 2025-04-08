@@ -13,6 +13,7 @@ static void	read_heredoc(t_data *data, t_node **node)
 
 	while (1)
 	{
+		g_signal = 0;
 		if (isatty(STDIN_FILENO))
 			rl_event_hook = check_signal_heredoc;
 		line = readline(PROMPT_HEREDOC);
