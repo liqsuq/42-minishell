@@ -107,7 +107,7 @@ void	expand(t_data *data, t_node *node);
 void	append_char(char **s, char c);
 
 // expand/expand_variable.c
-void	expand_variable(t_node *node);
+void	expand_variable(t_data *data, t_node *node);
 void	expand_variable_token(t_token *token, int force);
 
 // expand/expand_parameter.c
@@ -115,10 +115,10 @@ void	expand_parameter(t_data *data, t_node *node);
 void	expand_parameter_token(t_data *data, t_token *token, int force);
 
 // expand/expand_word.c
-void	expand_word(t_node *node);
+void	expand_word(t_data *data, t_node *node);
 
 // expand/expand_quote.c
-void	expand_quote(t_node *node);
+void	expand_quote(t_data *data, t_node *node);
 void	expand_quote_token(t_token *token);
 
 // expand/expand_heredoc.c

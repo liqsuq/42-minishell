@@ -91,10 +91,10 @@ static void	expand_word_token(t_token *token)
 	expand_word_token(token->next);
 }
 
-void	expand_word(t_node *node)
+void	expand_word(t_data *data, t_node *node)
 {
-	if (node == NULL)
+	if (node == NULL || data->abort)
 		return ;
 	expand_word_token(node->args);
-	expand_word(node->next);
+	expand_word(data, node->next);
 }

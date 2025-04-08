@@ -7,7 +7,6 @@ volatile sig_atomic_t	g_signal;
 static void signal_handler(int sig)
 {
 	g_signal = sig;
-	write(2, "\n", 1);
 }
 
 int check_signal_main(void)
@@ -15,6 +14,7 @@ int check_signal_main(void)
 	if (g_signal == SIGINT)
 	{
 		g_signal = 0;
+		write(2, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
