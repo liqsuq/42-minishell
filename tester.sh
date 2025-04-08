@@ -246,6 +246,12 @@ assert 0 'sleep 10'
 # 3. Ctrl-D
 # 
 # $ ./minishell
+# $ cat
+# 1. Ctrl-\
+# 2. Ctrl-C
+# 3. Ctrl-D
+# 
+# $ ./minishell
 # $ cat | cat | ls
 # 1. Ctrl-\
 # 2. Ctrl-C
