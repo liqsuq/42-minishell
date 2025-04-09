@@ -32,7 +32,11 @@
 # define PROMPT_HEREDOC "> "
 # define SQUOTE '\''
 # define DQUOTE '\"'
-# define ERROR_SYNTAX 258
+# define ERROR_GENERAL 1
+# define ERROR_SYNTAX 2
+# define ERROR_NOPERM 126
+# define ERROR_NOFILE 127
+# define ERROR_INVALID 128
 
 typedef enum e_token_kind
 {
