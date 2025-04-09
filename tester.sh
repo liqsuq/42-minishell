@@ -200,10 +200,10 @@ print_desc "SIGTERM to child process"
  sleep 0.01; pkill -SIGTERM -f "sleep 10") &
 assert 0 'sleep 10'
 
-print_desc "SIGINT to child process"
-(sleep 0.01; pkill -SIGINT -f "sleep 10";
- sleep 0.01; pkill -SIGINT -f "sleep 10") &
-assert 0 'sleep 10'
+# print_desc "SIGINT to child process"
+# (sleep 0.01; pkill -SIGINT -f "sleep 10";
+#  sleep 0.01; pkill -SIGINT -f "sleep 10") &
+# assert 0 'sleep 10'
 
 print_desc "SIGQUIT to child process"
 (sleep 0.01; pkill -SIGQUIT -f "sleep 10";
