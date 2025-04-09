@@ -17,7 +17,32 @@ static void	open_redirect(t_node *redi, int srcfd, int flags, mode_t mode)
 	close(dstfd);
 }
 
-void redirect(t_node *redi, t_env **env)
+static void	write_heredoc(int fd, t_token *token)
+{
+	if (token == NULL)
+		return ;
+	write(fd, token->word, ft_strlen(token->word));
+	write(fd, "\n", 1);
+	write_heredoc(fd, token->next);
+}
+
+static void	open_heredoc(t_node *redi)
+{
+	int	pipefd[2];
+
+	if (pipe(pipefd) < 0)
+		fatal_error("pipe");
+	write_heredoc(pipefd[1], redi->args->next);
+	close(pipefd[1]);
+	redi->stashed_fd = dup(STDIN_FILENO);
+	if (redi->stashed_fd < 0)
+		fatal_error("dup");
+	if (dup2(pipefd[0], STDIN_FILENO) < 0)
+		fatal_error("dup2");
+	close(pipefd[0]);
+}
+
+void	redirect(t_node *redi, t_env **env)
 {
 	if (redi == NULL)
 		return ;
@@ -28,7 +53,7 @@ void redirect(t_node *redi, t_env **env)
 	else if (redi->kind == ND_REDIR_APPEND)
 		open_redirect(redi, STDOUT_FILENO, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else if (redi->kind == ND_REDIR_HEREDOC)
-	setup_heredoc_input(redi);
+		open_heredoc(redi);
 	return (redirect(redi->next, env));
 }
 
