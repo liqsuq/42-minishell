@@ -176,38 +176,38 @@ unset MINISHTESTER1 MINISHTESTER2 MINISHTESTER3
 
 # Signal
 print_desc "SIGTERM to SHELL"
-(sleep 0.1; pkill -SIGTERM bash;
- sleep 0.1; pkill -SIGTERM minishell) &
+(sleep 0.01; pkill -SIGTERM bash;
+ sleep 0.01; pkill -SIGTERM minishell) &
 assert 0 'sleep 10' 2>/dev/null
 
 print_desc "SIGQUIT to SHELL"
-(sleep 0.1; pkill -SIGQUIT bash; # SIGQUIT should not kill the shell
- sleep 0.1; pkill -SIGTERM bash;
- sleep 0.1; pkill -SIGQUIT minishell; # SIGQUIT should not kill the shell
- sleep 0.1; pkill -SIGTERM minishell) &
+(sleep 0.01; pkill -SIGQUIT bash; # SIGQUIT should not kill the shell
+ sleep 0.01; pkill -SIGTERM bash;
+ sleep 0.01; pkill -SIGQUIT minishell; # SIGQUIT should not kill the shell
+ sleep 0.01; pkill -SIGTERM minishell) &
 assert 0 'sleep 10' 2>/dev/null
 
 print_desc "SIGINT to SHELL"
-(sleep 0.1; pkill -SIGINT bash; # SIGINT should not kill the shell
- sleep 0.1; pkill -SIGTERM bash;
- sleep 0.1; pkill -SIGINT minishell; # SIGINT should not kill the shell
- sleep 0.1; pkill -SIGTERM minishell) &
+(sleep 0.01; pkill -SIGINT bash; # SIGINT should not kill the shell
+ sleep 0.01; pkill -SIGTERM bash;
+ sleep 0.01; pkill -SIGINT minishell; # SIGINT should not kill the shell
+ sleep 0.01; pkill -SIGTERM minishell) &
 assert 0 'sleep 10' 2>/dev/null
 
 # Signal to child processes
 print_desc "SIGTERM to child process"
-(sleep 0.1; pkill -SIGTERM -f "sleep 10";
- sleep 0.1; pkill -SIGTERM -f "sleep 10") &
+(sleep 0.01; pkill -SIGTERM -f "sleep 10";
+ sleep 0.01; pkill -SIGTERM -f "sleep 10") &
 assert 0 'sleep 10'
 
 print_desc "SIGINT to child process"
-(sleep 0.1; pkill -SIGINT -f "sleep 10";
- sleep 0.1; pkill -SIGINT -f "sleep 10") &
+(sleep 0.01; pkill -SIGINT -f "sleep 10";
+ sleep 0.01; pkill -SIGINT -f "sleep 10") &
 assert 0 'sleep 10'
 
 print_desc "SIGQUIT to child process"
-(sleep 0.1; pkill -SIGQUIT -f "sleep 10";
- sleep 0.1; pkill -SIGQUIT -f "sleep 10") &
+(sleep 0.01; pkill -SIGQUIT -f "sleep 10";
+ sleep 0.01; pkill -SIGQUIT -f "sleep 10") &
 assert 0 'sleep 10'
 
 # Manual
