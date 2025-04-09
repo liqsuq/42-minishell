@@ -1,5 +1,4 @@
 NAME := minishell
-
 TOKSRC := $(addprefix tokenize/, \
 	tokenize.c tokenutils.c)
 PARSRC := $(addprefix parse/, \
