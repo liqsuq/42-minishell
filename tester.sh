@@ -196,18 +196,18 @@ assert 0 'sleep 10' 2>/dev/null
 
 # Signal to child processes
 print_desc "SIGTERM to child process"
-(sleep 0.05; pkill -n -SIGTERM -f "sleep 10";
- sleep 0.05; pkill -n -SIGTERM -f "sleep 10") &
+(sleep 0.1; pkill -n -SIGTERM -f "sleep 10";
+ sleep 0.1; pkill -n -SIGTERM -f "sleep 10") &
 assert 0 'sleep 10'
 
 print_desc "SIGINT to child process"
-(sleep 0.05; pkill -n -SIGINT -f "sleep 10";
- sleep 0.05; pkill -n -SIGINT -f "sleep 10") &
+(sleep 0.1; pkill -n -SIGINT -f "sleep 10";
+ sleep 0.1; pkill -n -SIGINT -f "sleep 10") &
 assert 0 'sleep 10'
 
 print_desc "SIGQUIT to child process"
-(sleep 0.05; pkill -n -SIGQUIT -f "sleep 10";
- sleep 0.05; pkill -n -SIGQUIT -f "sleep 10") &
+(sleep 0.1; pkill -n -SIGQUIT -f "sleep 10";
+ sleep 0.1; pkill -n -SIGQUIT -f "sleep 10") &
 assert 0 'sleep 10'
 
 # Manual
