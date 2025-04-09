@@ -57,6 +57,8 @@ typedef enum e_node_kind
 }	t_node_kind;
 
 // コマンドやリダイレクトを表すノード構造体
+// args: arguments of the command or redirection
+//       NOTE: if node is a heredoc, args->next contains heredoc contents
 typedef struct s_node
 {
 	t_node_kind		kind;				// ノードの種類
