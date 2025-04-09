@@ -207,7 +207,7 @@ assert 0 'sleep 10'
 
 print_desc "SIGQUIT to child process"
 (sleep 0.1; pkill -n -SIGQUIT -f "sleep 10";
- sleep 0.1; pkill -n -SIGQUIT -f "sleep 10") &
+ sleep 0.5; pkill -n -SIGQUIT -f "sleep 10") &
 assert 0 'sleep 10'
 
 # Manual
