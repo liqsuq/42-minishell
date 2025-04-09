@@ -14,6 +14,8 @@ PIPSRC := $(addprefix pipeline/, \
 	pipeline.c)
 MSCSRC := $(addprefix misc/, \
 	error.c debug.c ft_funcs.c)
+BLTSRC := $(addprefix builtin/, \
+	builtin_exit.c)
 SOURCE := main.c \
 	$(TOKSRC) $(PARSRC) $(EXPSRC) $(EXESRC) $(REDSRC) $(PIPSRC) $(MSCSRC)
 OBJECT := $(SOURCE:.c=.o)

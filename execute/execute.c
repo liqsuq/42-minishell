@@ -29,6 +29,35 @@ void	execute_command(t_node *node)
 		exit(EXIT_FAILURE);
 }
 
+static int	is_builtin(t_token *args)
+{
+	char *const	cmd[] = {"exit", "cd", "echo", "env", "export", "pwd", "unset"};
+	size_t		i;
+
+	if (args == NULL)
+		return (0);
+	i = -1;
+	while (++i < sizeof(cmd) / sizeof(*cmd))
+		if (ft_strncmp(args->word, cmd[i], ft_strlen(cmd[i])) == 0)
+			return (1);
+	return (0);
+}
+
+void	execute_builtin(t_data *data, t_node *node)
+{
+	char	**argv;
+
+	(void)data;
+	argv = new_argv(node->args);
+	if (argv == NULL)
+		exit(1);
+	redirect(node->redirects, NULL);
+	if (ft_strncmp(node->args->word, "exit", 5) == 0)
+		builtin_exit(data, argv);
+	reset_redirect(node->redirects);
+	free_argv(argv);
+}
+
 static void	wait_pids(t_data *data, pid_t pid)
 {
 	pid_t	wpid;

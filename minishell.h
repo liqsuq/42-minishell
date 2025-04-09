@@ -127,6 +127,7 @@ void	expand_heredoc(t_data *data, t_node *node);
 // execute/execute.c
 void	execute(t_data *data, t_node *node);
 void	execute_command(t_node *node);
+void	execute_builtin(t_data *data, t_node *node);
 
 // execute/argvutils.c
 char	**new_argv(t_token *args);
@@ -158,5 +159,8 @@ void	print_node(t_node *node);
 // misc/ft_funcs.c
 int		ft_strcmp(const char *s1, const char *s2);
 // void	*ft_realloc(void *ptr, size_t size);
+
+// builtin/builtin_exit.c
+void	builtin_exit(t_data *data, char **argv);
 
 #endif
