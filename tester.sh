@@ -8,11 +8,11 @@ assert() {
 		printf '%-54s:' "\"$2\""
 	fi
 	# bashの出力をactualに保存
-	echo -n -e "$2" | bash >expected 2>&-
+	echo -n -e "$2" | bash >expected 2>&- || true
 	# bashのexit statusをexpectedに代入
 	expected=$?
 	# minishellの出力をexpectedに保存
-	echo -n -e "$2" | ./minishell >actual 2>&-
+	echo -n -e "$2" | ./minishell >actual 2>&- || true
 	# minishellのexit statusをactualに代入
 	actual=$?
 	# bashとminishellの出力を比較
@@ -198,17 +198,17 @@ assert 0 'sleep 10' 2>/dev/null
 print_desc "SIGTERM to child process"
 (sleep 0.01; pkill -SIGTERM -f "sleep 10";
  sleep 0.01; pkill -SIGTERM -f "sleep 10") &
-assert 0 'sleep 10'; true
+assert 0 'sleep 10'
 
 print_desc "SIGINT to child process"
 (sleep 0.01; pkill -SIGINT -f "sleep 10";
  sleep 0.01; pkill -SIGINT -f "sleep 10") &
-assert 0 'sleep 10'; true
+assert 0 'sleep 10'
 
 print_desc "SIGQUIT to child process"
 (sleep 0.01; pkill -SIGQUIT -f "sleep 10";
  sleep 0.01; pkill -SIGQUIT -f "sleep 10") &
-assert 0 'sleep 10'; true
+assert 0 'sleep 10'
 
 # Manual
 # $ ./minishell
