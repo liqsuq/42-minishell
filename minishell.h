@@ -127,6 +127,7 @@ void	expand_heredoc(t_data *data, t_node *node);
 // execute/execute.c
 void	execute(t_data *data, t_node *node);
 void	execute_command(t_node *node);
+int		is_builtin(t_token *args);
 void	execute_builtin(t_data *data, t_node *node);
 
 // execute/argvutils.c

@@ -18,7 +18,7 @@ static void	move_fd(int src, int dst)
 	close_fd(src);
 }
 
-int	pipeline(t_node *node, int prev_pipeout)
+int	pipeline(t_data *data, t_node *node, int prev_pipeout)
 {
 	int		pipefd[2];
 	pid_t	pid;
@@ -38,7 +38,10 @@ int	pipeline(t_node *node, int prev_pipeout)
 			close_fd(pipefd[0]);
 			move_fd(pipefd[1], STDOUT_FILENO);
 		}
-		execute_command(node);
+		if (is_builtin(node->args))
+			execute_builtin(data, node);
+		else
+			execute_command(node);
 	}
 	if (prev_pipeout != -1)
 		close_fd(prev_pipeout);

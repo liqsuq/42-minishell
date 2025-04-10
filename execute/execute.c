@@ -29,7 +29,7 @@ void	execute_command(t_node *node)
 		exit(EXIT_FAILURE);
 }
 
-static int	is_builtin(t_token *args)
+int	is_builtin(t_token *args)
 {
 	char *const	cmd[] = {"exit", "cd", "echo", "env", "export", "pwd", "unset"};
 	size_t		i;
@@ -98,6 +98,11 @@ void	execute(t_data *data, t_node *node)
 		data->exit_status = 1;
 		return ;
 	}
-	pid = pipeline(node, -1);
-	wait_pids(data, pid);
+	if (node->next == NULL && is_builtin(node->args))
+		execute_builtin(data, node);
+	else 
+	{	
+		pid = pipeline(data, node, -1);
+		wait_pids(data, pid);
+	}
 }
