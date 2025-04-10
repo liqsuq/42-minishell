@@ -148,7 +148,10 @@ void	redirect(t_node *redi, t_env **env);
 void	reset_redirect(t_node *redi);
 
 // pipeline/pipeline.c
-int		pipeline(t_node *node, int prev_pipeout);
+int		pipeline(t_data *data, t_node *node, int prev_pipeout);
+
+// builtin/builtin.c
+void	builtin_exit(t_data *data, char **argv);
 
 // misc/error.c
 void	fatal_error(const char *msg);
@@ -173,7 +176,5 @@ int		check_signal_main(void);
 int		check_signal_heredoc(void);
 void	setup_signal(void);
 void	reset_signal(void);
-// builtin/builtin.c
-void	builtin_exit(t_data *data, char **argv);
 
 #endif

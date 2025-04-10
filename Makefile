@@ -17,7 +17,8 @@ MSCSRC := $(addprefix misc/, \
 BLTSRC := $(addprefix builtin/, \
 	builtin_exit.c)
 SOURCE := main.c \
-	$(TOKSRC) $(PARSRC) $(EXPSRC) $(EXESRC) $(REDSRC) $(PIPSRC) $(MSCSRC)
+	$(TOKSRC) $(PARSRC) $(EXPSRC) $(EXESRC) \
+	$(REDSRC) $(PIPSRC) $(MSCSRC) $(BLTSRC)
 OBJECT := $(SOURCE:.c=.o)
 LFTDIR := libft
 LFT := $(LFTDIR)/libft.a

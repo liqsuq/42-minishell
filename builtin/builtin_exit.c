@@ -2,7 +2,21 @@
 
 #include "minishell.h"
 
-static int	is_over(const char *nptr, unsigned long long n, int sign)
+static int	is_number(char *str)
+{
+	while (*str == ' ' || (*str >= '\t' && *str <= '\r'))
+		str++;
+	if (*str == '-' || *str == '+')
+		str++;
+	while (*str != '\0')
+	{
+		if (!ft_isdigit(*str++))
+			return (0);
+	}
+	return (1);
+}
+
+static int	is_overflow(const char *nptr, unsigned long long n, int sign)
 {
 	unsigned long long	cutoff;
 	unsigned long long	cutlim;
@@ -32,7 +46,7 @@ static long long	ft_strtoll(const char *nptr)
 			sign = -1;
 	while (ft_isdigit(*nptr) && !is_overflow(nptr, (unsigned long long)n, sign))
 		n = n * 10 + *nptr++ - '0';
-	if (!is_over(nptr, n, sign))
+	if (!is_overflow(nptr, n, sign))
 		return (n * sign);
 	if (sign > 0)
 		return (LLONG_MAX);
@@ -44,7 +58,6 @@ void	builtin_exit(t_data *data, char **argv)
 	int			exit_status;
 	long long	num;
 
-	ft_dprintf(STDERR_FILENO, "exit\n");
 	if (argv[1] == NULL)
 		exit_status = data->exit_status;
 	else if (argv[2] != NULL)
@@ -52,7 +65,7 @@ void	builtin_exit(t_data *data, char **argv)
 		ft_dprintf(STDERR_FILENO, HEADER "exit: too many arguments\n");
 		exit_status = ERROR_GENERAL;
 	}
-	else if (!ft_isdigit(argv[1]))
+	else if (!is_number(argv[1]))
 	{
 		ft_dprintf(STDERR_FILENO, HEADER "exit: numeric argument required\n");
 		exit_status = ERROR_SYNTAX;

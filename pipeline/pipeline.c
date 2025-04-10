@@ -49,6 +49,6 @@ int	pipeline(t_data *data, t_node *node, int prev_pipeout)
 	if (has_pipe(node))
 		close_fd(pipefd[1]);
 	if (has_pipe(node))
-		return (pipeline(node->next, pipefd[0]));
+		return (pipeline(data, node->next, pipefd[0]));
 	return (pid);
 }
