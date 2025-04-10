@@ -5,7 +5,7 @@
 static void	init_data(t_data *data)
 {
 	data->exit_status = 0;
-	data->syntax_error = 0;
+	data->is_abort = 0;
 }
 
 static void	process_line(t_data *data, char *line)
@@ -13,13 +13,11 @@ static void	process_line(t_data *data, char *line)
 	t_token	*token;
 	t_node	*node;
 
-	data->syntax_error = 0;
+	data->is_abort = 0;
 	token = tokenize(data, line);
 	node = parse(data, token);
 	expand(data, node);
-	if (data->syntax_error == 1)
-		data->exit_status = ERROR_SYNTAX;
-	else
+	if (!data->is_abort)
 		execute(data, node);
 	free_node(node);
 	free_token(token);
@@ -30,10 +28,15 @@ int	main(void)
 	t_data	data;
 	char	*line;
 
+	g_signal = 0;
 	rl_outstream = stderr;
 	init_data(&data);
+	setup_signal();
 	while (1)
 	{
+		g_signal = 0;
+		if (isatty(STDIN_FILENO))
+			rl_event_hook = check_signal_main;
 		line = readline(PROMPT);
 		if (line == NULL)
 			break ;
@@ -44,5 +47,6 @@ int	main(void)
 		}
 		free(line);
 	}
+	ft_dprintf(STDERR_FILENO, "exit\n");
 	return (data.exit_status);
 }

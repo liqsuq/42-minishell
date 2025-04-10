@@ -73,9 +73,7 @@ static void	wait_pids(t_data *data, pid_t pid)
 			else if (WIFSIGNALED(status))
 			{
 				if (WTERMSIG(status) == SIGQUIT)
-					ft_printf("Quit: 3\n");
-				if (WTERMSIG(status) == SIGINT)
-					ft_printf("\n");
+					ft_dprintf(STDERR_FILENO, "Quit\n");
 				data->exit_status = WTERMSIG(status) + 128;
 			}
 		}
@@ -83,8 +81,8 @@ static void	wait_pids(t_data *data, pid_t pid)
 		{
 			if (errno == ECHILD)
 				break ;
-			else if (errno != EINTR)
-				fatal_error("wait");
+			else if (errno == EINTR)
+				ft_dprintf(STDERR_FILENO, "\n");
 		}
 	}
 }

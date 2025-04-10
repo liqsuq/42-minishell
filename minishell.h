@@ -32,7 +32,11 @@
 # define PROMPT_HEREDOC "> "
 # define SQUOTE '\''
 # define DQUOTE '\"'
-# define ERROR_SYNTAX 258
+# define ERROR_GENERAL 1
+# define ERROR_SYNTAX 2
+# define ERROR_NOPERM 126
+# define ERROR_NOFILE 127
+# define ERROR_INVALID 128
 
 typedef enum e_token_kind
 {
@@ -79,8 +83,10 @@ typedef struct s_env
 typedef struct s_data
 {
 	int				exit_status;
-	int				syntax_error;
+	int				is_abort;
 }					t_data;
+
+extern volatile sig_atomic_t	g_signal;
 
 // tokenize/tokenize.c
 int		is_blank(char c);
@@ -107,7 +113,7 @@ void	expand(t_data *data, t_node *node);
 void	append_char(char **s, char c);
 
 // expand/expand_variable.c
-void	expand_variable(t_node *node);
+void	expand_variable(t_data *data, t_node *node);
 void	expand_variable_token(t_token *token, int force);
 
 // expand/expand_parameter.c
@@ -115,10 +121,10 @@ void	expand_parameter(t_data *data, t_node *node);
 void	expand_parameter_token(t_data *data, t_token *token, int force);
 
 // expand/expand_word.c
-void	expand_word(t_node *node);
+void	expand_word(t_data *data, t_node *node);
 
 // expand/expand_quote.c
-void	expand_quote(t_node *node);
+void	expand_quote(t_data *data, t_node *node);
 void	expand_quote_token(t_token *token);
 
 // expand/expand_heredoc.c
@@ -149,6 +155,7 @@ void	fatal_error(const char *msg);
 void	assert_error(const char *msg);
 void	tokenize_error(const char *msg, t_data *data, char **line);
 void	parse_error(const char *msg, t_data *data, t_token **token);
+void	expand_error(const char *msg, t_data *data);
 
 // misc/debug.c
 void	print_argv(char **str);
@@ -161,7 +168,12 @@ void	print_node(t_node *node);
 int		ft_strcmp(const char *s1, const char *s2);
 // void	*ft_realloc(void *ptr, size_t size);
 
-// builtin/builtin_exit.c
+// misc/signal.c
+int		check_signal_main(void);
+int		check_signal_heredoc(void);
+void	setup_signal(void);
+void	reset_signal(void);
+// builtin/builtin.c
 void	builtin_exit(t_data *data, char **argv);
 
 #endif

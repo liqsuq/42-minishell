@@ -70,7 +70,7 @@ void	expand_variable_token(t_token *token, int force)
 			fatal_error("ft_calloc");
 		while (*str != '\0')
 		{
-			if (!force &&(*str == SQUOTE || *str == DQUOTE))
+			if (!force && (*str == SQUOTE || *str == DQUOTE))
 				append_quote_var(&new_word, &str);
 			else if (is_variable(str))
 				append_variable(&new_word, &str);
@@ -83,12 +83,12 @@ void	expand_variable_token(t_token *token, int force)
 	expand_variable_token(token->next, force);
 }
 
-void	expand_variable(t_node *node)
+void	expand_variable(t_data *data, t_node *node)
 {
-	if (node == NULL)
+	if (node == NULL || data->is_abort)
 		return ;
 	if (node->kind != ND_REDIR_HEREDOC)
 		expand_variable_token(node->args, 0);
-	expand_variable(node->redirects);
-	expand_variable(node->next);
+	expand_variable(data, node->redirects);
+	expand_variable(data, node->next);
 }

@@ -35,12 +35,12 @@ void	expand_quote_token(t_token *token)
 	expand_quote_token(token->next);
 }
 
-void	expand_quote(t_node *node)
+void	expand_quote(t_data *data, t_node *node)
 {
-	if (node == NULL)
+	if (node == NULL || data->is_abort)
 		return ;
 	if (node->kind != ND_REDIR_HEREDOC)
 		expand_quote_token(node->args);
-	expand_quote(node->redirects);
-	expand_quote(node->next);
+	expand_quote(data, node->redirects);
+	expand_quote(data, node->next);
 }
