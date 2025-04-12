@@ -13,7 +13,7 @@ REDSRC := $(addprefix redirect/, \
 PIPSRC := $(addprefix pipeline/, \
 	pipeline.c)
 MSCSRC := $(addprefix misc/, \
-	error.c debug.c ft_funcs.c)
+	error.c debug.c ft_funcs.c signal.c)
 SOURCE := main.c \
 	$(TOKSRC) $(PARSRC) $(EXPSRC) $(EXESRC) $(REDSRC) $(PIPSRC) $(MSCSRC)
 OBJECT := $(SOURCE:.c=.o)

@@ -27,9 +27,9 @@ void	append_char(char **s, char c)
 
 void	expand(t_data *data, t_node *node)
 {
-	expand_variable(node);
+	expand_variable(data, node);
 	expand_parameter(data, node);
-	expand_word(node);
-	expand_quote(node);
+	expand_word(data, node);
+	expand_quote(data, node);
 	expand_heredoc(data, node);
 }
