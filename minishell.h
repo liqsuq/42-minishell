@@ -84,6 +84,7 @@ typedef struct s_data
 {
 	int				exit_status;
 	int				is_abort;
+	t_env 		*env;
 }					t_data;
 
 extern volatile sig_atomic_t	g_signal;
@@ -171,5 +172,12 @@ int		check_signal_main(void);
 int		check_signal_heredoc(void);
 void	setup_signal(void);
 void	reset_signal(void);
+
+// misc/envutils.c
+t_env   *new_env(char *key, char *value);
+t_env   *free_env(t_env *env);
+char    *get_env(t_env *env, char *key);
+int     set_env(t_env **env, char *key, char *value);
+int     unset_env(t_env **env, char *key);
 
 #endif
