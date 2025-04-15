@@ -11,7 +11,7 @@ void	execute_command(t_data *data, t_node *node)
 	argv = new_argv(node->args);
 	if (argv == NULL)
 		exit(1);
-	path = resolve_path(argv[0]);
+	path = resolve_path(data->env, argv[0]);
 	if (path == NULL)
 	{
 		free_argv(argv);

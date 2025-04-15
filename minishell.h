@@ -115,7 +115,7 @@ void	append_char(char **s, char c);
 
 // expand/expand_variable.c
 void	expand_variable(t_data *data, t_node *node);
-void	expand_variable_token(t_token *token, int force);
+void	expand_variable_token(t_token *token, int force, t_env *env);
 
 // expand/expand_parameter.c
 void	expand_parameter(t_data *data, t_node *node);
@@ -140,7 +140,7 @@ char	**new_argv(t_token *args);
 void	free_argv(char **argv);
 
 // execute/pathutils.c
-char	*resolve_path(char *line);
+char	*resolve_path(t_env *env, char *line);
 
 // redirect/redirect.c
 void	redirect(t_node *redi, t_env **env);

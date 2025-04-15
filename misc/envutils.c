@@ -44,7 +44,7 @@ char	*get_env(t_env *env, char *key)
 int	set_env(t_env **env, char *key, char *value)
 {
 	t_env	*cur;
-	t_env	*prev;
+	t_env	*prev = NULL;
 
 	if (!env || !key || !value)
 		return (1);
