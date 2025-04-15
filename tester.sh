@@ -173,6 +173,7 @@ assert 1 'echo "$MINISHTESTER2" | cat -e'
 assert 1 'echo $MINISHTESTER3 | cat -e'
 assert 1 'echo "$MINISHTESTER3" | cat -e'
 unset MINISHTESTER1 MINISHTESTER2 MINISHTESTER3
+assert 1 'echo "" | cat -e'
 
 # Signal
 print_desc "SIGTERM to SHELL"
