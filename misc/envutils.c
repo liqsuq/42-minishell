@@ -44,7 +44,7 @@ char	*get_env(t_env *env, char *key)
 int	set_env(t_env **env, char *key, char *value)
 {
 	t_env	*cur;
-	t_env	*prev = NULL;
+	t_env	*prev;
 
 	if (!env || !key || !value)
 		return (1);
@@ -96,4 +96,51 @@ int	unset_env(t_env **env, char *key)
 		cur = cur->next;
 	}
 	return (1);
+}
+
+char	**dump_env(t_env *env)
+{
+	int		count;
+	t_env	*cur;
+	char 	**envp;
+	size_t len;
+	int i;
+
+	i = 0;
+	count = 0;
+	cur = env;
+	while (cur)
+	{
+		count++;
+		cur = cur->next;
+	}
+	envp = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!envp)
+		fatal_error("malloc");
+	cur = env;
+	while (i < count)
+	{
+		len = ft_strlen(cur->key) + 1 + ft_strlen(cur->value) + 1;
+		envp[i] = (char *)malloc(sizeof(char) * len);
+		if (!envp[i])
+			fatal_error("malloc");
+		sprintf(envp[i], "%s=%s", cur->key, cur->value);
+		cur = cur->next;
+		i++;
+	}
+	envp[count] = NULL;
+	return envp;
+}
+
+void	free_envp(char **envp)
+{
+	if (!envp)
+		return;
+	int i = 0;
+	while (envp[i])
+	{
+		free(envp[i]);
+		i++;
+	}
+	free(envp);
 }

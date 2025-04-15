@@ -133,7 +133,7 @@ void	expand_heredoc(t_data *data, t_node *node);
 
 // execute/execute.c
 void	execute(t_data *data, t_node *node);
-void	execute_command(t_node *node);
+void 	execute_command(t_data *data, t_node *node);
 
 // execute/argvutils.c
 char	**new_argv(t_token *args);
@@ -147,7 +147,7 @@ void	redirect(t_node *redi, t_env **env);
 void	reset_redirect(t_node *redi);
 
 // pipeline/pipeline.c
-int		pipeline(t_node *node, int prev_pipeout);
+int 	pipeline(t_data *data, t_node *node, int prev_pipeout);
 
 // misc/error.c
 void	fatal_error(const char *msg);
@@ -179,5 +179,7 @@ t_env   *free_env(t_env *env);
 char    *get_env(t_env *env, char *key);
 int     set_env(t_env **env, char *key, char *value);
 int     unset_env(t_env **env, char *key);
+char    **dump_env(t_env *env);
+void    free_envp(char **envp);
 
 #endif

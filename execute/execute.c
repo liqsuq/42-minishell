@@ -2,10 +2,11 @@
 
 #include "minishell.h"
 
-void	execute_command(t_node *node)
+void	execute_command(t_data *data, t_node *node)
 {
 	char	**argv;
 	char	*path;
+	char 	**envp;
 
 	argv = new_argv(node->args);
 	if (argv == NULL)
@@ -16,10 +17,12 @@ void	execute_command(t_node *node)
 		free_argv(argv);
 		exit(127);
 	}
-	redirect(node->redirects, NULL);
-	execve(path, argv, NULL);
+	envp = dump_env(data->env);
+	redirect(node->redirects, &data->env);
+	execve(path, argv, envp);
 	reset_redirect(node->redirects);
 	free_argv(argv);
+	free_envp(envp);
 	free(path);
 	if (errno == ENOENT)
 		exit(127);
@@ -67,6 +70,6 @@ void	execute(t_data *data, t_node *node)
 		data->exit_status = 1;
 		return ;
 	}
-	pid = pipeline(node, -1);
+	pid = pipeline(data, node, -1);
 	wait_pids(data, pid);
 }
