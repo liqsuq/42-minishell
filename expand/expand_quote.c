@@ -8,7 +8,9 @@ static void	remove_quote(t_token *token)
 	char	*cur;
 	char	c;
 
-	new_word = NULL;
+	new_word = ft_strdup("");
+	if (new_word == NULL)
+		fatal_error("ft_strdup");
 	cur = token->word;
 	while (*cur != '\0' && !is_metacharacter(*cur))
 	{
