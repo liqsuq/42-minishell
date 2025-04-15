@@ -29,6 +29,8 @@ static t_env *init_env_list(char **envp)
 	t_env *env_list = NULL;
 	int    i = 0;
 
+	if (envp == NULL)
+		return NULL;
 	while (envp[i])
 	{
 		char *equal_pos = strchr(envp[i], '=');
