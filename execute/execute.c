@@ -51,7 +51,6 @@ void	execute_builtin(t_data *data, t_node *node)
 	argv = new_argv(node->args);
 	if (argv == NULL)
 		exit(1);
-	print_node(node);
 	redirect(node->redirects, NULL);
 	if (ft_strncmp(node->args->word, "exit", 5) == 0)
 		builtin_exit(data, argv);
