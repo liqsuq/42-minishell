@@ -91,11 +91,36 @@ static void	expand_word_token(t_token *token)
 	expand_word_token(token->next);
 }
 
+static void pop_token(t_token **head, t_token *token)
+{
+	t_token	*cur;
+
+	if (head == NULL || *head == NULL || token == NULL)
+		return ;
+	if (*head == token)
+	{
+		*head = token->next;
+		free(token->word);
+		free(token);
+		return ;
+	}
+	cur = *head;
+	while (cur->next != NULL)
+	{
+		if (cur->next == token)
+		{
+			cur->next = token->next;
+			free(token->word);
+			free(token);
+			return ;
+		}
+		cur = cur->next;
+	}
+}
+
 void	expand_word(t_data *data, t_node *node)
 {
 	t_token *cur;
-	char	*tmpc;
-	t_token	*tmpt;
 
 	if (node == NULL || data->is_abort)
 		return ;
@@ -104,14 +129,7 @@ void	expand_word(t_data *data, t_node *node)
 	while (cur != NULL)
 	{
 		if (cur->word != NULL && ft_strlen(cur->word) == 0)
-		{
-			tmpc = cur->word;
-			cur->word = cur->next->word;
-			free(tmpc);
-			tmpt = cur->next;
-			cur->next = cur->next->next;
-			free(tmpt);
-		}
+			pop_token(&node->args, cur);
 		cur = cur->next;
 	}
 	expand_word(data, node->next);
