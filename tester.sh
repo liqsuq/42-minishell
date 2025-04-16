@@ -174,6 +174,16 @@ assert 1 'echo $MINISHTESTER3 | cat -e'
 assert 1 'echo "$MINISHTESTER3" | cat -e'
 unset MINISHTESTER1 MINISHTESTER2 MINISHTESTER3
 assert 1 'echo "" | cat -e'
+assert 1 '"" ls'
+unset NOVAR
+assert 1 '$NOVAR ls'
+assert 1 '"$NOVAR" ls'
+assert 1 'echo $NOVAR | cat -e'
+assert 1 'echo "$NOVAR" | cat -e'
+assert 1 'echo $NOVAR test | cat -e'
+assert 1 'echo "$NOVAR" test | cat -e'
+assert 1 'echo $NOVAR test $NOVAR | cat -e'
+assert 1 'echo "$NOVAR" test "$NOVAR" | cat -e'
 
 # Signal
 print_desc "SIGTERM to SHELL"
