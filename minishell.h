@@ -133,6 +133,8 @@ void	expand_heredoc(t_data *data, t_node *node);
 // execute/execute.c
 void	execute(t_data *data, t_node *node);
 void	execute_command(t_node *node);
+int		is_builtin(t_token *args);
+void	execute_builtin(t_data *data, t_node *node);
 
 // execute/argvutils.c
 char	**new_argv(t_token *args);
@@ -146,7 +148,10 @@ void	redirect(t_node *redi, t_env **env);
 void	reset_redirect(t_node *redi);
 
 // pipeline/pipeline.c
-int		pipeline(t_node *node, int prev_pipeout);
+int		pipeline(t_data *data, t_node *node, int prev_pipeout);
+
+// builtin/builtin.c
+void	builtin_exit(t_data *data, char **argv);
 
 // misc/error.c
 void	fatal_error(const char *msg);

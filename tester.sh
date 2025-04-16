@@ -268,6 +268,20 @@ assert 0 'sleep 10'
 # 2. Ctrl-C
 # 3. Ctrl-D
 
+# Built-in commands
+## exit
+assert 1 'exit'
+assert 1 'exit 42'
+assert 1 'exit -42'
+assert 1 'exit --42'
+assert 1 'exit +42'
+assert 1 'exit ++42'
+# assert 1 'exit ""'
+assert 1 'exit hello'
+assert 1 'exit 42Tokyo'
+assert 1 'exit 1 2'
+assert 1 'exit 1024'
+
 echo "==========================================================================="
 if [ $STATUS -eq 0 ]; then
 	echo "All tests passed"
