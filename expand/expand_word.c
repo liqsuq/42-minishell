@@ -93,8 +93,26 @@ static void	expand_word_token(t_token *token)
 
 void	expand_word(t_data *data, t_node *node)
 {
+	t_token *cur;
+	char	*tmpc;
+	t_token	*tmpt;
+
 	if (node == NULL || data->is_abort)
 		return ;
 	expand_word_token(node->args);
+	cur = node->args;
+	while (cur != NULL)
+	{
+		if (cur->word != NULL && ft_strlen(cur->word) == 0)
+		{
+			tmpc = cur->word;
+			cur->word = cur->next->word;
+			free(tmpc);
+			tmpt = cur->next;
+			cur->next = cur->next->next;
+			free(tmpt);
+		}
+		cur = cur->next;
+	}
 	expand_word(data, node->next);
 }
