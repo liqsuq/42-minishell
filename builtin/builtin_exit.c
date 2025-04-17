@@ -4,6 +4,8 @@
 
 static int	is_number(char *str)
 {
+	if (*str == '\0')
+		return (0);
 	while (*str == ' ' || (*str >= '\t' && *str <= '\r'))
 		str++;
 	if (*str == '-' || *str == '+')
@@ -58,6 +60,7 @@ void	builtin_exit(t_data *data, char **argv)
 	int			exit_status;
 	long long	num;
 
+	ft_dprintf(STDERR_FILENO, "exit\n");
 	if (argv[1] == NULL)
 		exit_status = data->exit_status;
 	else if (argv[2] != NULL)
