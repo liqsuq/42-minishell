@@ -34,13 +34,15 @@ static int	is_overflow(const char *nptr, unsigned long long n, int sign)
 	return (0);
 }
 
-static long long	ft_strtoll(const char *nptr)
+static long long	ft_strtoll(const char *nptr, char **endptr)
 {
 	long long	n;
 	int			sign;
 
 	n = 0;
 	sign = 1;
+	if (endptr != NULL)
+	 	*endptr = (char *)nptr;
 	while (*nptr == ' ' || (*nptr >= '\t' && *nptr <= '\r'))
 		nptr++;
 	if (*nptr == '-' || *nptr == '+')
@@ -48,6 +50,8 @@ static long long	ft_strtoll(const char *nptr)
 			sign = -1;
 	while (ft_isdigit(*nptr) && !is_overflow(nptr, (unsigned long long)n, sign))
 		n = n * 10 + *nptr++ - '0';
+	if (endptr != NULL)
+		*endptr = (char *)nptr;
 	if (!is_overflow(nptr, n, sign))
 		return (n * sign);
 	if (sign > 0)
@@ -55,29 +59,36 @@ static long long	ft_strtoll(const char *nptr)
 	return (LLONG_MIN);
 }
 
+static void	summarize(int *status, const char *msg, int num)
+{
+	if (msg != NULL)
+		ft_dprintf(STDERR_FILENO, HEADER "%s", msg);
+	if (status != NULL)
+		*status = num;
+}
+
+
 void	builtin_exit(t_data *data, char **argv)
 {
-	int			exit_status;
+	int			stat;
 	long long	num;
+	char		*endptr;
 
 	ft_dprintf(STDERR_FILENO, "exit\n");
 	if (argv[1] == NULL)
-		exit_status = data->exit_status;
+		summarize(&stat, NULL, data->exit_status);	
 	else if (argv[2] != NULL)
-	{
-		ft_dprintf(STDERR_FILENO, HEADER "exit: too many arguments\n");
-		exit_status = ERROR_GENERAL;
-	}
+		summarize(&stat, "exit: too many arguments\n", EXIT_FAILURE);
 	else if (!is_number(argv[1]))
-	{
-		ft_dprintf(STDERR_FILENO, HEADER "exit: numeric argument required\n");
-		exit_status = ERROR_SYNTAX;
-	}
+		summarize(&stat, "exit: numeric argument required\n", ERROR_SYNTAX);
 	else
 	{
-		num = ft_strtoll(argv[1]);
-		exit_status = (int)(unsigned int)(num % 256);
+		num = ft_strtoll(argv[1], &endptr);
+		if (*endptr != '\0')
+			summarize(&stat, "exit: numeric argument required\n", ERROR_SYNTAX);
+		else
+			summarize(&stat, NULL, (int)(unsigned int)(num % 256));
 	}
 	free_argv(argv);
-	exit(exit_status);
+	exit(stat);
 }

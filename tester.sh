@@ -281,6 +281,9 @@ assert 1 'exit hello'
 assert 1 'exit 42Tokyo'
 assert 1 'exit 1 2'
 assert 1 'exit 1024'
+assert 1 'exit 9223372036854775807'
+assert 1 'exit 9223372036854775808'
+assert 1 'exit 3141592653589793238462643383279'
 
 echo "==========================================================================="
 if [ $STATUS -eq 0 ]; then
