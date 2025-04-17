@@ -282,6 +282,22 @@ assert 1 'exit 42Tokyo'
 assert 1 'exit 1 2'
 assert 1 'exit 1024'
 
+## echo
+assert 1 'echo'
+assert 1 'echo hello'
+assert 1 'echo hello world'
+assert 1 'echo "42tokyo !#$%&()=~|{}[];:,.<>?"'
+assert 1 'echo hello "    " world'
+assert 1 'echo -n'
+assert 1 'echo -n hello world'
+assert 1 'echo -nnnnnnnn hello world'
+assert 1 'echo -n -n -n -n hello world'
+assert 1 'echo --n hello world'
+assert 1 'echo -na hello world'
+assert 1 'echo -n-n hello world'
+assert 1 'echo hello world -n'
+assert 1 'echo -n -n hello world -n -n'
+
 echo "==========================================================================="
 if [ $STATUS -eq 0 ]; then
 	echo "All tests passed"
