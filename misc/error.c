@@ -4,7 +4,17 @@
 
 void	fatal_error(const char *msg)
 {
-	ft_dprintf(STDERR_FILENO, "Fatal Error: %s\n", msg);
+	char *str;
+
+	if (msg != NULL)
+		str = ft_strjoin(HEADER, msg);
+	else
+		str = ft_strdup(HEADER);
+	if (str != NULL)
+		perror(str);
+	else
+		perror(HEADER);
+	free(str);
 	exit(EXIT_FAILURE);
 }
 
