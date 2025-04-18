@@ -153,6 +153,7 @@ int 	pipeline(t_data *data, t_node *node, int prev_pipeout);
 
 // builtin/builtin.c
 void	builtin_exit(t_data *data, char **argv);
+void  builtin_export(t_data *data, char **argv);
 
 // misc/error.c
 void	fatal_error(const char *msg);
@@ -186,5 +187,6 @@ int     set_env(t_env **env, char *key, char *value);
 int     unset_env(t_env **env, char *key);
 char    **dump_env(t_env *env);
 void    free_envp(char **envp);
+void 		print_env_export_format(t_env *env);
 
 #endif

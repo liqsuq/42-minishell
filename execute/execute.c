@@ -34,7 +34,7 @@ void	execute_command(t_data *data, t_node *node)
 
 int	is_builtin(t_token *args)
 {
-	char *const	cmd[] = {"exit"};
+	char *const	cmd[] = {"exit", "export"};
 	size_t		i;
 
 	if (args == NULL)
@@ -57,6 +57,8 @@ void	execute_builtin(t_data *data, t_node *node)
 	redirect(node->redirects, NULL);
 	if (ft_strncmp(node->args->word, "exit", 5) == 0)
 		builtin_exit(data, argv);
+	else if (ft_strncmp(node->args->word, "export", 7) == 0)
+		builtin_export(data, argv);
 	reset_redirect(node->redirects);
 	free_argv(argv);
 }

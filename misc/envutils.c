@@ -144,3 +144,15 @@ void	free_envp(char **envp)
 	}
 	free(envp);
 }
+
+void print_env_export_format(t_env *env)
+{
+  while (env)
+  {
+    if (env->value)
+      printf("declare -x %s=\"%s\"\n", env->key, env->value);
+    else
+      printf("declare -x %s=\"\"\n", env->key);
+    env = env->next;
+  }
+}

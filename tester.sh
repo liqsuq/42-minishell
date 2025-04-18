@@ -282,6 +282,20 @@ assert 1 'exit 42Tokyo'
 assert 1 'exit 1 2'
 assert 1 'exit 1024'
 
+## export
+assert 1 'export | sort' # order of variables, default variables differs...
+assert 1 'export | grep nosuch | sort'
+assert 1 'export nosuch\n export | grep nosuch | sort'
+assert 1 'export nosuch=fuga\n export | grep nosuch | sort'
+assert 1 'export nosuch=fuga hoge=nosuch\n export | grep nosuch | sort'
+assert 1 'export [invalid]'
+assert 1 'export [invalid_nosuch]\n export | grep nosuch | sort'
+assert 1 'export [invalid]=nosuch\n export | grep nosuch | sort'
+assert 1 'export [invalid] nosuch hoge=nosuch\n export | grep nosuch | sort'
+assert 1 'export nosuch [invalid] hoge=nosuch\n export | grep nosuch | sort'
+assert 1 'export nosuch hoge=nosuch [invalid]\n export | grep nosuch | sort'
+assert 1 'export nosuch="nosuch2=hoge"\nexport $nosuch\n export | grep nosuch | sort'
+
 echo "==========================================================================="
 if [ $STATUS -eq 0 ]; then
 	echo "All tests passed"
