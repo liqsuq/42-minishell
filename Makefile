@@ -4,8 +4,8 @@ TOKSRC := $(addprefix tokenize/, \
 PARSRC := $(addprefix parse/, \
 	parse.c nodeutils.c)
 EXPSRC := $(addprefix expand/, \
-	expand.c expand_variable.c expand_parameter.c expand_word.c expand_quote.c \
-	expand_heredoc.c)
+	expand.c expand_variable.c expand_parameter.c \
+	expand_word.c expand_quote.c expand_heredoc.c)
 EXESRC := $(addprefix execute/, \
 	execute.c argvutils.c pathutils.c)
 REDSRC := $(addprefix redirect/, \
@@ -14,8 +14,11 @@ PIPSRC := $(addprefix pipeline/, \
 	pipeline.c)
 MSCSRC := $(addprefix misc/, \
 	error.c debug.c ft_funcs.c signal.c envutils.c)
+BLTSRC := $(addprefix builtin/, \
+	builtin_exit.c)
 SOURCE := main.c \
-	$(TOKSRC) $(PARSRC) $(EXPSRC) $(EXESRC) $(REDSRC) $(PIPSRC) $(MSCSRC)
+	$(TOKSRC) $(PARSRC) $(EXPSRC) $(EXESRC) \
+	$(REDSRC) $(PIPSRC) $(MSCSRC) $(BLTSRC)
 OBJECT := $(SOURCE:.c=.o)
 LFTDIR := libft
 LFT := $(LFTDIR)/libft.a

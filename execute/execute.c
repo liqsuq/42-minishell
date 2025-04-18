@@ -32,6 +32,35 @@ void	execute_command(t_data *data, t_node *node)
 		exit(EXIT_FAILURE);
 }
 
+int	is_builtin(t_token *args)
+{
+	char *const	cmd[] = {"exit"};
+	size_t		i;
+
+	if (args == NULL)
+		return (0);
+	i = -1;
+	while (++i < sizeof(cmd) / sizeof(*cmd))
+		if (ft_strncmp(args->word, cmd[i], ft_strlen(cmd[i])) == 0)
+			return (1);
+	return (0);
+}
+
+void	execute_builtin(t_data *data, t_node *node)
+{
+	char	**argv;
+
+	(void)data;
+	argv = new_argv(node->args);
+	if (argv == NULL)
+		exit(1);
+	redirect(node->redirects, NULL);
+	if (ft_strncmp(node->args->word, "exit", 5) == 0)
+		builtin_exit(data, argv);
+	reset_redirect(node->redirects);
+	free_argv(argv);
+}
+
 static void	wait_pids(t_data *data, pid_t pid)
 {
 	pid_t	wpid;
@@ -70,6 +99,11 @@ void	execute(t_data *data, t_node *node)
 		data->exit_status = 1;
 		return ;
 	}
-	pid = pipeline(data, node, -1);
-	wait_pids(data, pid);
+	if (node->next == NULL && is_builtin(node->args))
+		execute_builtin(data, node);
+	else 
+	{	
+		pid = pipeline(data, node, -1);
+		wait_pids(data, pid);
+	}
 }

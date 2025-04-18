@@ -174,6 +174,16 @@ assert 1 'echo $MINISHTESTER3 | cat -e'
 assert 1 'echo "$MINISHTESTER3" | cat -e'
 unset MINISHTESTER1 MINISHTESTER2 MINISHTESTER3
 assert 1 'echo "" | cat -e'
+assert 1 '"" ls'
+unset NOVAR
+assert 1 '$NOVAR ls'
+assert 1 '"$NOVAR" ls'
+assert 1 'echo $NOVAR | cat -e'
+assert 1 'echo "$NOVAR" | cat -e'
+assert 1 'echo $NOVAR test | cat -e'
+assert 1 'echo "$NOVAR" test | cat -e'
+assert 1 'echo $NOVAR test $NOVAR | cat -e'
+assert 1 'echo "$NOVAR" test "$NOVAR" | cat -e'
 
 # Signal
 print_desc "SIGTERM to SHELL"
@@ -257,6 +267,20 @@ assert 0 'sleep 10'
 # 1. Ctrl-\
 # 2. Ctrl-C
 # 3. Ctrl-D
+
+# Built-in commands
+## exit
+assert 1 'exit'
+assert 1 'exit 42'
+assert 1 'exit -42'
+assert 1 'exit --42'
+assert 1 'exit +42'
+assert 1 'exit ++42'
+# assert 1 'exit ""'
+assert 1 'exit hello'
+assert 1 'exit 42Tokyo'
+assert 1 'exit 1 2'
+assert 1 'exit 1024'
 
 echo "==========================================================================="
 if [ $STATUS -eq 0 ]; then

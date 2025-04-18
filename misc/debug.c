@@ -14,7 +14,7 @@ void	print_argv(char **str)
 	// str 配列の各要素を順に表示
 	while (str[i])
 	{
-		ft_printf("str[%d]: %s\n", i, str[i]);
+		ft_printf("str[%d]: \"%s\"\n", i, str[i]);
 		i++;
 	}
 }
@@ -23,7 +23,7 @@ void	print_token(t_token *token)
 {
 	if (token == NULL)
 		return ;
-	ft_printf("token: %d, word: %s\n", token->kind, token->word);
+	ft_printf("token: %d, word: \"%s\"\n", token->kind, token->word);
 	print_token(token->next);
 }
 
@@ -38,7 +38,7 @@ void	print_env(t_env *env)
 	ft_printf("=======================================================\n");
 	while (env)
 	{
-		ft_printf("env->key: %s, env->value: %s\n", env->key, env->value);
+		ft_printf("env->key: %s, env->value: \"%s\"\n", env->key, env->value);
 		env = env->next;
 	}
 }
@@ -47,7 +47,7 @@ void	print_redir(t_node *redir)
 {
 	if (redir == NULL)
 		return ;
-	ft_printf("redirect: %d, args: %s\n", redir->args->kind, redir->args->word);
+	ft_printf("redir: %d, args: \"%s\"\n",redir->args->kind, redir->args->word);
 	print_redir(redir->next);
 }
 

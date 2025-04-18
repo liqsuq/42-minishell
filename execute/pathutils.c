@@ -63,6 +63,8 @@ char	*resolve_path(t_env *env, char *line)
 {
 	char	*path;
 
+	if (line == NULL || *line == '\0')
+		return (NULL);
 	if (ft_strchr(line, '/'))
 		return (ft_strdup(line));
 	path = search_path(env, line);
