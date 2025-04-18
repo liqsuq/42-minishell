@@ -17,7 +17,7 @@ static int	is_variable(const char *s)
 	return (s[0] == '$' && is_namehead(s[1]));
 }
 
-static void	append_variable(char **dst, char **str)
+static void	append_variable(char **dst, char **str, t_env *env)
 {
 	char	*name;
 	char	*value;
@@ -28,7 +28,7 @@ static void	append_variable(char **dst, char **str)
 	append_char(&name, *cur++);
 	while (is_namebody(*cur))
 		append_char(&name, *cur++);
-	value = getenv(name);
+	value = get_env(env, name);
 	free(name);
 	if (value)
 		while (*value)
@@ -36,7 +36,7 @@ static void	append_variable(char **dst, char **str)
 	*str = cur;
 }
 
-static void	append_quote_var(char **dst, char **str)
+static void	append_quote_var(char **dst, char **str, t_env *env)
 {
 	char	c;
 	char	*cur;
@@ -47,7 +47,7 @@ static void	append_quote_var(char **dst, char **str)
 	while (*cur != c)
 	{
 		if (c == DQUOTE && is_variable(cur))
-			append_variable(dst, &cur);
+			append_variable(dst, &cur, env);
 		else
 			append_char(dst, *cur++);
 	}
@@ -55,7 +55,7 @@ static void	append_quote_var(char **dst, char **str)
 	*str = cur;
 }
 
-void	expand_variable_token(t_token *token, int force)
+void	expand_variable_token(t_token *token, int force, t_env *env)
 {
 	char	*new_word;
 	char	*str;
@@ -71,16 +71,16 @@ void	expand_variable_token(t_token *token, int force)
 		while (*str != '\0')
 		{
 			if (!force && (*str == SQUOTE || *str == DQUOTE))
-				append_quote_var(&new_word, &str);
+				append_quote_var(&new_word, &str, env);
 			else if (is_variable(str))
-				append_variable(&new_word, &str);
+				append_variable(&new_word, &str, env);
 			else
 				append_char(&new_word, *str++);
 		}
 		free(token->word);
 		token->word = new_word;
 	}
-	expand_variable_token(token->next, force);
+	expand_variable_token(token->next, force, env);
 }
 
 void	expand_variable(t_data *data, t_node *node)
@@ -88,7 +88,7 @@ void	expand_variable(t_data *data, t_node *node)
 	if (node == NULL || data->is_abort)
 		return ;
 	if (node->kind != ND_REDIR_HEREDOC)
-		expand_variable_token(node->args, 0);
+		expand_variable_token(node->args, 0, data->env);
 	expand_variable(data, node->redirects);
 	expand_variable(data, node->next);
 }

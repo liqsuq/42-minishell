@@ -42,7 +42,7 @@ int	pipeline(t_data *data, t_node *node, int prev_pipeout)
 		if (is_builtin(node->args))
 			execute_builtin(data, node);
 		else
-			execute_command(node);
+		execute_command(data, node);
 	}
 	if (prev_pipeout != -1)
 		close_fd(prev_pipeout);
