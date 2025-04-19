@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export LC_ALL=C
+
 STATUS=0
 
 assert() {
@@ -139,9 +141,9 @@ assert 1 'cat <<E"O"F\nhello\nworld\nEOF\nNOPRINT'
 assert 1 'cat <<EOF   \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
 assert 1 'cat <<"EOF" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
 assert 1 'cat <<EO"F" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
-# export EOF="eof"
-# assert 1 'cat <<$EOF         \neof\n$EOF\nEOF'　//環境変数が必要
-# assert 1 'cat <<"$EOF"       \neof\n$EOF\nEOF'　//環境変数が必要
+export EOF="eof"
+assert 1 'cat <<$EOF         \neof\n$EOF\nEOF'
+assert 1 'cat <<"$EOF"       \neof\n$EOF\nEOF'
 
 # Pipe
 assert 1 'cat Makefile | grep minishell'
@@ -284,6 +286,12 @@ assert 1 'exit 1024'
 assert 1 'exit 9223372036854775807'
 assert 1 'exit 9223372036854775808'
 assert 1 'exit 3141592653589793238462643383279'
+
+# Environment variables
+print_desc "(LC_ALL=ja_JP.UTF-8) ls -l minishell"
+export LC_ALL="ja_JP.UTF-8"
+assert 0 'ls -l minishell'
+export LC_ALL="C"
 
 echo "==========================================================================="
 if [ $STATUS -eq 0 ]; then

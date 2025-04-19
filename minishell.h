@@ -84,6 +84,7 @@ typedef struct s_data
 {
 	int				exit_status;
 	int				is_abort;
+	t_env 		*env;
 }					t_data;
 
 extern volatile sig_atomic_t	g_signal;
@@ -114,7 +115,7 @@ void	append_char(char **s, char c);
 
 // expand/expand_variable.c
 void	expand_variable(t_data *data, t_node *node);
-void	expand_variable_token(t_token *token, int force);
+void	expand_variable_token(t_token *token, int force, t_env *env);
 
 // expand/expand_parameter.c
 void	expand_parameter(t_data *data, t_node *node);
@@ -132,7 +133,7 @@ void	expand_heredoc(t_data *data, t_node *node);
 
 // execute/execute.c
 void	execute(t_data *data, t_node *node);
-void	execute_command(t_node *node);
+void 	execute_command(t_data *data, t_node *node);
 int		is_builtin(t_token *args);
 void	execute_builtin(t_data *data, t_node *node);
 
@@ -141,14 +142,14 @@ char	**new_argv(t_token *args);
 void	free_argv(char **argv);
 
 // execute/pathutils.c
-char	*resolve_path(char *line);
+char	*resolve_path(t_env *env, char *line);
 
 // redirect/redirect.c
 void	redirect(t_node *redi, t_env **env);
 void	reset_redirect(t_node *redi);
 
 // pipeline/pipeline.c
-int		pipeline(t_data *data, t_node *node, int prev_pipeout);
+int 	pipeline(t_data *data, t_node *node, int prev_pipeout);
 
 // builtin/builtin.c
 void	builtin_exit(t_data *data, char **argv);
@@ -176,5 +177,14 @@ int		check_signal_main(void);
 int		check_signal_heredoc(void);
 void	setup_signal(void);
 void	reset_signal(void);
+
+// misc/envutils.c
+t_env   *new_env(char *key, char *value);
+t_env   *free_env(t_env *env);
+char    *get_env(t_env *env, char *key);
+int     set_env(t_env **env, char *key, char *value);
+int     unset_env(t_env **env, char *key);
+char    **dump_env(t_env *env);
+void    free_envp(char **envp);
 
 #endif

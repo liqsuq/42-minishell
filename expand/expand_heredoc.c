@@ -59,7 +59,7 @@ void	expand_heredoc(t_data *data, t_node *node)
 		read_heredoc(data, &node);
 		if (!is_quoted && !data->is_abort)
 		{
-			expand_variable_token(node->args->next, 1);
+			expand_variable_token(node->args->next, 1, data->env);
 			expand_parameter_token(data, node->args->next, 1);
 		}
 	}
