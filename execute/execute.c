@@ -2,24 +2,27 @@
 
 #include "minishell.h"
 
-void	execute_command(t_node *node)
+void	execute_command(t_data *data, t_node *node)
 {
 	char	**argv;
 	char	*path;
+	char 	**envp;
 
 	argv = new_argv(node->args);
 	if (argv == NULL)
 		exit(EXIT_FAILURE);
-	path = resolve_path(argv[0]);
+	path = resolve_path(data->env, argv[0]);
 	if (path == NULL)
 	{
 		free_argv(argv);
 		exit(ERROR_NOFILE);
 	}
-	redirect(node->redirects, NULL);
-	execve(path, argv, NULL);
+	envp = dump_env(data->env);
+	redirect(node->redirects, &data->env);
+	execve(path, argv, envp);
 	reset_redirect(node->redirects);
 	free_argv(argv);
+	free_envp(envp);
 	free(path);
 	if (errno == ENOENT)
 		exit(ERROR_NOFILE);

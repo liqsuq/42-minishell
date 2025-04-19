@@ -13,7 +13,7 @@ REDSRC := $(addprefix redirect/, \
 PIPSRC := $(addprefix pipeline/, \
 	pipeline.c)
 MSCSRC := $(addprefix misc/, \
-	error.c debug.c ft_funcs.c signal.c)
+	error.c debug.c ft_funcs.c signal.c envutils.c)
 BLTSRC := $(addprefix builtin/, \
 	builtin_exit.c builtin_echo.c)
 SOURCE := main.c \
