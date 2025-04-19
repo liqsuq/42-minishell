@@ -39,12 +39,12 @@ static void	join_filename(char *dirname, const char *filename)
 	dirname[i] = '\0';
 }
 
-static char	*search_path(const char *filename)
+static char	*search_path(t_env *env, const char *filename)
 {
 	char		dirname[PATH_MAX];
 	const char	*env_value;
 
-	env_value = getenv("PATH");
+	env_value = get_env(env, "PATH");
 	if (env_value == NULL || *env_value == '\0')
 		return (NULL);
 	while (1)
@@ -59,7 +59,7 @@ static char	*search_path(const char *filename)
 	return (NULL);
 }
 
-char	*resolve_path(char *line)
+char	*resolve_path(t_env *env, char *line)
 {
 	char	*path;
 
@@ -67,7 +67,7 @@ char	*resolve_path(char *line)
 		return (NULL);
 	if (ft_strchr(line, '/'))
 		return (ft_strdup(line));
-	path = search_path(line);
+	path = search_path(env, line);
 	if (path == NULL)
 		dprintf(STDERR_FILENO, "%s: command not found\n", line);
 	return (path);
