@@ -294,18 +294,17 @@ assert 1 'exit 9223372036854775808'
 assert 1 'exit 3141592653589793238462643383279'
 
 ## export
-assert 1 'export | sort' # order of variables, default variables differs...
-assert 1 'export | grep nosuch | sort'
-assert 1 'export nosuch\n export | grep nosuch | sort'
-assert 1 'export nosuch=fuga\n export | grep nosuch | sort'
-assert 1 'export nosuch=fuga hoge=nosuch\n export | grep nosuch | sort'
-assert 1 'export [invalid]'
-assert 1 'export [invalid_nosuch]\n export | grep nosuch | sort'
-assert 1 'export [invalid]=nosuch\n export | grep nosuch | sort'
-assert 1 'export [invalid] nosuch hoge=nosuch\n export | grep nosuch | sort'
-assert 1 'export nosuch [invalid] hoge=nosuch\n export | grep nosuch | sort'
-assert 1 'export nosuch hoge=nosuch [invalid]\n export | grep nosuch | sort'
-assert 1 'export nosuch="nosuch2=hoge"\nexport $nosuch\n export | grep nosuch | sort'
+export BLKLST="OLDPWD|SHLVL|_=" # これらはbash固有のシェル変数
+assert 1 'export|sort|vgrep $BLKLST'
+# assert 1 'export nosuch\n export | grep nosuch | sort' # valueがNULL
+assert 1 'export FUGA=test\nexport|sort|vgrep $BLKLST'
+assert 1 'export FUGA=te HOGE=st\nexport|sort|vgrep $BLKLST'
+assert 1 'export [WRONG]'
+assert 1 'export [WRONG]\nexport|sort|vgrep $BLKLST'
+assert 1 'export [WRONG]=test\nexport|sort|vgrep $BLKLST'
+assert 1 'export [WRONG]=te HOGE=st\nexport|sort|vgrep $BLKLST'
+assert 1 'export HOGE=[OK] FUGA=tst\nexport|sort|vgrep $BLKLST'
+assert 1 'export HOGE="HOGE=hoge"\nexport|sort|vgrep $BLKLST'
 
 ## echo
 assert 1 'echo'
