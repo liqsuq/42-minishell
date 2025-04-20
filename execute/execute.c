@@ -10,12 +10,12 @@ void	execute_command(t_data *data, t_node *node)
 
 	argv = new_argv(node->args);
 	if (argv == NULL)
-		exit(1);
+		exit(EXIT_FAILURE);
 	path = resolve_path(data->env, argv[0]);
 	if (path == NULL)
 	{
 		free_argv(argv);
-		exit(127);
+		exit(ERROR_NOFILE);
 	}
 	envp = dump_env(data->env);
 	redirect(node->redirects, &data->env);
@@ -25,16 +25,16 @@ void	execute_command(t_data *data, t_node *node)
 	free_envp(envp);
 	free(path);
 	if (errno == ENOENT)
-		exit(127);
+		exit(ERROR_NOFILE);
 	else if (errno == EACCES || errno == ENOEXEC)
-		exit(126);
+		exit(ERROR_NOPERM);
 	else
 		exit(EXIT_FAILURE);
 }
 
 int	is_builtin(t_token *args)
 {
-	char *const	cmd[] = {"exit"};
+	char *const	cmd[] = {"exit", "echo"};
 	size_t		i;
 
 	if (args == NULL)
@@ -53,10 +53,12 @@ void	execute_builtin(t_data *data, t_node *node)
 	(void)data;
 	argv = new_argv(node->args);
 	if (argv == NULL)
-		exit(1);
+		exit(EXIT_FAILURE);
 	redirect(node->redirects, NULL);
 	if (ft_strncmp(node->args->word, "exit", 5) == 0)
 		builtin_exit(data, argv);
+	else if (ft_strncmp(node->args->word, "echo", 5) == 0)
+		builtin_echo(data, argv);
 	reset_redirect(node->redirects);
 	free_argv(argv);
 }
