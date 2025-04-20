@@ -270,6 +270,12 @@ assert 0 'sleep 10'
 # 2. Ctrl-C
 # 3. Ctrl-D
 
+# Environment variables
+print_desc "(LC_ALL=ja_JP.UTF-8) ls -l minishell"
+export LC_ALL="ja_JP.UTF-8"
+assert 0 'ls -l minishell'
+export LC_ALL="C"
+
 # Built-in commands
 ## exit
 assert 1 'exit'
@@ -278,11 +284,14 @@ assert 1 'exit -42'
 assert 1 'exit --42'
 assert 1 'exit +42'
 assert 1 'exit ++42'
-# assert 1 'exit ""'
+assert 1 'exit ""'
 assert 1 'exit hello'
 assert 1 'exit 42Tokyo'
 assert 1 'exit 1 2'
 assert 1 'exit 1024'
+assert 1 'exit 9223372036854775807'
+assert 1 'exit 9223372036854775808'
+assert 1 'exit 3141592653589793238462643383279'
 
 ## export
 assert 1 'export | sort' # order of variables, default variables differs...
@@ -298,11 +307,21 @@ assert 1 'export nosuch [invalid] hoge=nosuch\n export | grep nosuch | sort'
 assert 1 'export nosuch hoge=nosuch [invalid]\n export | grep nosuch | sort'
 assert 1 'export nosuch="nosuch2=hoge"\nexport $nosuch\n export | grep nosuch | sort'
 
-# Environment variables
-print_desc "(LC_ALL=ja_JP.UTF-8) ls -l minishell"
-export LC_ALL="ja_JP.UTF-8"
-assert 0 'ls -l minishell'
-export LC_ALL="C"
+## echo
+assert 1 'echo'
+assert 1 'echo hello'
+assert 1 'echo hello world'
+assert 1 'echo "42tokyo !#$%&()=~|{}[];:,.<>?"'
+assert 1 'echo hello "    " world'
+assert 1 'echo -n'
+assert 1 'echo -n hello world'
+assert 1 'echo -nnnnnnnn hello world'
+assert 1 'echo -n -n -n -n hello world'
+assert 1 'echo --n hello world'
+assert 1 'echo -na hello world'
+assert 1 'echo -n-n hello world'
+assert 1 'echo hello world -n'
+assert 1 'echo -n -n hello world -n -n'
 
 echo "==========================================================================="
 if [ $STATUS -eq 0 ]; then

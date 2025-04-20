@@ -8,7 +8,7 @@ static void	open_redirect(t_node *redi, int srcfd, int flags, mode_t mode)
 
 	dstfd = open(redi->args->word, flags, mode);
 	if (dstfd < 0)
-		fatal_error("open");
+		fatal_error(redi->args->word);
 	redi->stashed_fd = dup(srcfd);
 	if (redi->stashed_fd < 0)
 		fatal_error("dup");
