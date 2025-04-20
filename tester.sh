@@ -284,6 +284,15 @@ assert 1 'exit 42Tokyo'
 assert 1 'exit 1 2'
 assert 1 'exit 1024'
 
+## unset
+export TEST1="hello" TEST2="world"
+assert 1 'unset TEST1\necho $TEST1 $TEST2'
+assert 1 'unset TEST1 TEST2\necho $TEST1 $TEST2'
+assert 1 'unset NOVAR\necho $TEST1 $TEST2'
+assert 1 'unset novar\necho $TEST1 $TEST2'
+assert 1 'unset TEST1 TEST2\necho $TEST1 $TEST2'
+assert 1 'unset TEST1 NOVAR TEST2\necho $TEST1 $TEST2'
+
 # Environment variables
 print_desc "(LC_ALL=ja_JP.UTF-8) ls -l minishell"
 export LC_ALL="ja_JP.UTF-8"
