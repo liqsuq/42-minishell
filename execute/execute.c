@@ -57,7 +57,7 @@ void	execute_builtin(t_data *data, t_node *node)
 	redirect(node->redirects, NULL);
 	if (ft_strncmp(node->args->word, "exit", 5) == 0)
 		builtin_exit(data, argv);
-	else (ft_strncmp(node->args->word, "unset", 6) == 0)
+	else if (ft_strncmp(node->args->word, "unset", 6) == 0)
 		builtin_unset(data, argv);
 	reset_redirect(node->redirects);
 	free_argv(argv);
