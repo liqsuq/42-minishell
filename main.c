@@ -16,7 +16,9 @@ static void	process_line(t_data *data, char *line)
 
 	data->is_abort = 0;
 	token = tokenize(data, line);
+	// print_token(token);
 	node = parse(data, token);
+	// print_node(node);
 	expand(data, node);
 	if (!data->is_abort)
 		execute(data, node);
