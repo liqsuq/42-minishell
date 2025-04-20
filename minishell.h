@@ -154,6 +154,9 @@ int 	pipeline(t_data *data, t_node *node, int prev_pipeout);
 // builtin/builtin_exit.c
 void	builtin_exit(t_data *data, char **argv);
 
+// builtin/builtin_echo.c
+void	builtin_echo(t_data *data, char **argv);
+
 // builtin/builtin_unset.c
 void	builtin_unset(t_data *data, char **argv);
 

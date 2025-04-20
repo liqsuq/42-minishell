@@ -270,6 +270,12 @@ assert 0 'sleep 10'
 # 2. Ctrl-C
 # 3. Ctrl-D
 
+# Environment variables
+print_desc "(LC_ALL=ja_JP.UTF-8) ls -l minishell"
+export LC_ALL="ja_JP.UTF-8"
+assert 0 'ls -l minishell'
+export LC_ALL="C"
+
 # Built-in commands
 ## exit
 assert 1 'exit'
@@ -278,11 +284,27 @@ assert 1 'exit -42'
 assert 1 'exit --42'
 assert 1 'exit +42'
 assert 1 'exit ++42'
-# assert 1 'exit ""'
+assert 1 'exit ""'
 assert 1 'exit hello'
 assert 1 'exit 42Tokyo'
 assert 1 'exit 1 2'
 assert 1 'exit 1024'
+
+## echo
+assert 1 'echo'
+assert 1 'echo hello'
+assert 1 'echo hello world'
+assert 1 'echo "42tokyo !#$%&()=~|{}[];:,.<>?"'
+assert 1 'echo hello "    " world'
+assert 1 'echo -n'
+assert 1 'echo -n hello world'
+assert 1 'echo -nnnnnnnn hello world'
+assert 1 'echo -n -n -n -n hello world'
+assert 1 'echo --n hello world'
+assert 1 'echo -na hello world'
+assert 1 'echo -n-n hello world'
+assert 1 'echo hello world -n'
+assert 1 'echo -n -n hello world -n -n'
 
 ## unset
 export TEST1="hello" TEST2="world"
@@ -292,12 +314,9 @@ assert 1 'unset NOVAR\necho $TEST1 $TEST2'
 assert 1 'unset novar\necho $TEST1 $TEST2'
 assert 1 'unset TEST1 TEST2\necho $TEST1 $TEST2'
 assert 1 'unset TEST1 NOVAR TEST2\necho $TEST1 $TEST2'
-
-# Environment variables
-print_desc "(LC_ALL=ja_JP.UTF-8) ls -l minishell"
-export LC_ALL="ja_JP.UTF-8"
-assert 0 'ls -l minishell'
-export LC_ALL="C"
+assert 1 'exit 9223372036854775807'
+assert 1 'exit 9223372036854775808'
+assert 1 'exit 3141592653589793238462643383279'
 
 echo "==========================================================================="
 if [ $STATUS -eq 0 ]; then
