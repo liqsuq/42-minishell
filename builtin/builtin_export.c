@@ -32,44 +32,45 @@ void print_env_export_format(t_env *env)
   }
 }
 
-static void process_arg(t_data *data, const char *arg)
+static void process_arg_val(t_data *data, const char *arg)
 {
-	char *eq;
-	size_t key_len;
-	char *key_dup;
+	char		*eq;
+	size_t	key_len;
+	char		*key_dup;
 
 	eq = ft_strchr(arg, '=');
-	if (eq)
+	key_len = (size_t)(eq - arg);
+	key_dup = ft_substr(arg, 0, key_len);
+	if (!key_dup)
+		return;
+	if (is_valid_identifier(key_dup))
 	{
-		key_len = (size_t)(eq - arg);
-		key_dup = ft_substr(arg, 0, key_len);
-		if (!key_dup)
-			return;
-		if (is_valid_identifier(key_dup))
-		{
-			set_env(&data->env, key_dup, eq + 1);
-			data->exit_status = 0;
-		}
-		free(key_dup);
+		set_env(&data->env, key_dup, eq + 1);
+		data->exit_status = 0;
+	}
+	free(key_dup);
+}
+
+static void process_arg_key(t_data *data, const char *arg)
+{
+	if (!is_valid_identifier(arg))
+	{
+		ft_dprintf(STDERR_FILENO,
+			HEADER "export: not a valid identifier\n");
+		data->exit_status = 1;
 	}
 	else
 	{
-		if (!is_valid_identifier(arg))
-		{
-			ft_dprintf(STDERR_FILENO,
-				HEADER "export: not a valid identifier\n");
-			data->exit_status = 1;
-		}
-		else
-		{
-			set_env(&data->env, (char *)arg, "");
-			data->exit_status = 0;
-		}
+		set_env(&data->env, (char *)arg, "");
+		data->exit_status = 0;
 	}
 }
 
 void builtin_export(t_data *data, char **argv)
 {
+	int		i;
+	char	*eq;
+
 	if (!argv[1])
 	{
 		print_env_export_format(data->env);
@@ -77,15 +78,13 @@ void builtin_export(t_data *data, char **argv)
 		return;
 	}
 	data->exit_status = 0;
-	while (*++argv != NULL)
+	i = 0;
+	while (argv[++i])
 	{
-		if (is_valid_identifier(*argv))
-			process_arg(data, *argv);
+		eq = ft_strchr(argv[i], '=');
+		if (eq)
+			process_arg_val(data, argv[i]);
 		else
-		{
-			ft_dprintf(STDERR_FILENO,
-				HEADER "export: not a valid identifier\n");
-			data->exit_status = 1;
-		}
+			process_arg_key(data, argv[i]);
 	}
 }
