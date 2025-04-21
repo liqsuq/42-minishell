@@ -318,6 +318,13 @@ assert 1 'unset novar\necho $TEST1 $TEST2'
 assert 1 'unset TEST1 TEST2\necho $TEST1 $TEST2'
 assert 1 'unset TEST1 NOVAR TEST2\necho $TEST1 $TEST2'
 
+# env
+assert 1 'env | vgrep "OLDPWD|SHLVL|_="'
+print_desc "export TEST1=42tokyo TEST2=; env"
+export TEST1="42tokyo" TEST2=""
+assert 0 'env | vgrep "OLDPWD|SHLVL|_="'
+unset TEST1 TEST2
+
 echo "==========================================================================="
 if [ $STATUS -eq 0 ]; then
 	echo "All tests passed"
