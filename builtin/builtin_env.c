@@ -2,16 +2,16 @@
 
 #include "minishell.h"
 
-static void	print_env_builtin(t_env *env)
-{
-	if (env == NULL)
-		return ;
-	printf("%s=%s\n", env->key, env->value);
-	print_env_builtin(env->next);
-}
-
 void	builtin_env(t_data *data)
 {
-	print_env_builtin(data->env);
+	t_env	*cur;
+
+	cur = data->env;
+	while (cur)
+	{
+		if (cur->key && cur->value)
+			printf("%s=%s\n", cur->key, cur->value);
+		cur = cur->next;
+	}
 	data->exit_status = 0;
 }
