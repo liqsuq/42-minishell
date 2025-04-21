@@ -59,7 +59,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 
-	g_signal = 0;
 	rl_outstream = stderr;
 	init_data(&data);
 	data.env = init_env_list(envp);
@@ -67,9 +66,11 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		g_signal = 0;
+		rl_event_hook = check_signal_main;
 		if (isatty(STDIN_FILENO))
-			rl_event_hook = check_signal_main;
-		line = readline(PROMPT);
+			line = readline(PROMPT);
+		else
+			line = get_next_line(STDIN_FILENO);
 		if (line == NULL)
 			break ;
 		if (*line)
@@ -79,6 +80,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		free(line);
 	}
-	ft_dprintf(STDERR_FILENO, "exit\n");
+	if (isatty(STDIN_FILENO))
+		ft_dprintf(STDERR_FILENO, "exit\n");
 	return (data.exit_status);
 }
