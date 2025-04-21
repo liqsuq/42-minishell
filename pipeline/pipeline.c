@@ -40,9 +40,12 @@ int	pipeline(t_data *data, t_node *node, int prev_pipeout)
 			move_fd(pipefd[1], STDOUT_FILENO);
 		}
 		if (is_builtin(node->args))
+		{
 			execute_builtin(data, node);
+			exit(data->exit_status);
+		}
 		else
-		execute_command(data, node);
+			execute_command(data, node);
 	}
 	if (prev_pipeout != -1)
 		close_fd(prev_pipeout);
