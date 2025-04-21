@@ -26,50 +26,65 @@ void print_env_export_format(t_env *env)
   {
     if (env->value)
       printf("declare -x %s=\"%s\"\n", env->key, env->value);
-    else
-      printf("declare -x %s=\"\"\n", env->key);
     env = env->next;
   }
 }
 
 static void process_arg_val(t_data *data, const char *arg)
 {
-	char		*eq;
-	size_t	key_len;
-	char		*key_dup;
+	char   *eq;
+	size_t key_len;
+	char   *key_dup;
 
 	eq = ft_strchr(arg, '=');
+	if (eq == NULL)
+	{
+		ft_dprintf(STDERR_FILENO, HEADER "export: '=' missing\n");
+		data->exit_status = 1;
+		return;
+	}
 	key_len = (size_t)(eq - arg);
 	key_dup = ft_substr(arg, 0, key_len);
-	if (!key_dup)
-		return;
-	if (is_valid_identifier(key_dup))
+	if (key_dup	== NULL)
 	{
-		set_env(&data->env, key_dup, eq + 1);
-		data->exit_status = 0;
+		data->exit_status = 1;
+		return;
 	}
+	set_env(&data->env, key_dup, eq + 1);
 	free(key_dup);
 }
 
-static void process_arg_key(t_data *data, const char *arg)
+static void check_arg(t_data *data, const char *arg)
 {
-	if (!is_valid_identifier(arg))
-	{
-		ft_dprintf(STDERR_FILENO,
-			HEADER "export: not a valid identifier\n");
-		data->exit_status = 1;
-	}
+	char   *eq;
+	size_t  key_len;
+	char   *key;
+
+	eq = ft_strchr(arg, '=');
+	if (eq)
+		key_len = (size_t)(eq - arg);
 	else
+		key_len = ft_strlen(arg);
+	key = ft_substr(arg, 0, key_len);
+	if (key == NULL)
 	{
-		set_env(&data->env, (char *)arg, "");
-		data->exit_status = 0;
+		data->exit_status = 1;
+		return;
 	}
+	if (!is_valid_identifier(key))
+	{
+		ft_dprintf(STDERR_FILENO, HEADER "export: not a valid identifier\n");
+		data->exit_status = 1;
+		free(key);
+		return;
+	}
+	free(key);
+	process_arg_val(data, arg);
 }
 
 void builtin_export(t_data *data, char **argv)
 {
-	int		i;
-	char	*eq;
+	int i;
 
 	if (!argv[1])
 	{
@@ -80,11 +95,5 @@ void builtin_export(t_data *data, char **argv)
 	data->exit_status = 0;
 	i = 0;
 	while (argv[++i])
-	{
-		eq = ft_strchr(argv[i], '=');
-		if (eq)
-			process_arg_val(data, argv[i]);
-		else
-			process_arg_key(data, argv[i]);
-	}
+		check_arg(data, argv[i]);
 }

@@ -295,6 +295,7 @@ assert 1 'exit 3141592653589793238462643383279'
 
 ## export
 export BLKLST="OLDPWD|SHLVL|_=" # これらはbash固有のシェル変数
+assert 1 'export TEST=test'
 assert 1 'export|sort|vgrep $BLKLST'
 # assert 1 'export nosuch\n export | grep nosuch | sort' # valueがNULL
 assert 1 'export FUGA=test\nexport|sort|vgrep $BLKLST'
