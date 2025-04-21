@@ -161,6 +161,9 @@ void	builtin_echo(t_data *data, char **argv);
 // builtin/builtin_unset.c
 void	builtin_unset(t_data *data, char **argv);
 
+// builtin/builtin_env.c
+void	builtin_env(t_data *data);
+
 // misc/error.c
 void	fatal_error(const char *msg);
 void	assert_error(const char *msg);
