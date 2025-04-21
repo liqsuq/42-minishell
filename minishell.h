@@ -153,7 +153,7 @@ int 	pipeline(t_data *data, t_node *node, int prev_pipeout);
 
 // builtin/builtin_exit.c
 void	builtin_exit(t_data *data, char **argv);
-void  builtin_export(t_data *data, char **argv);
+void	builtin_export(t_data *data, char **argv);
 
 // builtin/builtin_echo.c
 void	builtin_echo(t_data *data, char **argv);
@@ -186,13 +186,12 @@ void	setup_signal(void);
 void	reset_signal(void);
 
 // misc/envutils.c
-t_env   *new_env(char *key, char *value);
-t_env   *free_env(t_env *env);
-char    *get_env(t_env *env, char *key);
-int     set_env(t_env **env, char *key, char *value);
-int     unset_env(t_env **env, char *key);
-char    **dump_env(t_env *env);
-void    free_envp(char **envp);
-void 		print_env_export_format(t_env *env);
+t_env	*new_env(char *key, char *value);
+t_env	*free_env(t_env *env);
+char	*get_env(t_env *env, char *key);
+int		set_env(t_env **env, char *key, char *value);
+int		unset_env(t_env **env, char *key);
+char	**dump_env(t_env *env);
+void	free_envp(char **envp);
 
 #endif
