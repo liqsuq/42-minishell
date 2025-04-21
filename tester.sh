@@ -322,6 +322,15 @@ assert 1 'echo -n-n hello world'
 assert 1 'echo hello world -n'
 assert 1 'echo -n -n hello world -n -n'
 
+## unset
+export TEST1="hello" TEST2="world"
+assert 1 'unset TEST1\necho $TEST1 $TEST2'
+assert 1 'unset TEST1 TEST2\necho $TEST1 $TEST2'
+assert 1 'unset NOVAR\necho $TEST1 $TEST2'
+assert 1 'unset novar\necho $TEST1 $TEST2'
+assert 1 'unset TEST1 TEST2\necho $TEST1 $TEST2'
+assert 1 'unset TEST1 NOVAR TEST2\necho $TEST1 $TEST2'
+
 echo "==========================================================================="
 if [ $STATUS -eq 0 ]; then
 	echo "All tests passed"
