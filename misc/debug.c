@@ -14,7 +14,7 @@ void	print_argv(char **str)
 	// str 配列の各要素を順に表示
 	while (str[i])
 	{
-		ft_printf("str[%d]: \"%s\"\n", i, str[i]);
+		printf("str[%d]: \"%s\"\n", i, str[i]);
 		i++;
 	}
 }
@@ -23,7 +23,7 @@ void	print_token(t_token *token)
 {
 	if (token == NULL)
 		return ;
-	ft_printf("token: %d, word: \"%s\"\n", token->kind, token->word);
+	printf("token: %d, word: \"%s\"\n", token->kind, token->word);
 	print_token(token->next);
 }
 
@@ -34,11 +34,11 @@ void	print_token(t_token *token)
 void	print_env(t_env *env)
 {
 	// 環境変数のリストの先頭から順に key と value を表示
-	ft_printf("start print_env\n");
-	ft_printf("=======================================================\n");
+	printf("start print_env\n");
+	printf("=======================================================\n");
 	while (env)
 	{
-		ft_printf("env->key: %s, env->value: \"%s\"\n", env->key, env->value);
+		printf("env->key: %s, env->value: \"%s\"\n", env->key, env->value);
 		env = env->next;
 	}
 }
@@ -47,7 +47,7 @@ void	print_redir(t_node *redir)
 {
 	if (redir == NULL)
 		return ;
-	ft_printf("redir: %d, args: \"%s\"\n",redir->args->kind, redir->args->word);
+	printf("redir: %d, args: \"%s\"\n",redir->args->kind, redir->args->word);
 	print_redir(redir->next);
 }
 
@@ -62,7 +62,7 @@ void	print_node(t_node *node)
 	// コマンドの引数が存在する場合、引数を表示
 	if (node->args)
 	{
-		ft_printf("node: %d, args:\n", node->kind);
+		printf("node: %d, args:\n", node->kind);
 		print_token(node->args);
 	}
 	// コマンドのリダイレクトが存在する場合、リダイレクト情報を表示
