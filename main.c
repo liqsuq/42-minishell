@@ -70,7 +70,7 @@ int	main(int argc, char **argv, char **envp)
 		if (isatty(STDIN_FILENO))
 			line = readline(PROMPT);
 		else
-			line = get_next_line(STDIN_FILENO);
+			line = get_next_line_nonl(STDIN_FILENO);
 		if (line == NULL)
 			break ;
 		if (*line)

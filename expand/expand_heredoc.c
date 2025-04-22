@@ -25,7 +25,7 @@ static void	read_heredoc(t_data *data, t_node **node)
 		if (isatty(STDIN_FILENO))
 			line = readline(PROMPT_HEREDOC);
 		else
-			line = get_next_line(STDIN_FILENO);
+			line = get_next_line_nonl(STDIN_FILENO);
 		if (line == NULL)
 		{
 			ft_dprintf(STDERR_FILENO,

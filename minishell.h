@@ -180,6 +180,7 @@ void	print_node(t_node *node);
 
 // misc/ft_funcs.c
 int		ft_strcmp(const char *s1, const char *s2);
+char	*get_next_line_nonl(int fd);
 // void	*ft_realloc(void *ptr, size_t size);
 
 // misc/signal.c
