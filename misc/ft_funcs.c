@@ -19,12 +19,14 @@ int	ft_strcmp(const char *s1, const char *s2)
 char	*get_next_line_nonl(int fd)
 {
 	char	*line;
+	size_t	len;
 
 	line = get_next_line(fd);
 	if (line == NULL)
 		return (NULL);
-	if (line[ft_strlen(line) - 1] == '\n')
-		line[ft_strlen(line) - 1] = '\0';
+	len = ft_strlen(line);
+	if (len > 0 && line[len - 1] == '\n')
+		line[len - 1] = '\0';
 	return (line);
 }
 
