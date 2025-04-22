@@ -338,6 +338,41 @@ export TEST1="42tokyo" TEST2=""
 assert 0 'env | vgrep "OLDPWD|SHLVL|_="'
 unset TEST1 TEST2
 
+## cd
+assert 1 'cd'
+assert 1 'cd .'
+assert 1 'cd ..'
+assert 1 'cd ///'
+assert 1 'cd /tmp'
+assert 1 'cd /tmp/'
+assert 1 'cd /tmp///'
+assert 1 'cd /../../../././.././'
+assert 1 'cd src'
+assert 1 'unset HOME\ncd'
+
+assert 1 'cd \n echo $PWD'
+assert 1 'cd \n echo $PWD'
+assert 1 'cd .\n echo $PWD'
+assert 1 'cd ..\n echo $PWD'
+assert 1 'cd ///\n echo $PWD'
+assert 1 'cd /tmp\n echo $PWD'
+assert 1 'cd /tmp/\n echo $PWD'
+assert 1 'cd /tmp///\n echo $PWD'
+assert 1 'cd /../../../././.././\n echo $PWD'
+assert 1 'cd src\n echo $PWD'
+assert 1 'unset HOME\ncd \n echo $PWD'
+
+## pwd
+assert 1 'pwd'
+assert 1 'cd\npwd'
+assert 1 'cd src\npwd'
+assert 1 'cd /etc\npwd'
+assert 1 'cd . \n pwd \n echo $PWD $OLDPWD'
+assert 1 'cd .. \n pwd \n echo $PWD $OLDPWD'
+assert 1 'cd /// \n pwd \n echo $PWD $OLDPWD'
+assert 1 'cd /tmp/// \n pwd \n echo $PWD $OLDPWD'
+assert 1 'unset PWD\npwd\ncd /etc\npwd'
+
 echo "==========================================================================="
 if [ $STATUS -eq 0 ]; then
 	echo "All tests passed"
