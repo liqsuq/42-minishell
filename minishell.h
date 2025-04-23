@@ -191,7 +191,7 @@ void	reset_signal(void);
 
 // misc/envutils.c
 t_env	*new_env(char *key, char *value);
-t_env	*free_env(t_env *env);
+void	free_env(t_env **env);
 char	*get_env(t_env *env, char *key);
 int		set_env(t_env **env, char *key, char *value);
 int		unset_env(t_env **env, char *key);

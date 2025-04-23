@@ -6,28 +6,33 @@ t_env	*new_env(char *key, char *value)
 {
 	t_env	*env;
 
-	env = (t_env *)malloc(sizeof(t_env));
-	if (!env)
-		fatal_error("malloc");
+	if (!key || !value)
+		return (NULL);
+	env = calloc(1, sizeof(t_env));
+	if (env == NULL)
+		return (NULL);
 	env->key = ft_strdup(key);
+	if (env->key == NULL)
+		return (free_env(&env), NULL);
 	env->value = ft_strdup(value);
+	if (env->value == NULL)
+		return (free_env(&env), NULL);
 	env->next = NULL;
 	return (env);
 }
 
-t_env	*free_env(t_env *env)
+void	free_env(t_env **env)
 {
 	t_env	*next;
 
 	while (env)
 	{
-		next = env->next;
-		free(env->key);
-		free(env->value);
-		free(env);
-		env = next;
+		next = (*env)->next;
+		free((*env)->key);
+		free((*env)->value);
+		free(*env);
 	}
-	return (NULL);
+	*env = next;
 }
 
 char	*get_env(t_env *env, char *key)
@@ -48,7 +53,6 @@ int	set_env(t_env **env, char *key, char *value)
 
 	if (!env || !key || !value)
 		return (1);
-
 	cur = *env;
 	while (cur)
 	{
