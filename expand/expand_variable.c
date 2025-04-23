@@ -2,19 +2,9 @@
 
 #include "minishell.h"
 
-static int	is_namehead(char c)
-{
-	return (ft_isalpha(c) || c == '_');
-}
-
-static int	is_namebody(char c)
-{
-	return (is_namehead(c) || ft_isdigit(c));
-}
-
 static int	is_variable(const char *s)
 {
-	return (s[0] == '$' && is_namehead(s[1]));
+	return (s[0] == '$' && (ft_isalpha(s[1]) || s[1] == '_'));
 }
 
 static void	append_variable(char **dst, char **str, t_env *env)
@@ -26,7 +16,7 @@ static void	append_variable(char **dst, char **str, t_env *env)
 	name = NULL;
 	cur = *str + 1;
 	append_char(&name, *cur++);
-	while (is_namebody(*cur))
+	while (ft_isalpha(*cur) || ft_isdigit(*cur) || *cur == '_')
 		append_char(&name, *cur++);
 	value = get_env(env, name);
 	free(name);
