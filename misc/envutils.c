@@ -25,14 +25,17 @@ void	free_env(t_env **env)
 {
 	t_env	*next;
 
-	while (env)
+	if (env == NULL)
+		return ;
+	while (*env)
 	{
 		next = (*env)->next;
 		free((*env)->key);
 		free((*env)->value);
 		free(*env);
+		*env = next;
 	}
-	*env = next;
+	*env = NULL;
 }
 
 char	*get_env(t_env *env, char *key)
