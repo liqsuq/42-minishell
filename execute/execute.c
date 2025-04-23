@@ -85,16 +85,15 @@ static void	wait_pids(t_data *data, pid_t pid)
 			{
 				if (WTERMSIG(status) == SIGQUIT)
 					ft_dprintf(STDERR_FILENO, "Quit\n");
+				else if (WTERMSIG(status) == SIGINT)
+					ft_dprintf(STDERR_FILENO, "\n");
 				data->exit_status = WTERMSIG(status) + 128;
 			}
 		}
-		else if (wpid < 0)
-		{
-			if (errno == ECHILD)
-				break ;
-			else if (errno == EINTR)
-				ft_dprintf(STDERR_FILENO, "\n");
-		}
+		else if (wpid < 0 && errno == ECHILD)
+			break ;
+		else if (wpid < 0 && errno != EINTR)
+			fatal_error("wait");
 	}
 }
 
