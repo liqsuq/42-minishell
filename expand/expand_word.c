@@ -94,26 +94,25 @@ static void	expand_word_token(t_token *token)
 static void pop_token(t_token **head, t_token *token)
 {
 	t_token	*cur;
+	t_token *prev;
 
 	if (head == NULL || *head == NULL || token == NULL)
 		return ;
-	if (*head == token)
-	{
-		*head = token->next;
-		free(token->word);
-		free(token);
-		return ;
-	}
 	cur = *head;
-	while (cur->next != NULL)
+	prev = NULL;
+	while (cur != NULL)
 	{
-		if (cur->next == token)
+		if (cur == token)
 		{
-			cur->next = token->next;
+			if (prev != NULL)
+				prev->next = cur->next;
+			else
+				*head = cur->next;
 			free(token->word);
 			free(token);
 			return ;
 		}
+		prev = cur;
 		cur = cur->next;
 	}
 }
