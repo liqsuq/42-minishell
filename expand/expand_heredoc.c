@@ -21,9 +21,11 @@ static void	read_heredoc(t_data *data, t_node **node)
 	while (1)
 	{
 		g_signal = 0;
+		rl_event_hook = check_signal_heredoc;
 		if (isatty(STDIN_FILENO))
-			rl_event_hook = check_signal_heredoc;
-		line = readline(PROMPT_HEREDOC);
+			line = readline(PROMPT_HEREDOC);
+		else
+			line = get_next_line_nonl(STDIN_FILENO);
 		if (line == NULL)
 		{
 			ft_dprintf(STDERR_FILENO,
