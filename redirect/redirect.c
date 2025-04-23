@@ -42,7 +42,7 @@ static void	open_heredoc(t_node *redi)
 	close(pipefd[0]);
 }
 
-void	redirect(t_node *redi, t_env **env)
+void	setup_redirect(t_node *redi, t_env **env)
 {
 	if (redi == NULL)
 		return ;
@@ -54,7 +54,7 @@ void	redirect(t_node *redi, t_env **env)
 		open_redirect(redi, STDOUT_FILENO, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else if (redi->kind == ND_REDIR_HEREDOC)
 		open_heredoc(redi);
-	return (redirect(redi->next, env));
+	return (setup_redirect(redi->next, env));
 }
 
 void	reset_redirect(t_node *redi)

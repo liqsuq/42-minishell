@@ -18,7 +18,7 @@ void	execute_command(t_data *data, t_node *node)
 		exit(ERROR_NOFILE);
 	}
 	envp = dump_env(data->env);
-	redirect(node->redirects, &data->env);
+	setup_redirect(node->redirects, &data->env);
 	execve(path, argv, envp);
 	reset_redirect(node->redirects);
 	free_argv(argv);
@@ -54,7 +54,7 @@ void	execute_builtin(t_data *data, t_node *node)
 	argv = new_argv(node->args);
 	if (argv == NULL)
 		exit(EXIT_FAILURE);
-	redirect(node->redirects, NULL);
+	setup_redirect(node->redirects, NULL);
 	if (ft_strncmp(node->args->word, "exit", 5) == 0)
 		builtin_exit(data, argv);
 	else if (ft_strncmp(node->args->word, "export", 7) == 0)
