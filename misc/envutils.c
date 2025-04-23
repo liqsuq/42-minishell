@@ -49,11 +49,12 @@ char	*get_env(t_env *env, char *key)
 int	set_env(t_env **env, char *key, char *value)
 {
 	t_env	*cur;
-	t_env	*prev = NULL;
+	t_env	*prev;
 
 	if (!env || !key || !value)
 		return (1);
 	cur = *env;
+	prev = NULL;
 	while (cur)
 	{
 		if (ft_strcmp(cur->key, key) == 0)
@@ -77,12 +78,12 @@ int	set_env(t_env **env, char *key, char *value)
 int	unset_env(t_env **env, char *key)
 {
 	t_env	*cur;
-	t_env	*prev = NULL;
+	t_env	*prev;
 
 	if (!env || !key || !(*env))
 		return (1);
-
 	cur = *env;
+	prev = NULL;
 	while (cur)
 	{
 		if (ft_strcmp(cur->key, key) == 0)
@@ -106,9 +107,9 @@ char	**dump_env(t_env *env)
 {
 	int		count;
 	t_env	*cur;
-	char 	**envp;
-	size_t len;
-	int i;
+	char	**envp;
+	size_t	len;
+	int		i;
 
 	i = 0;
 	count = 0;
@@ -133,14 +134,16 @@ char	**dump_env(t_env *env)
 		i++;
 	}
 	envp[count] = NULL;
-	return envp;
+	return (envp);
 }
 
 void	free_envp(char **envp)
 {
+	int	i;
+
 	if (!envp)
-		return;
-	int i = 0;
+		return ;
+	i = 0;
 	while (envp[i])
 	{
 		free(envp[i]);

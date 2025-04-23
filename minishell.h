@@ -84,7 +84,7 @@ typedef struct s_data
 {
 	int				exit_status;
 	int				is_abort;
-	t_env 		*env;
+	t_env			*env;
 }					t_data;
 
 extern volatile sig_atomic_t	g_signal;
@@ -133,7 +133,7 @@ void	expand_heredoc(t_data *data, t_node *node);
 
 // execute/execute.c
 void	execute(t_data *data, t_node *node);
-void 	execute_command(t_data *data, t_node *node);
+void	execute_command(t_data *data, t_node *node);
 int		is_builtin(t_token *args);
 void	execute_builtin(t_data *data, t_node *node);
 
@@ -145,11 +145,11 @@ void	free_argv(char **argv);
 char	*resolve_path(t_env *env, char *line);
 
 // redirect/redirect.c
-void	redirect(t_node *redi, t_env **env);
+void	setup_redirect(t_node *redi, t_env **env);
 void	reset_redirect(t_node *redi);
 
 // pipeline/pipeline.c
-int 	pipeline(t_data *data, t_node *node, int prev_pipeout);
+int		pipeline(t_data *data, t_node *node, int prev_pipeout);
 
 // builtin/builtin_exit.c
 void	builtin_exit(t_data *data, char **argv);

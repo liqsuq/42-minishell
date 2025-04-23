@@ -47,7 +47,7 @@ void	print_redir(t_node *redir)
 {
 	if (redir == NULL)
 		return ;
-	printf("redir: %d, args: \"%s\"\n",redir->args->kind, redir->args->word);
+	printf("redir: %d, args: \"%s\"\n", redir->args->kind, redir->args->word);
 	print_redir(redir->next);
 }
 

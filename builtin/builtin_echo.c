@@ -2,9 +2,9 @@
 
 #include "minishell.h"
 
-static int is_opt_newline(char *str)
+static int	is_opt_newline(char *str)
 {
-	int i;
+	int	i;
 
 	if (str != NULL && ft_strncmp(str, "-n", 2) == 0)
 	{
@@ -17,7 +17,7 @@ static int is_opt_newline(char *str)
 	return (0);
 }
 
-void builtin_echo(t_data *data, char **argv)
+void	builtin_echo(t_data *data, char **argv)
 {
 	int		opt_newline;
 	int		done_optparse;

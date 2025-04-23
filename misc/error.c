@@ -4,7 +4,7 @@
 
 void	fatal_error(const char *msg)
 {
-	char *str;
+	char	*str;
 
 	if (msg != NULL)
 		str = ft_strjoin(HEADER, msg);

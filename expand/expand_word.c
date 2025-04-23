@@ -91,10 +91,10 @@ static void	expand_word_token(t_token *token)
 	expand_word_token(token->next);
 }
 
-static void pop_token(t_token **head, t_token *token)
+static void	pop_token(t_token **head, t_token *token)
 {
 	t_token	*cur;
-	t_token *prev;
+	t_token	*prev;
 
 	if (head == NULL || *head == NULL || token == NULL)
 		return ;
@@ -119,7 +119,7 @@ static void pop_token(t_token **head, t_token *token)
 
 void	expand_word(t_data *data, t_node *node)
 {
-	t_token *cur;
+	t_token	*cur;
 
 	if (node == NULL || data->is_abort)
 		return ;

@@ -6,7 +6,7 @@ void	execute_command(t_data *data, t_node *node)
 {
 	char	**argv;
 	char	*path;
-	char 	**envp;
+	char	**envp;
 
 	argv = new_argv(node->args);
 	if (argv == NULL)
@@ -108,8 +108,8 @@ void	execute(t_data *data, t_node *node)
 	}
 	if (node->next == NULL && is_builtin(node->args))
 		execute_builtin(data, node);
-	else 
-	{	
+	else
+	{
 		pid = pipeline(data, node, -1);
 		wait_pids(data, pid);
 	}
