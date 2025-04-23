@@ -26,39 +26,39 @@ static void	process_line(t_data *data, char *line)
 	free_token(token);
 }
 
-static t_env *init_env_list(char **envp)
+static t_env	*init_env_list(char **envp)
 {
-	t_env *env_list = NULL;
-	int    i = 0;
+	int		i;
+	t_env	*env;
+	char	*eq_pos;
+	char	*key;
 
+	env = NULL;
 	if (envp == NULL)
-		return NULL;
-	while (envp[i])
+		return (NULL);
+	i = -1;
+	while (envp[++i] != NULL)
 	{
-		char *equal_pos = strchr(envp[i], '=');
-		if (equal_pos)
-		{
-			size_t keylen = equal_pos - envp[i];
-			char  *key = strndup(envp[i], keylen);
-			char  *val = strdup(equal_pos + 1);
-
-			set_env(&env_list, key, val);
-
-			free(key);
-			free(val);
-		}
-		i++;
+		eq_pos = ft_strchr(envp[i], '=');
+		if (eq_pos == NULL)
+			continue ;
+		key = ft_substr(envp[i], 0, (eq_pos - envp[i]) / sizeof(char));
+		if (key == NULL)
+			return (NULL);
+		if (set_env(&env, key, eq_pos + 1))
+			return (free_env(&env), free(key), NULL);
+		free(key);
 	}
-	return (env_list);
+	return (env);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 	char	*line;
+
 	(void)argc;
 	(void)argv;
-
 	rl_outstream = stderr;
 	init_data(&data);
 	data.env = init_env_list(envp);
