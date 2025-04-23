@@ -32,16 +32,3 @@ void	free_node(t_node *node)
 	free_token(node->args);
 	free(node);
 }
-
-// void	print_nodes(t_node *nodes)
-// {
-// 	t_node	*cur;
-
-// 	cur = nodes;
-// 	while (cur)
-// 	{
-// 		printf("kind: %d\n", cur->kind);
-// 		print_tokens(cur->args);
-// 		cur = cur->next;
-// 	}
-// }
