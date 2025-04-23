@@ -2,30 +2,6 @@
 
 #include "minishell.h"
 
-static void	init_data(t_data *data)
-{
-	data->exit_status = 0;
-	data->is_abort = 0;
-	data->env = NULL;
-}
-
-static void	process_line(t_data *data, char *line)
-{
-	t_token	*token;
-	t_node	*node;
-
-	data->is_abort = 0;
-	token = tokenize(data, line);
-	// print_token(token);
-	node = parse(data, token);
-	// print_node(node);
-	expand(data, node);
-	if (!data->is_abort)
-		execute(data, node);
-	free_node(node);
-	free_token(token);
-}
-
 static t_env	*init_env_list(char **envp)
 {
 	int		i;
@@ -52,17 +28,42 @@ static t_env	*init_env_list(char **envp)
 	return (env);
 }
 
+static void	setup_shell(t_data *data, char **envp)
+{
+	rl_outstream = stderr;
+	setup_signal();
+	data->exit_status = 0;
+	data->is_abort = 0;
+	data->env = init_env_list(envp);
+}
+
+static void	reset_shell(t_data *data)
+{
+	free_env(&data->env);
+}
+
+static void	process_line(t_data *data, char *line)
+{
+	t_token	*token;
+	t_node	*node;
+
+	data->is_abort = 0;
+	token = tokenize(data, line);
+	node = parse(data, token);
+	expand(data, node);
+	if (!data->is_abort)
+		execute(data, node);
+	free_node(node);
+	free_token(token);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 	char	*line;
 
-	(void)argc;
-	(void)argv;
-	rl_outstream = stderr;
-	init_data(&data);
-	data.env = init_env_list(envp);
-	setup_signal();
+	(void)argc, (void)argv;
+	setup_shell(&data, envp);
 	while (1)
 	{
 		g_signal = 0;
@@ -73,7 +74,7 @@ int	main(int argc, char **argv, char **envp)
 			line = get_next_line_nonl(STDIN_FILENO);
 		if (line == NULL)
 			break ;
-		if (*line)
+		if (*line != '\0')
 		{
 			add_history(line);
 			process_line(&data, line);
@@ -82,5 +83,5 @@ int	main(int argc, char **argv, char **envp)
 	}
 	if (isatty(STDIN_FILENO))
 		ft_dprintf(STDERR_FILENO, "exit\n");
-	return (data.exit_status);
+	return (reset_shell(&data), data.exit_status);
 }
