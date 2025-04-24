@@ -95,11 +95,11 @@ int		is_metacharacter(char c);
 t_token	*tokenize(t_data *data, char *line);
 
 // tokenize/tokenuils.c
-int		tokenlen(t_token *token);
 t_token	*new_token(char *word, t_token_kind kind);
 t_token	*add_token(t_token **head, t_token *new);
-t_token	*dup_token(t_token *token);
 void	free_token(t_token *token);
+t_token	*dup_token(t_token *token);
+void	pop_token(t_token **head, t_token *token);
 
 // parse/parse.c
 t_node	*parse(t_data *data, t_token *token);

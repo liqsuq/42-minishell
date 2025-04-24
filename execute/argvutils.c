@@ -13,10 +13,19 @@ static void	trans_args(char **argv, t_token *args)
 char	**new_argv(t_token *args)
 {
 	char	**argv;
+	size_t	len;
+	t_token	*cur;
 
-	argv = ft_calloc((tokenlen(args) + 1), sizeof(char *));
+	len = 0;
+	cur = args;
+	while (cur != NULL)
+	{
+		len++;
+		cur = cur->next;
+	}
+	argv = ft_calloc((len + 1), sizeof(char *));
 	if (argv == NULL)
-		fatal_error("malloc");
+		fatal_error("ft_calloc");
 	trans_args(argv, args);
 	return (argv);
 }

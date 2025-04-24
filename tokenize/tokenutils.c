@@ -2,13 +2,6 @@
 
 #include "minishell.h"
 
-int	tokenlen(t_token *token)
-{
-	if (token == NULL)
-		return (0);
-	return (1 + tokenlen(token->next));
-}
-
 t_token	*new_token(char *word, t_token_kind kind)
 {
 	t_token	*token;
@@ -32,6 +25,15 @@ t_token	*add_token(t_token **head, t_token *new)
 	return (add_token(&(*head)->next, new));
 }
 
+void	free_token(t_token *token)
+{
+	if (token == NULL)
+		return ;
+	free_token(token->next);
+	free(token->word);
+	free(token);
+}
+
 t_token	*dup_token(t_token *token)
 {
 	char	*word;
@@ -42,11 +44,28 @@ t_token	*dup_token(t_token *token)
 	return (new_token(word, token->kind));
 }
 
-void	free_token(t_token *token)
+void	pop_token(t_token **head, t_token *token)
 {
-	if (token == NULL)
+	t_token	*cur;
+	t_token	*prev;
+
+	if (head == NULL || *head == NULL || token == NULL)
 		return ;
-	free_token(token->next);
-	free(token->word);
-	free(token);
+	cur = *head;
+	prev = NULL;
+	while (cur != NULL)
+	{
+		if (cur == token)
+		{
+			if (prev != NULL)
+				prev->next = cur->next;
+			else
+				*head = cur->next;
+			free(token->word);
+			free(token);
+			return ;
+		}
+		prev = cur;
+		cur = cur->next;
+	}
 }
