@@ -102,7 +102,7 @@ void	expand_word(t_data *data, t_node *node)
 	while (cur != NULL)
 	{
 		if (cur->word != NULL && ft_strlen(cur->word) == 0)
-			pop_token(&node->args, cur);
+			pop_token(&node->args, cur, NULL);
 		cur = cur->next;
 	}
 	expand_word(data, node->next);

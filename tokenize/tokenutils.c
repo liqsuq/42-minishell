@@ -44,28 +44,19 @@ t_token	*dup_token(t_token *token)
 	return (new_token(word, token->kind));
 }
 
-void	pop_token(t_token **head, t_token *token)
+void	pop_token(t_token **head, t_token *token, t_token *prev)
 {
-	t_token	*cur;
-	t_token	*prev;
-
 	if (head == NULL || *head == NULL || token == NULL)
 		return ;
-	cur = *head;
-	prev = NULL;
-	while (cur != NULL)
+	if (*head == token)
 	{
-		if (cur == token)
-		{
-			if (prev != NULL)
-				prev->next = cur->next;
-			else
-				*head = cur->next;
-			free(token->word);
-			free(token);
-			return ;
-		}
-		prev = cur;
-		cur = cur->next;
+		if (prev != NULL)
+			prev->next = (*head)->next;
+		else
+			*head = (*head)->next;
+		free(token->word);
+		free(token);
+		return ;
 	}
+	pop_token(&(*head)->next, token, *head);
 }
