@@ -134,12 +134,10 @@ void	execute_command(t_data *data, t_node *node);
 int		is_builtin(t_token *args);
 void	execute_builtin(t_data *data, t_node *node);
 
-// execute/argvutils.c
+// execute/executils.c
 char	**new_argv(t_token *args);
 void	free_argv(char **argv);
-
-// execute/pathutils.c
-char	*resolve_path(t_env *env, char *line);
+char	*find_path(t_env *env, char *line);
 
 // redirect/redirect.c
 void	setup_redirect(t_node *redi, t_env **env);
