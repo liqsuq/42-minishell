@@ -25,7 +25,7 @@ static int	skip_blank(char **line)
 
 static int	is_operator(const char *s)
 {
-	char *const	ops[] = {">>", "<<", "||", "&&", ";;", ">", "<", "|", "&", ";", "(", ")"};
+	char *const	ops[] = {">>", "<<", ">", "<", "|"};
 	size_t		i;
 
 	i = -1;
@@ -37,7 +37,7 @@ static int	is_operator(const char *s)
 
 int	is_metacharacter(char c)
 {
-	return (c != '\0' && ft_strchr("|&;()<> \t\n", c));
+	return (c != '\0' && ft_strchr("><| \t\n", c));
 }
 
 static int	is_word(const char *s)
@@ -47,7 +47,7 @@ static int	is_word(const char *s)
 
 static t_token	*tokenize_operator(t_data *data, char **line)
 {
-	char *const	ops[] = {">>", "<<", "||", "&&", ";;", ">", "<", "|", "&", ";", "(", ")"};
+	char *const	ops[] = {">>", "<<", ">", "<", "|"};
 	char		*cur;
 	size_t		i;
 	char		*op;	
