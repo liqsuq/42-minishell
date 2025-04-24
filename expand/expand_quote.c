@@ -14,7 +14,7 @@ static void	remove_quote(t_token *token)
 	cur = token->word;
 	while (*cur != '\0' && !is_metacharacter(*cur))
 	{
-		if (*cur == SQUOTE || *cur == DQUOTE)
+		if (*cur == '\'' || *cur == '\"')
 		{
 			c = *cur;
 			while (*++cur != c)

@@ -77,7 +77,7 @@ static t_token	*tokenize_word(t_data *data, char **line)
 	cur = *line;
 	while (*cur != '\0' && !is_metacharacter(*cur))
 	{
-		if (*cur == SQUOTE || *cur == DQUOTE)
+		if (*cur == '\'' || *cur == '\"')
 		{
 			c = *cur;
 			while (*++cur != c)

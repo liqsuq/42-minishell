@@ -30,9 +30,6 @@
 # define HEADER "minishell: "
 # define PROMPT "minish$ "
 # define PROMPT_HEREDOC "> "
-# define SQUOTE '\''
-# define DQUOTE '\"'
-# define ERROR_GENERAL 1
 # define ERROR_SYNTAX 2
 # define ERROR_NOPERM 126
 # define ERROR_NOFILE 127

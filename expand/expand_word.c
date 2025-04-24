@@ -47,7 +47,7 @@ static t_token	*split_word_tail(t_token *token)
 				cur++;
 			return (split_word(token, end, cur));
 		}
-		if (*cur == SQUOTE || *cur == DQUOTE)
+		if (*cur == '\'' || *cur == '\"')
 		{
 			c = *cur++;
 			while (*cur != c)

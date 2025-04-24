@@ -27,7 +27,7 @@ static void	append_quote_para(char **dst, char **str, t_data *data)
 	append_char(dst, *cur++);
 	while (*cur != c)
 	{
-		if (c == DQUOTE && (*str)[0] == '$' && (*str)[1] == '?')
+		if (c == '\"' && (*str)[0] == '$' && (*str)[1] == '?')
 			append_status(dst, &cur, data);
 		else
 			append_char(dst, *cur++);
@@ -51,7 +51,7 @@ void	expand_parameter_token(t_data *data, t_token *token, int force)
 			fatal_error("ft_calloc");
 		while (*str != '\0')
 		{
-			if (!force && (*str == SQUOTE || *str == DQUOTE))
+			if (!force && (*str == '\'' || *str == '\"'))
 				append_quote_para(&new_word, &str, data);
 			else if (str[0] == '$' && str[1] == '?')
 				append_status(&new_word, &str, data);

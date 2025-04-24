@@ -36,7 +36,7 @@ static void	append_quote_var(char **dst, char **str, t_env *env)
 	append_char(dst, *cur++);
 	while (*cur != c)
 	{
-		if (c == DQUOTE && is_variable(cur))
+		if (c == '\"' && is_variable(cur))
 			append_variable(dst, &cur, env);
 		else
 			append_char(dst, *cur++);
@@ -60,7 +60,7 @@ void	expand_variable_token(t_token *token, int force, t_env *env)
 			fatal_error("ft_calloc");
 		while (*str != '\0')
 		{
-			if (!force && (*str == SQUOTE || *str == DQUOTE))
+			if (!force && (*str == '\'' || *str == '\"'))
 				append_quote_var(&new_word, &str, env);
 			else if (is_variable(str))
 				append_variable(&new_word, &str, env);
