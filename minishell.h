@@ -90,7 +90,6 @@ extern volatile sig_atomic_t	g_signal;
 int		is_blank(char c);
 int		is_metacharacter(char c);
 t_token	*tokenize(t_data *data, char *line);
-
 // tokenize/tokenuils.c
 t_token	*new_token(char *word, t_token_kind kind);
 t_token	*add_token(t_token **head, t_token *new);
@@ -100,7 +99,6 @@ void	pop_token(t_token **head, t_token *token, t_token *prev);
 
 // parse/parse.c
 t_node	*parse(t_data *data, t_token *token);
-
 // parse/nodeutils.c
 t_node	*new_node(t_node_kind kind);
 t_node	*add_node(t_node **head, t_node *new);
@@ -109,22 +107,17 @@ void	free_node(t_node *node);
 // expand/expand.c
 void	expand(t_data *data, t_node *node);
 void	append_char(char **s, char c);
-
 // expand/expand_variable.c
 void	expand_variable(t_data *data, t_node *node);
 void	expand_variable_token(t_token *token, int force, t_env *env);
-
 // expand/expand_parameter.c
 void	expand_parameter(t_data *data, t_node *node);
 void	expand_parameter_token(t_data *data, t_token *token, int force);
-
 // expand/expand_word.c
 void	expand_word(t_data *data, t_node *node);
-
 // expand/expand_quote.c
 void	expand_quote(t_data *data, t_node *node);
 void	expand_quote_token(t_token *token);
-
 // expand/expand_heredoc.c
 void	expand_heredoc(t_data *data, t_node *node);
 
@@ -133,7 +126,6 @@ void	execute(t_data *data, t_node *node);
 void	execute_command(t_data *data, t_node *node);
 int		is_builtin(t_token *args);
 void	execute_builtin(t_data *data, t_node *node);
-
 // execute/executils.c
 char	**new_argv(t_token *args);
 void	free_argv(char **argv);
@@ -149,13 +141,10 @@ int		pipeline(t_data *data, t_node *node, int prev_pipeout);
 // builtin/builtin_exit.c
 void	builtin_exit(t_data *data, char **argv);
 void	builtin_export(t_data *data, char **argv);
-
 // builtin/builtin_echo.c
 void	builtin_echo(t_data *data, char **argv);
-
 // builtin/builtin_unset.c
 void	builtin_unset(t_data *data, char **argv);
-
 // builtin/builtin_env.c
 void	builtin_env(t_data *data);
 
@@ -165,24 +154,20 @@ void	assert_error(const char *msg);
 void	tokenize_error(const char *msg, t_data *data, char **line);
 void	parse_error(const char *msg, t_data *data, t_token **token);
 void	expand_error(const char *msg, t_data *data);
-
 // misc/debug.c
 void	print_argv(char **str);
 void	print_token(t_token *token);
 void	print_env(t_env *env);
 void	print_redir(t_node *redir);
 void	print_node(t_node *node);
-
 // misc/ft_funcs.c
 int		ft_strcmp(const char *s1, const char *s2);
 char	*get_next_line_nonl(int fd);
-
 // misc/signal.c
 int		check_signal_main(void);
 int		check_signal_heredoc(void);
 void	setup_signal(void);
 void	reset_signal(void);
-
 // misc/envutils.c
 t_env	*new_env(char *key, char *value);
 void	free_env(t_env **env);
