@@ -193,7 +193,7 @@ t_env	*new_env(char *key, char *value);
 void	free_env(t_env **env);
 char	*get_env(t_env *env, char *key);
 int		set_env(t_env **env, char *key, char *value);
-int		unset_env(t_env **env, char *key);
+t_env	*init_env(char **envp);
 char	**dump_env(t_env *env);
 void	free_envp(char **envp);
 

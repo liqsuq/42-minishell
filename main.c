@@ -2,39 +2,13 @@
 
 #include "minishell.h"
 
-static t_env	*init_env_list(char **envp)
-{
-	int		i;
-	t_env	*env;
-	char	*eq_pos;
-	char	*key;
-
-	env = NULL;
-	if (envp == NULL)
-		return (NULL);
-	i = -1;
-	while (envp[++i] != NULL)
-	{
-		eq_pos = ft_strchr(envp[i], '=');
-		if (eq_pos == NULL)
-			continue ;
-		key = ft_substr(envp[i], 0, (eq_pos - envp[i]) / sizeof(char));
-		if (key == NULL)
-			return (NULL);
-		if (set_env(&env, key, eq_pos + 1))
-			return (free_env(&env), free(key), NULL);
-		free(key);
-	}
-	return (env);
-}
-
 static void	setup_shell(t_data *data, char **envp)
 {
 	rl_outstream = stderr;
 	setup_signal();
 	data->exit_status = 0;
 	data->is_abort = 0;
-	data->env = init_env_list(envp);
+	data->env = init_env(envp);
 }
 
 static void	reset_shell(t_data *data)

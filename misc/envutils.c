@@ -78,6 +78,32 @@ int	set_env(t_env **env, char *key, char *value)
 	return (0);
 }
 
+t_env	*init_env(char **envp)
+{
+	int		i;
+	t_env	*env;
+	char	*eq_pos;
+	char	*key;
+
+	env = NULL;
+	if (envp == NULL)
+		return (NULL);
+	i = -1;
+	while (envp[++i] != NULL)
+	{
+		eq_pos = ft_strchr(envp[i], '=');
+		if (eq_pos == NULL)
+			continue ;
+		key = ft_substr(envp[i], 0, (eq_pos - envp[i]) / sizeof(char));
+		if (key == NULL)
+			return (NULL);
+		if (set_env(&env, key, eq_pos + 1))
+			return (free_env(&env), free(key), NULL);
+		free(key);
+	}
+	return (env);
+}
+
 char	**dump_env(t_env *env)
 {
 	int		count;
