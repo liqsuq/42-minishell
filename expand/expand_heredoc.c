@@ -43,11 +43,15 @@ static void	read_heredoc(t_data *data, t_node **node)
 		interrupt_heredoc(data);
 }
 
-// expand_heredoc()
-// This function handles the expansion of heredoc nodes in the tree.
-// It checks if the node is a heredoc and if so, it reads and expands the input.
-// Note that the read input is stored in the heardoc node args->next.
-// Args contains the delimiter of heredoc and the input is linked to the next.
+/**
+ * expand_heredoc - Expand heredocumant in the tree.
+ * @data: The data structure containing the environment variables and state.
+ * @node: The current node in the tree.
+ * This function handles the expansion of heredoc nodes in the tree.
+ * It checks if the node is a heredoc and if so, it reads and expands the input.
+ * Note that the read input is stored in the heardoc node args->next.
+ * Args contains the delimiter of heredoc and the input is linked to the next.
+ */
 void	expand_heredoc(t_data *data, t_node *node)
 {
 	int	is_quoted;
