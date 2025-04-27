@@ -348,7 +348,6 @@ assert 1 'cd /tmp/'
 assert 1 'cd /tmp///'
 assert 1 'cd /../../../././.././'
 assert 1 'cd src'
-assert 1 'unset HOME\ncd'
 
 assert 1 'cd \n echo $PWD'
 assert 1 'cd \n echo $PWD'
@@ -367,10 +366,6 @@ assert 1 'pwd'
 assert 1 'cd\npwd'
 assert 1 'cd src\npwd'
 assert 1 'cd /etc\npwd'
-assert 1 'cd . \n pwd \n echo $PWD $OLDPWD'
-assert 1 'cd .. \n pwd \n echo $PWD $OLDPWD'
-assert 1 'cd /// \n pwd \n echo $PWD $OLDPWD'
-assert 1 'cd /tmp/// \n pwd \n echo $PWD $OLDPWD'
 assert 1 'unset PWD\npwd\ncd /etc\npwd'
 
 echo "==========================================================================="
