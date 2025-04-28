@@ -29,7 +29,7 @@ static void	update_pwd_if_needed(t_data *data)
 	}
 }
 
-static bool	handle_empty_or_abs(t_data *data, char **argv)
+static bool	handle_empty(t_data *data, char **argv)
 {
 	char	*home;
 
@@ -81,7 +81,7 @@ void	builtin_cd(t_data *data, char **argv)
 {
 	if (argv[1] == NULL)
 	{
-		handle_empty_or_abs(data, argv);
+		handle_empty(data, argv);
 		return ;
 	}
 	if (argv[2] != NULL)
@@ -90,8 +90,6 @@ void	builtin_cd(t_data *data, char **argv)
 		data->exit_status = 1;
 		return ;
 	}
-	if (handle_empty_or_abs(data, argv))
-		return ;
 	if (argv[1][0] == '/')
 	{
 		do_chdir_with_error(data, argv[1], argv[1]);
