@@ -154,12 +154,6 @@ void	assert_error(const char *msg);
 void	tokenize_error(const char *msg, t_data *data, char **line);
 void	parse_error(const char *msg, t_data *data, t_token **token);
 void	expand_error(const char *msg, t_data *data);
-// misc/debug.c
-void	print_argv(char **str);
-void	print_token(t_token *token);
-void	print_env(t_env *env);
-void	print_redir(t_node *redir);
-void	print_node(t_node *node);
 // misc/ft_funcs.c
 int		ft_strcmp(const char *s1, const char *s2);
 char	*get_next_line_nonl(int fd);
