@@ -33,7 +33,7 @@ static bool	handle_empty(t_data *data, char **argv)
 {
 	char	*home;
 
-	if (!argv[1] || argv[1][0] == '\0')
+	if (argv[1] == NULL)
 	{
 		home = get_env(data->env, "HOME");
 		if (!home)
