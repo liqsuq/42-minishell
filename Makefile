@@ -15,8 +15,8 @@ PIPSRC := $(addprefix pipeline/, \
 MSCSRC := $(addprefix misc/, \
 	error.c ft_funcs.c signal.c envutils.c)
 BLTSRC := $(addprefix builtin/, \
-	builtin_exit.c builtin_echo.c builtin_unset.c builtin_env.c \
-	builtin_export.c builtin_cd.c builtin_pwd.c) 
+	builtin_echo.c builtin_cd.c builtin_pwd.c builtin_export.c \
+	builtin_unset.c builtin_env.c builtin_exit.c) 
 SOURCE := main.c \
 	$(TOKSRC) $(PARSRC) $(EXPSRC) $(EXESRC) \
 	$(REDSRC) $(PIPSRC) $(MSCSRC) $(BLTSRC)

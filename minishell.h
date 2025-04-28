@@ -138,14 +138,20 @@ void	reset_redirect(t_node *redi);
 // pipeline/pipeline.c
 int		pipeline(t_data *data, t_node *node, int prev_pipeout);
 
-// builtin
-void	builtin_env(t_data *data);
-void	builtin_cd(t_data *data, char **argv);
-void	builtin_pwd(t_data *data, char **argv);
-void	builtin_exit(t_data *data, char **argv);
+// builtin/builtin_echo.c
 void	builtin_echo(t_data *data, char **argv);
-void	builtin_unset(t_data *data, char **argv);
+// builtin/builtin_cd.c
+void	builtin_cd(t_data *data, char **argv);
+// builtin/builtin_pwd.c
+void	builtin_pwd(t_data *data, char **argv);
+// builtin/builtin_export.c
 void	builtin_export(t_data *data, char **argv);
+// builtin/builtin_unset.c
+void	builtin_unset(t_data *data, char **argv);
+// builtin/builtin_env.c
+void	builtin_env(t_data *data);
+// builtin/builtin_exit.c
+void	builtin_exit(t_data *data, char **argv);
 
 // misc/error.c
 void	fatal_error(const char *msg);
