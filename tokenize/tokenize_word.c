@@ -14,7 +14,6 @@ t_token	*tokenize_word(t_data *data, char **line)
 	char	c;
 
 	cur = *line;
-	// while (*cur != '\0' && !is_metacharacter(*cur))
 	while (is_word(cur))
 	{
 		if (*cur == '\'' || *cur == '\"')
