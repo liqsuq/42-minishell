@@ -31,9 +31,10 @@ static void	change_relative(t_data *data, const char *relpath)
 			return (builtin_error(data, "cd: getcwd", strerror(errno)));
 		wd = cwd;
 	}
-	ft_strlcpy(buf, wd, PATH_MAX);
-	ft_strlcat(buf, "/", PATH_MAX);
-	ft_strlcat(buf, relpath, PATH_MAX);
+	if (ft_strlcpy(buf, wd, PATH_MAX) >= PATH_MAX
+		|| ft_strlcat(buf, "/", PATH_MAX) >= PATH_MAX
+		|| ft_strlcat(buf, relpath, PATH_MAX) >= PATH_MAX)
+		return (builtin_error(data, "cd: ", strerror(ENAMETOOLONG)));
 	change_directory(data, buf);
 }
 
