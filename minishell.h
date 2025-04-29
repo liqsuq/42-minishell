@@ -19,7 +19,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <limits.h>
-# include <stdbool.h>
 # include "libft/libft.h"
 
 # ifndef PATH_MAX
