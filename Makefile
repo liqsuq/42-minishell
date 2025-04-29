@@ -35,11 +35,8 @@ endif
 $(NAME): $(LFT) $(OBJECT)
 	$(LINK.o) $(OBJECT) $(LFT) $(LDLIBS) -o $@
 
-$(LFT): | $(LFTDIR)
+$(LFT):
 	$(MAKE) -C $(LFTDIR)
-
-$(LFTDIR):
-	git clone https://github.com/liqsuq/libft
 
 all: $(NAME)
 
@@ -48,7 +45,7 @@ clean:
 	$(RM) $(OBJECT)
 
 fclean: clean
-	$(RM) -r $(LFTDIR)
+	-$(MAKE) -C $(LFTDIR) fclean
 	$(RM) $(NAME)
 
 re: fclean all

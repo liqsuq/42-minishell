@@ -51,5 +51,11 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-minishell
+# Custom
+libftTester/
+libft-tester-tokyo/
 .vscode/
+.bonus
+.printf
+.getnl
+
