@@ -29,7 +29,7 @@ t_token	*tokenize_operator(t_data *data, char **line)
 		{
 			op = ft_strdup(ops[i]);
 			if (op == NULL)
-				fatal_error("strdup");
+				fatal_error("ft_strdup", strerror(errno));
 			*line = cur + ft_strlen(op);
 			return (new_token(op, TK_OP));
 		}

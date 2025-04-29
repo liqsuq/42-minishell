@@ -40,7 +40,7 @@ t_token	*dup_token(t_token *token)
 
 	word = ft_strdup(token->word);
 	if (word == NULL)
-		fatal_error("strdup", strerror(errno));
+		fatal_error("ft_strdup", strerror(errno));
 	return (new_token(word, token->kind));
 }
 
