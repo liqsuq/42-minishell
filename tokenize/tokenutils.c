@@ -8,7 +8,7 @@ t_token	*new_token(char *word, t_token_kind kind)
 
 	token = malloc(sizeof(t_token));
 	if (!token)
-		fatal_error(strerror(errno));
+		fatal_error("malloc", strerror(errno));
 	token->word = word;
 	token->kind = kind;
 	token->next = NULL;
@@ -40,7 +40,7 @@ t_token	*dup_token(t_token *token)
 
 	word = ft_strdup(token->word);
 	if (word == NULL)
-		fatal_error("strdup");
+		fatal_error("strdup", strerror(errno));
 	return (new_token(word, token->kind));
 }
 

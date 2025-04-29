@@ -40,10 +40,10 @@ void	setup_signal(void)
 	sigact.sa_flags = 0;
 	sigact.sa_handler = signal_handler;
 	if (sigaction(SIGINT, &sigact, NULL) < 0)
-		fatal_error("sigaction");
+		fatal_error("sigaction", strerror(errno));
 	sigact.sa_handler = SIG_IGN;
 	if (sigaction(SIGQUIT, &sigact, NULL) < 0)
-		fatal_error("sigaction");
+		fatal_error("sigaction", strerror(errno));
 }
 
 void	reset_signal(void)
@@ -54,7 +54,7 @@ void	reset_signal(void)
 	sigact.sa_flags = 0;
 	sigact.sa_handler = SIG_DFL;
 	if (sigaction(SIGINT, &sigact, NULL) < 0)
-		fatal_error("sigaction");
+		fatal_error("sigaction", strerror(errno));
 	if (sigaction(SIGQUIT, &sigact, NULL) < 0)
-		fatal_error("sigaction");
+		fatal_error("sigaction", strerror(errno));
 }

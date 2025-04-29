@@ -170,7 +170,7 @@ char	*get_env(t_env *env, char *key);
 int		set_env(t_env **env, char *key, char *value);
 t_env	*init_env(char **envp);
 // misc/error.c
-void	fatal_error(const char *msg);
+void	fatal_error(const char *msg, const char *errstr);
 void	tokenize_error(t_data *data, const char *msg, char **line);
 void	parse_error(t_data *data, const char *msg, t_token **token);
 void	builtin_error(t_data *data, const char *msg, const char *errstr);

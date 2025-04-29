@@ -96,7 +96,7 @@ static void	wait_pids(t_data *data, pid_t pid)
 		else if (wpid < 0 && errno == ECHILD)
 			break ;
 		else if (wpid < 0 && errno != EINTR)
-			fatal_error("wait");
+			fatal_error("wait", strerror(errno));
 	}
 }
 

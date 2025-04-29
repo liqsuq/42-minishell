@@ -14,7 +14,7 @@ void	append_char(char **s, char c)
 	if (new == NULL)
 	{
 		free(*s);
-		fatal_error("malloc");
+		fatal_error("malloc", strerror(errno));
 	}
 	if (*s != NULL)
 		ft_strlcpy(new, *s, size);

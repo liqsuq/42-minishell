@@ -9,7 +9,7 @@ static void	append_status(char **dst, char **str, t_data *data)
 
 	stat = ft_itoa(data->exit_status);
 	if (stat == NULL)
-		fatal_error("ft_itoa");
+		fatal_error("ft_itoa", strerror(errno));
 	cur = stat;
 	while (*cur != '\0')
 		append_char(dst, *cur++);
@@ -48,7 +48,7 @@ void	expand_parameter_token(t_data *data, t_token *token, int force)
 		str = token->word;
 		new_word = ft_calloc(1, sizeof(char));
 		if (new_word == NULL)
-			fatal_error("ft_calloc");
+			fatal_error("ft_calloc", strerror(errno));
 		while (*str != '\0')
 		{
 			if (!force && (*str == '\'' || *str == '\"'))

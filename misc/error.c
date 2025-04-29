@@ -2,19 +2,19 @@
 
 #include "minishell.h"
 
-void	fatal_error(const char *msg)
+void	fatal_error(const char *msg, const char *errstr)
 {
-	char	*str;
+	char	buf[1024];
 
+	ft_strlcpy(buf, HEADER, sizeof(buf));
 	if (msg != NULL)
-		str = ft_strjoin(HEADER, msg);
-	else
-		str = ft_strdup(HEADER);
-	if (str != NULL)
-		perror(str);
-	else
-		perror(HEADER);
-	free(str);
+		ft_strlcat(buf, msg, sizeof(buf));
+	if (errstr != NULL)
+	{
+		ft_strlcat(buf, ": ", sizeof(buf));
+		ft_strlcat(buf, errstr, sizeof(buf));
+	}
+	ft_dprintf(STDERR, "%s\n", buf);
 	exit(EXIT_FAILURE);
 }
 

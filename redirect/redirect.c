@@ -8,12 +8,12 @@ static void	open_redirect(t_node *redi, int srcfd, int flags, mode_t mode)
 
 	dstfd = open(redi->args->word, flags, mode);
 	if (dstfd < 0)
-		fatal_error(redi->args->word);
+		fatal_error(redi->args->word, strerror(errno));
 	redi->stashed_fd = dup(srcfd);
 	if (redi->stashed_fd < 0)
-		fatal_error("dup");
+		fatal_error("dup", strerror(errno));
 	if (dup2(dstfd, srcfd) < 0)
-		fatal_error("dup2");
+		fatal_error("dup2", strerror(errno));
 	close(dstfd);
 }
 
@@ -31,14 +31,14 @@ static void	open_heredoc(t_node *redi)
 	int	pipefd[2];
 
 	if (pipe(pipefd) < 0)
-		fatal_error("pipe");
+		fatal_error("pipe", strerror(errno));
 	write_heredoc(pipefd[1], redi->args->next);
 	close(pipefd[1]);
 	redi->stashed_fd = dup(STDIN);
 	if (redi->stashed_fd < 0)
-		fatal_error("dup");
+		fatal_error("dup", strerror(errno));
 	if (dup2(pipefd[0], STDIN) < 0)
-		fatal_error("dup2");
+		fatal_error("dup2", strerror(errno));
 	close(pipefd[0]);
 }
 
@@ -69,6 +69,6 @@ void	reset_redirect(t_node *redi)
 	else
 		fd = STDOUT;
 	if (dup2(redi->stashed_fd, fd) < 0)
-		fatal_error("dup2");
+		fatal_error("dup2", strerror(errno));
 	close(redi->stashed_fd);
 }

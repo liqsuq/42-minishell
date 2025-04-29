@@ -13,10 +13,10 @@ static void	move_fd(int src, int dst)
 
 	retval = dup2(src, dst);
 	if (retval < 0)
-		fatal_error("dup2");
+		fatal_error("dup2", strerror(errno));
 	retval = close(src);
 	if (retval < 0)
-		fatal_error("close");
+		fatal_error("close", strerror(errno));
 }
 
 static void	attach_pipe(t_node *node, int prev_pipeout, int *pipefd)
@@ -31,7 +31,7 @@ static void	attach_pipe(t_node *node, int prev_pipeout, int *pipefd)
 	{
 		retval = close(pipefd[0]);
 		if (retval < 0)
-			fatal_error("close");
+			fatal_error("close", strerror(errno));
 		move_fd(pipefd[1], STDOUT);
 	}
 }
@@ -44,13 +44,13 @@ static void	detach_pipe(t_node *node, int prev_pipeout, int *pipefd)
 	{
 		retval = close(prev_pipeout);
 		if (retval < 0)
-			fatal_error("close");
+			fatal_error("close", strerror(errno));
 	}
 	if (has_pipe(node))
 	{
 		retval = close(pipefd[1]);
 		if (retval < 0)
-			fatal_error("close");
+			fatal_error("close", strerror(errno));
 	}
 }
 
@@ -61,10 +61,10 @@ int	pipeline(t_data *data, t_node *node, int prev_pipeout)
 
 	if (has_pipe(node))
 		if (pipe(pipefd) < 0)
-			fatal_error("pipe");
+			fatal_error("pipe", strerror(errno));
 	pid = fork();
 	if (pid < 0)
-		fatal_error("fork");
+		fatal_error("fork", strerror(errno));
 	if (pid == 0)
 	{
 		attach_pipe(node, prev_pipeout, pipefd);

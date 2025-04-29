@@ -57,7 +57,7 @@ void	expand_variable_token(t_token *token, int force, t_env *env)
 		str = token->word;
 		new_word = ft_calloc(1, sizeof(char));
 		if (new_word == NULL)
-			fatal_error("ft_calloc");
+			fatal_error("ft_calloc", strerror(errno));
 		while (*str != '\0')
 		{
 			if (!force && (*str == '\'' || *str == '\"'))

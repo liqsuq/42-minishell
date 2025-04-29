@@ -25,7 +25,7 @@ char	**new_argv(t_token *args)
 	}
 	argv = ft_calloc((len + 1), sizeof(char *));
 	if (argv == NULL)
-		fatal_error("ft_calloc");
+		fatal_error("ft_calloc", strerror(errno));
 	trans_args(argv, args);
 	return (argv);
 }
