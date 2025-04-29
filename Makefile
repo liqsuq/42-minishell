@@ -1,6 +1,6 @@
 NAME := minishell
 TOKSRC := $(addprefix tokenize/, \
-	tokenize.c tokenutils.c)
+	tokenize.c tokenize_operator.c tokenize_word.c tokenutils.c)
 PARSRC := $(addprefix parse/, \
 	parse.c nodeutils.c)
 EXPSRC := $(addprefix expand/, \

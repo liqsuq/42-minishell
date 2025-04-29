@@ -18,7 +18,7 @@ static void	change_directory(t_data *data, char *path)
 	data->exit_status = 0;
 }
 
-static void change_relative(t_data *data, const char *relpath)
+static void	change_relative(t_data *data, const char *relpath)
 {
 	char	*wd;
 	char	cwd[PATH_MAX];
@@ -37,7 +37,7 @@ static void change_relative(t_data *data, const char *relpath)
 	change_directory(data, buf);
 }
 
-static void change_homedir(t_data *data)
+static void	change_homedir(t_data *data)
 {
 	char	*home;
 

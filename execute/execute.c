@@ -22,8 +22,8 @@ void	execute_command(t_data *data, t_node *node)
 	execve(path, argv, envp);
 	reset_redirect(node->redirects);
 	free_argv(argv);
-	free_environ(&envp);
 	free(path);
+	free_environ(&envp);
 	if (errno == ENOENT)
 		exit(ERROR_NOFILE);
 	else if (errno == EACCES || errno == ENOEXEC)
@@ -50,7 +50,6 @@ void	execute_builtin(t_data *data, t_node *node)
 {
 	char	**argv;
 
-	(void)data;
 	argv = new_argv(node->args);
 	if (argv == NULL)
 		exit(EXIT_FAILURE);

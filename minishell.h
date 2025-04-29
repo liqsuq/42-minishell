@@ -92,6 +92,12 @@ extern volatile sig_atomic_t	g_signal;
 int		is_blank(char c);
 int		is_metacharacter(char c);
 t_token	*tokenize(t_data *data, char *line);
+// tokenize/tokenize_operator.c
+int		is_operator(const char *s);
+t_token	*tokenize_operator(t_data *data, char **line);
+// tokenize/tokenize_word.c
+int		is_word(const char *s);
+t_token	*tokenize_word(t_data *data, char **line);
 // tokenize/tokenuils.c
 t_token	*new_token(char *word, t_token_kind kind);
 t_token	*add_token(t_token **head, t_token *new);
@@ -171,6 +177,5 @@ void	builtin_error(t_data *data, const char *msg, const char *errstr);
 // misc/ft_funcs.c
 int		ft_strcmp(const char *s1, const char *s2);
 char	*get_next_line_nonl(int fd);
-
 
 #endif

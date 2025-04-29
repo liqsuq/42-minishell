@@ -2,7 +2,7 @@
 
 #include "minishell.h"
 
-static size_t envcount(t_env *env)
+static size_t	envcount(t_env *env)
 {
 	size_t	count;
 
@@ -21,7 +21,6 @@ char	**dump_environ(t_env *env)
 	char	**envp;
 	size_t	i;
 	size_t	len;
-
 
 	count = envcount(env);
 	envp = malloc((count + 1) * sizeof(char *));
