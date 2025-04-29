@@ -38,7 +38,7 @@ t_token	*dup_token(t_token *token)
 {
 	char	*word;
 
-	word = strdup(token->word);
+	word = ft_strdup(token->word);
 	if (word == NULL)
 		fatal_error("strdup");
 	return (new_token(word, token->kind));
