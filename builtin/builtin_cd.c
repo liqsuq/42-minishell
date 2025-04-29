@@ -8,17 +8,11 @@ static void	change_directory(t_data *data, char *path)
 	if (path == NULL)
 		return ;
 	if (chdir(path) < 0)
-	{
-		builtin_error("cd: chdir", data, strerror(errno));
-		return ;
-	}
+		return (builtin_error("cd: chdir", data, strerror(errno)));
 	if (get_env(data->env, "PWD") != NULL)
 	{
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
-		{
-			builtin_error("cd: getcwd", data, strerror(errno));
-			return ;
-		}
+			return (builtin_error("cd: getcwd", data, strerror(errno)));
 		set_env(&data->env, "PWD", cwd);
 	}
 	data->exit_status = 0;
@@ -34,10 +28,7 @@ static void change_relative(t_data *data, const char *relpath)
 	if (wd == NULL)
 	{
 		if (getcwd(cwd, PATH_MAX) == NULL)
-		{
-			builtin_error("cd: getcwd", data, strerror(errno));
-			return ;
-		}
+			return (builtin_error("cd: getcwd", data, strerror(errno)));
 		wd = cwd;
 	}
 	ft_strlcpy(buf, wd, PATH_MAX);
@@ -52,10 +43,7 @@ static void change_homedir(t_data *data)
 
 	home = get_env(data->env, "HOME");
 	if (home == NULL)
-	{
-		builtin_error("cd: HOME not set", data, NULL);
-		return ;
-	}
+		return (builtin_error("cd: HOME not set", data, NULL));
 	change_directory(data, home);
 }
 
