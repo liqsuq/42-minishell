@@ -30,6 +30,9 @@
 # define HEADER "minishell: "
 # define PROMPT "minish$ "
 # define PROMPT_HEREDOC "> "
+# define STDIN STDIN_FILENO
+# define STDOUT STDOUT_FILENO
+# define STDERR STDERR_FILENO
 # define ERROR_SYNTAX 2
 # define ERROR_NOPERM 126
 # define ERROR_NOFILE 127
