@@ -18,12 +18,6 @@ void	fatal_error(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
-void	assert_error(const char *msg)
-{
-	ft_dprintf(STDERR, "Error: %s\n", msg);
-	exit(EXIT_FAILURE);
-}
-
 void	tokenize_error(const char *msg, t_data *data, char **line)
 {
 	char	*cur;

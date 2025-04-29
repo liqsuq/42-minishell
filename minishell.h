@@ -158,7 +158,6 @@ void	builtin_exit(t_data *data, char **argv);
 
 // misc/error.c
 void	fatal_error(const char *msg);
-void	assert_error(const char *msg);
 void	tokenize_error(const char *msg, t_data *data, char **line);
 void	parse_error(const char *msg, t_data *data, t_token **token);
 void	expand_error(const char *msg, t_data *data);
