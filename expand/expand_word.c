@@ -84,9 +84,9 @@ static void	expand_word_token(t_token *token)
 	if (token->kind == TK_WORD && token->word != NULL)
 	{
 		if (split_word_head(token) == NULL)
-			fatal_error("split_word_head");
+			fatal_error("split_word_head", strerror(errno));
 		if (split_word_tail(token) == NULL)
-			fatal_error("split_word_tail");
+			fatal_error("split_word_tail", strerror(errno));
 	}
 	expand_word_token(token->next);
 }

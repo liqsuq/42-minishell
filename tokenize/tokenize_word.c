@@ -29,7 +29,7 @@ t_token	*tokenize_word(t_data *data, char **line)
 	}
 	word = ft_substr(*line, 0, cur - *line);
 	if (word == NULL)
-		fatal_error("ft_substr");
+		fatal_error("ft_substr", strerror(errno));
 	*line = cur;
 	return (new_token(word, TK_WORD));
 }
