@@ -46,13 +46,6 @@ void	parse_error(t_data *data, const char *msg, t_token **token)
 	*token = cur;
 }
 
-void	expand_error(t_data *data, const char *msg)
-{
-	data->is_abort = 1;
-	if (msg != NULL)
-		ft_dprintf(STDERR, HEADER "%s\n", msg);
-}
-
 void	builtin_error(t_data *data, const char *msg, const char *errstr)
 {
 	char	buf[1024];

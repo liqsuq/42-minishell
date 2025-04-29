@@ -160,7 +160,6 @@ void	builtin_exit(t_data *data, char **argv);
 void	fatal_error(const char *msg);
 void	tokenize_error(t_data *data, const char *msg, char **line);
 void	parse_error(t_data *data, const char *msg, t_token **token);
-void	expand_error(t_data *data, const char *msg);
 void	builtin_error(t_data *data, const char *msg, const char *errstr);
 // misc/ft_funcs.c
 int		ft_strcmp(const char *s1, const char *s2);
