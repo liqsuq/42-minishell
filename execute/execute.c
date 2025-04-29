@@ -17,12 +17,12 @@ void	execute_command(t_data *data, t_node *node)
 		free_argv(argv);
 		exit(ERROR_NOFILE);
 	}
-	envp = dump_env(data->env);
+	envp = dump_environ(data->env);
 	setup_redirect(node->redirects, &data->env);
 	execve(path, argv, envp);
 	reset_redirect(node->redirects);
 	free_argv(argv);
-	free_envp(envp);
+	free_environ(&envp);
 	free(path);
 	if (errno == ENOENT)
 		exit(ERROR_NOFILE);

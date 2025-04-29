@@ -140,21 +140,29 @@ void	reset_redirect(t_node *redi);
 // pipeline/pipeline.c
 int		pipeline(t_data *data, t_node *node, int prev_pipeout);
 
-// builtin/builtin_echo.c
+// builtin
 void	builtin_echo(t_data *data, char **argv);
-// builtin/builtin_cd.c
 void	builtin_cd(t_data *data, char **argv);
-// builtin/builtin_pwd.c
 void	builtin_pwd(t_data *data);
-// builtin/builtin_export.c
 void	builtin_export(t_data *data, char **argv);
-// builtin/builtin_unset.c
 void	builtin_unset(t_data *data, char **argv);
-// builtin/builtin_env.c
 void	builtin_env(t_data *data);
-// builtin/builtin_exit.c
 void	builtin_exit(t_data *data, char **argv);
 
+// misc/signal.c
+int		check_signal_main(void);
+int		check_signal_heredoc(void);
+void	setup_signal(void);
+void	reset_signal(void);
+// misc/environ.c
+char	**dump_environ(t_env *env);
+void	free_environ(char ***envp);
+// misc/envutils.c
+t_env	*new_env(char *key, char *value);
+void	free_env(t_env **env);
+char	*get_env(t_env *env, char *key);
+int		set_env(t_env **env, char *key, char *value);
+t_env	*init_env(char **envp);
 // misc/error.c
 void	fatal_error(const char *msg);
 void	tokenize_error(t_data *data, const char *msg, char **line);
@@ -163,18 +171,6 @@ void	builtin_error(t_data *data, const char *msg, const char *errstr);
 // misc/ft_funcs.c
 int		ft_strcmp(const char *s1, const char *s2);
 char	*get_next_line_nonl(int fd);
-// misc/signal.c
-int		check_signal_main(void);
-int		check_signal_heredoc(void);
-void	setup_signal(void);
-void	reset_signal(void);
-// misc/envutils.c
-t_env	*new_env(char *key, char *value);
-void	free_env(t_env **env);
-char	*get_env(t_env *env, char *key);
-int		set_env(t_env **env, char *key, char *value);
-t_env	*init_env(char **envp);
-char	**dump_env(t_env *env);
-void	free_envp(char **envp);
+
 
 #endif
