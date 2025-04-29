@@ -4,7 +4,7 @@
 
 static int	is_delim_quoted(char *str)
 {
-	return (ft_strchr(str, SQUOTE) || ft_strchr(str, DQUOTE));
+	return (ft_strchr(str, '\'') || ft_strchr(str, '\"'));
 }
 
 static void	interrupt_heredoc(t_data *data)
@@ -22,13 +22,13 @@ static void	read_heredoc(t_data *data, t_node **node)
 	{
 		g_signal = 0;
 		rl_event_hook = check_signal_heredoc;
-		if (isatty(STDIN_FILENO))
+		if (isatty(STDIN))
 			line = readline(PROMPT_HEREDOC);
 		else
-			line = get_next_line_nonl(STDIN_FILENO);
+			line = get_next_line_nonl(STDIN);
 		if (line == NULL)
 		{
-			ft_dprintf(STDERR_FILENO,
+			ft_dprintf(STDERR,
 				HEADER "warning: here-document delimited by end-of-file\n");
 			break ;
 		}
@@ -43,11 +43,15 @@ static void	read_heredoc(t_data *data, t_node **node)
 		interrupt_heredoc(data);
 }
 
-// expand_heredoc()
-// This function handles the expansion of heredoc nodes in the tree.
-// It checks if the node is a heredoc and if so, it reads and expands the input.
-// Note that the read input is stored in the heardoc node args->next.
-// Args contains the delimiter of heredoc and the input is linked to the next.
+/**
+ * expand_heredoc - Expand heredocumant in the tree.
+ * @data: The data structure containing the environment variables and state.
+ * @node: The current node in the tree.
+ * This function handles the expansion of heredoc nodes in the tree.
+ * It checks if the node is a heredoc and if so, it reads and expands the input.
+ * Note that the read input is stored in the heardoc node args->next.
+ * Args contains the delimiter of heredoc and the input is linked to the next.
+ */
 void	expand_heredoc(t_data *data, t_node *node)
 {
 	int	is_quoted;

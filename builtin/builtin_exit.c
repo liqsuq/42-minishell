@@ -42,7 +42,7 @@ static long long	ft_strtoll(const char *nptr, char **endptr)
 	n = 0;
 	sign = 1;
 	if (endptr != NULL)
-	 	*endptr = (char *)nptr;
+		*endptr = (char *)nptr;
 	while (*nptr == ' ' || (*nptr >= '\t' && *nptr <= '\r'))
 		nptr++;
 	if (*nptr == '-' || *nptr == '+')
@@ -62,11 +62,10 @@ static long long	ft_strtoll(const char *nptr, char **endptr)
 static void	summarize(int *status, const char *msg, int num)
 {
 	if (msg != NULL)
-		ft_dprintf(STDERR_FILENO, HEADER "%s", msg);
+		ft_dprintf(STDERR, HEADER "%s", msg);
 	if (status != NULL)
 		*status = num;
 }
-
 
 void	builtin_exit(t_data *data, char **argv)
 {
@@ -74,9 +73,9 @@ void	builtin_exit(t_data *data, char **argv)
 	long long	num;
 	char		*endptr;
 
-	ft_dprintf(STDERR_FILENO, "exit\n");
+	ft_dprintf(STDERR, "exit\n");
 	if (argv[1] == NULL)
-		summarize(&stat, NULL, data->exit_status);	
+		summarize(&stat, NULL, data->exit_status);
 	else if (argv[2] != NULL)
 		summarize(&stat, "exit: too many arguments\n", EXIT_FAILURE);
 	else if (!is_number(argv[1]))

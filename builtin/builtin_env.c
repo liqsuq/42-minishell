@@ -10,7 +10,7 @@ void	builtin_env(t_data *data)
 	while (cur)
 	{
 		if (cur->key && cur->value)
-			printf("%s=%s\n", cur->key, cur->value);
+			ft_printf("%s=%s\n", cur->key, cur->value);
 		cur = cur->next;
 	}
 	data->exit_status = 0;

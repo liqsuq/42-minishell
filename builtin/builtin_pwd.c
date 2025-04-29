@@ -1,29 +1,24 @@
 // builtin_pwd.c
 #include "minishell.h"
 
-void	builtin_pwd(t_data *data, char **argv)
+void	builtin_pwd(t_data *data)
 {
-	char	*pwd_env;
+	char	*pwd;
 	char	cwd[PATH_MAX];
 
-	(void)argv;
-	pwd_env = get_env(data->env, "PWD");
-	if (pwd_env)
+	pwd = get_env(data->env, "PWD");
+	if (pwd)
 	{
-		ft_putendl_fd(pwd_env, STDOUT_FILENO);
+		ft_printf("%s\n", pwd);
+		// ft_putendl_fd(pwd_env, STDOUT);
 		data->exit_status = 0;
-		return ;
 	}
 	else
 	{
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
-		{
-			ft_dprintf(STDERR_FILENO, HEADER "pwd: getcwd: %s\n",
-				strerror(errno));
-			data->exit_status = 1;
-			return ;
-		}
-		ft_putendl_fd(cwd, STDOUT_FILENO);
+			return (builtin_error(data, "pwd: getcwd", strerror(errno)));
+		ft_printf("%s\n", cwd);
+		// ft_putendl_fd(cwd, STDOUT);
 		data->exit_status = 0;
 	}
 }

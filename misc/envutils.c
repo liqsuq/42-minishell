@@ -6,28 +6,36 @@ t_env	*new_env(char *key, char *value)
 {
 	t_env	*env;
 
-	env = (t_env *)malloc(sizeof(t_env));
-	if (!env)
-		fatal_error("malloc");
+	if (!key || !value)
+		return (NULL);
+	env = calloc(1, sizeof(t_env));
+	if (env == NULL)
+		return (NULL);
 	env->key = ft_strdup(key);
+	if (env->key == NULL)
+		return (free_env(&env), NULL);
 	env->value = ft_strdup(value);
+	if (env->value == NULL)
+		return (free_env(&env), NULL);
 	env->next = NULL;
 	return (env);
 }
 
-t_env	*free_env(t_env *env)
+void	free_env(t_env **env)
 {
 	t_env	*next;
 
-	while (env)
+	if (env == NULL)
+		return ;
+	while (*env)
 	{
-		next = env->next;
-		free(env->key);
-		free(env->value);
-		free(env);
-		env = next;
+		next = (*env)->next;
+		free((*env)->key);
+		free((*env)->value);
+		free(*env);
+		*env = next;
 	}
-	return (NULL);
+	*env = NULL;
 }
 
 char	*get_env(t_env *env, char *key)
@@ -44,12 +52,12 @@ char	*get_env(t_env *env, char *key)
 int	set_env(t_env **env, char *key, char *value)
 {
 	t_env	*cur;
-	t_env	*prev = NULL;
+	t_env	*prev;
 
 	if (!env || !key || !value)
 		return (1);
-
 	cur = *env;
+	prev = NULL;
 	while (cur)
 	{
 		if (ft_strcmp(cur->key, key) == 0)
@@ -70,77 +78,28 @@ int	set_env(t_env **env, char *key, char *value)
 	return (0);
 }
 
-int	unset_env(t_env **env, char *key)
+t_env	*init_env(char **envp)
 {
-	t_env	*cur;
-	t_env	*prev = NULL;
+	int		i;
+	t_env	*env;
+	char	*eq_pos;
+	char	*key;
 
-	if (!env || !key || !(*env))
-		return (1);
-
-	cur = *env;
-	while (cur)
+	env = NULL;
+	if (envp == NULL)
+		return (NULL);
+	i = -1;
+	while (envp[++i] != NULL)
 	{
-		if (ft_strcmp(cur->key, key) == 0)
-		{
-			if (prev)
-				prev->next = cur->next;
-			else
-				*env = cur->next;
-			free(cur->key);
-			free(cur->value);
-			free(cur);
-			return (0);
-		}
-		prev = cur;
-		cur = cur->next;
+		eq_pos = ft_strchr(envp[i], '=');
+		if (eq_pos == NULL)
+			continue ;
+		key = ft_substr(envp[i], 0, (eq_pos - envp[i]) / sizeof(char));
+		if (key == NULL)
+			return (NULL);
+		if (set_env(&env, key, eq_pos + 1))
+			return (free_env(&env), free(key), NULL);
+		free(key);
 	}
-	return (1);
-}
-
-char	**dump_env(t_env *env)
-{
-	int		count;
-	t_env	*cur;
-	char 	**envp;
-	size_t len;
-	int i;
-
-	i = 0;
-	count = 0;
-	cur = env;
-	while (cur)
-	{
-		count++;
-		cur = cur->next;
-	}
-	envp = (char **)malloc(sizeof(char *) * (count + 1));
-	if (!envp)
-		fatal_error("malloc");
-	cur = env;
-	while (i < count)
-	{
-		len = ft_strlen(cur->key) + 1 + ft_strlen(cur->value) + 1;
-		envp[i] = (char *)malloc(sizeof(char) * len);
-		if (!envp[i])
-			fatal_error("malloc");
-		sprintf(envp[i], "%s=%s", cur->key, cur->value);
-		cur = cur->next;
-		i++;
-	}
-	envp[count] = NULL;
-	return envp;
-}
-
-void	free_envp(char **envp)
-{
-	if (!envp)
-		return;
-	int i = 0;
-	while (envp[i])
-	{
-		free(envp[i]);
-		i++;
-	}
-	free(envp);
+	return (env);
 }

@@ -1,22 +1,22 @@
 NAME := minishell
 TOKSRC := $(addprefix tokenize/, \
-	tokenize.c tokenutils.c)
+	tokenize.c tokenize_operator.c tokenize_word.c tokenutils.c)
 PARSRC := $(addprefix parse/, \
 	parse.c nodeutils.c)
 EXPSRC := $(addprefix expand/, \
 	expand.c expand_variable.c expand_parameter.c \
 	expand_word.c expand_quote.c expand_heredoc.c)
 EXESRC := $(addprefix execute/, \
-	execute.c argvutils.c pathutils.c)
+	execute.c executils.c)
 REDSRC := $(addprefix redirect/, \
 	redirect.c)
 PIPSRC := $(addprefix pipeline/, \
 	pipeline.c)
 MSCSRC := $(addprefix misc/, \
-	error.c debug.c ft_funcs.c signal.c envutils.c)
+	signal.c environ.c envutils.c error.c ft_funcs.c)
 BLTSRC := $(addprefix builtin/, \
-	builtin_exit.c builtin_echo.c builtin_unset.c builtin_env.c \
-	builtin_export.c builtin_cd.c builtin_pwd.c) 
+	builtin_echo.c builtin_cd.c builtin_pwd.c builtin_export.c \
+	builtin_unset.c builtin_env.c builtin_exit.c) 
 SOURCE := main.c \
 	$(TOKSRC) $(PARSRC) $(EXPSRC) $(EXESRC) \
 	$(REDSRC) $(PIPSRC) $(MSCSRC) $(BLTSRC)
@@ -35,11 +35,8 @@ endif
 $(NAME): $(LFT) $(OBJECT)
 	$(LINK.o) $(OBJECT) $(LFT) $(LDLIBS) -o $@
 
-$(LFT): | $(LFTDIR)
+$(LFT):
 	$(MAKE) -C $(LFTDIR)
-
-$(LFTDIR):
-	git clone https://github.com/liqsuq/libft
 
 all: $(NAME)
 
@@ -48,7 +45,7 @@ clean:
 	$(RM) $(OBJECT)
 
 fclean: clean
-	$(RM) -r $(LFTDIR)
+	-$(MAKE) -C $(LFTDIR) fclean
 	$(RM) $(NAME)
 
 re: fclean all

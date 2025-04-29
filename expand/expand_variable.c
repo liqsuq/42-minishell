@@ -2,19 +2,9 @@
 
 #include "minishell.h"
 
-static int	is_namehead(char c)
-{
-	return (ft_isalpha(c) || c == '_');
-}
-
-static int	is_namebody(char c)
-{
-	return (is_namehead(c) || ft_isdigit(c));
-}
-
 static int	is_variable(const char *s)
 {
-	return (s[0] == '$' && is_namehead(s[1]));
+	return (s[0] == '$' && (ft_isalpha(s[1]) || s[1] == '_'));
 }
 
 static void	append_variable(char **dst, char **str, t_env *env)
@@ -26,7 +16,7 @@ static void	append_variable(char **dst, char **str, t_env *env)
 	name = NULL;
 	cur = *str + 1;
 	append_char(&name, *cur++);
-	while (is_namebody(*cur))
+	while (ft_isalpha(*cur) || ft_isdigit(*cur) || *cur == '_')
 		append_char(&name, *cur++);
 	value = get_env(env, name);
 	free(name);
@@ -46,7 +36,7 @@ static void	append_quote_var(char **dst, char **str, t_env *env)
 	append_char(dst, *cur++);
 	while (*cur != c)
 	{
-		if (c == DQUOTE && is_variable(cur))
+		if (c == '\"' && is_variable(cur))
 			append_variable(dst, &cur, env);
 		else
 			append_char(dst, *cur++);
@@ -67,10 +57,10 @@ void	expand_variable_token(t_token *token, int force, t_env *env)
 		str = token->word;
 		new_word = ft_calloc(1, sizeof(char));
 		if (new_word == NULL)
-			fatal_error("ft_calloc");
+			fatal_error("ft_calloc", strerror(errno));
 		while (*str != '\0')
 		{
-			if (!force && (*str == SQUOTE || *str == DQUOTE))
+			if (!force && (*str == '\'' || *str == '\"'))
 				append_quote_var(&new_word, &str, env);
 			else if (is_variable(str))
 				append_variable(&new_word, &str, env);

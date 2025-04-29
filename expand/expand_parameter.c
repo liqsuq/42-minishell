@@ -9,7 +9,7 @@ static void	append_status(char **dst, char **str, t_data *data)
 
 	stat = ft_itoa(data->exit_status);
 	if (stat == NULL)
-		fatal_error("ft_itoa");
+		fatal_error("ft_itoa", strerror(errno));
 	cur = stat;
 	while (*cur != '\0')
 		append_char(dst, *cur++);
@@ -27,7 +27,7 @@ static void	append_quote_para(char **dst, char **str, t_data *data)
 	append_char(dst, *cur++);
 	while (*cur != c)
 	{
-		if (c == DQUOTE && (*str)[0] == '$' && (*str)[1] == '?')
+		if (c == '\"' && (*str)[0] == '$' && (*str)[1] == '?')
 			append_status(dst, &cur, data);
 		else
 			append_char(dst, *cur++);
@@ -48,10 +48,10 @@ void	expand_parameter_token(t_data *data, t_token *token, int force)
 		str = token->word;
 		new_word = ft_calloc(1, sizeof(char));
 		if (new_word == NULL)
-			fatal_error("ft_calloc");
+			fatal_error("ft_calloc", strerror(errno));
 		while (*str != '\0')
 		{
-			if (!force && (*str == SQUOTE || *str == DQUOTE))
+			if (!force && (*str == '\'' || *str == '\"'))
 				append_quote_para(&new_word, &str, data);
 			else if (str[0] == '$' && str[1] == '?')
 				append_status(&new_word, &str, data);

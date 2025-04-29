@@ -10,11 +10,11 @@ static void	remove_quote(t_token *token)
 
 	new_word = ft_calloc(1, sizeof(char));
 	if (new_word == NULL)
-		fatal_error("ft_calloc");
+		fatal_error("ft_calloc", strerror(errno));
 	cur = token->word;
 	while (*cur != '\0' && !is_metacharacter(*cur))
 	{
-		if (*cur == SQUOTE || *cur == DQUOTE)
+		if (*cur == '\'' || *cur == '\"')
 		{
 			c = *cur;
 			while (*++cur != c)

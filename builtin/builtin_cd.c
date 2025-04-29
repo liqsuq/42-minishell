@@ -1,101 +1,63 @@
 // builtin_cd.c
 #include "minishell.h"
 
-static void	do_chdir_with_error(t_data *data, const char *path, const char *arg)
+static void	change_directory(t_data *data, char *path)
 {
-	if (chdir(path) < 0)
-	{
-		ft_dprintf(STDERR_FILENO, HEADER "cd: ");
-		perror(arg);
-		data->exit_status = 1;
+	char	cwd[PATH_MAX];
+
+	if (path == NULL)
 		return ;
+	if (chdir(path) < 0)
+		return (builtin_error(data, "cd: chdir", strerror(errno)));
+	if (get_env(data->env, "PWD") != NULL)
+	{
+		if (getcwd(cwd, sizeof(cwd)) == NULL)
+			return (builtin_error(data, "cd: getcwd", strerror(errno)));
+		set_env(&data->env, "PWD", cwd);
 	}
 	data->exit_status = 0;
 }
 
-static void	update_pwd_if_needed(t_data *data)
+static void	change_relative(t_data *data, const char *relpath)
 {
+	char	*wd;
 	char	cwd[PATH_MAX];
+	char	buf[PATH_MAX];
 
-	if (get_env(data->env, "PWD") != NULL)
+	wd = get_env(data->env, "PWD");
+	if (wd == NULL)
 	{
-		if (getcwd(cwd, sizeof(cwd)) == NULL)
-		{
-			ft_dprintf(STDERR_FILENO, "cd: getcwd: %s\n", strerror(errno));
-			data->exit_status = 1;
-			return ;
-		}
-		set_env(&data->env, "PWD", cwd);
+		if (getcwd(cwd, PATH_MAX) == NULL)
+			return (builtin_error(data, "cd: getcwd", strerror(errno)));
+		wd = cwd;
 	}
+	if (ft_strlcpy(buf, wd, PATH_MAX) >= PATH_MAX
+		|| ft_strlcat(buf, "/", PATH_MAX) >= PATH_MAX
+		|| ft_strlcat(buf, relpath, PATH_MAX) >= PATH_MAX)
+		return (builtin_error(data, "cd: ", strerror(ENAMETOOLONG)));
+	change_directory(data, buf);
 }
 
-static bool	handle_empty(t_data *data, char **argv)
+static void	change_homedir(t_data *data)
 {
 	char	*home;
 
-	if (argv[1] == NULL)
-	{
-		home = get_env(data->env, "HOME");
-		if (!home)
-		{
-			ft_dprintf(STDERR_FILENO, HEADER "HOME not set\n");
-			data->exit_status = 1;
-		}
-		else
-		{
-			do_chdir_with_error(data, home, home);
-			if (data->exit_status == 0)
-				update_pwd_if_needed(data);
-		}
-		return (true);
-	}
-	return (false);
-}
-
-static void	get_workdir_and_cd(t_data *data, const char *relpath)
-{
-	char		*pwd;
-	static char	buf[PATH_MAX];
-	char		tmp[PATH_MAX];
-
-	pwd = get_env(data->env, "PWD");
-	if (!pwd)
-	{
-		if (getcwd(buf, sizeof(buf)) == NULL)
-		{
-			ft_dprintf(STDERR_FILENO, HEADER "getcwd: %s\n", strerror(errno));
-			data->exit_status = 1;
-			return ;
-		}
-		pwd = buf;
-	}
-	ft_strlcpy(tmp, pwd, sizeof(tmp));
-	ft_strlcat(tmp, "/", sizeof(tmp));
-	ft_strlcat(tmp, relpath, sizeof(tmp));
-	do_chdir_with_error(data, tmp, relpath);
-	if (data->exit_status == 0)
-		update_pwd_if_needed(data);
+	home = get_env(data->env, "HOME");
+	if (home == NULL)
+		return (builtin_error(data, "cd: HOME not set", NULL));
+	change_directory(data, home);
 }
 
 void	builtin_cd(t_data *data, char **argv)
 {
+	if (data == NULL || argv == NULL || *argv == NULL)
+		return ;
 	if (argv[1] == NULL)
-	{
-		handle_empty(data, argv);
-		return ;
-	}
-	if (argv[2] != NULL)
-	{
-		ft_dprintf(STDERR_FILENO, HEADER "cd: too many arguments\n");
-		data->exit_status = 1;
-		return ;
-	}
-	if (argv[1][0] == '/')
-	{
-		do_chdir_with_error(data, argv[1], argv[1]);
-		if (data->exit_status == 0)
-			update_pwd_if_needed(data);
-		return ;
-	}
-	get_workdir_and_cd(data, argv[1]);
+		change_homedir(data);
+	else if (argv[2] != NULL)
+		builtin_error(data, "cd: too many arguments", NULL);
+	else if (argv[1][0] == '/')
+		change_directory(data, argv[1]);
+	else
+		change_relative(data, argv[1]);
 }

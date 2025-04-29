@@ -2,29 +2,23 @@
 
 #include "minishell.h"
 
-void	fatal_error(const char *msg)
+void	fatal_error(const char *msg, const char *errstr)
 {
-	char *str;
+	char	buf[1024];
 
+	ft_strlcpy(buf, HEADER, sizeof(buf));
 	if (msg != NULL)
-		str = ft_strjoin(HEADER, msg);
-	else
-		str = ft_strdup(HEADER);
-	if (str != NULL)
-		perror(str);
-	else
-		perror(HEADER);
-	free(str);
+		ft_strlcat(buf, msg, sizeof(buf));
+	if (errstr != NULL)
+	{
+		ft_strlcat(buf, ": ", sizeof(buf));
+		ft_strlcat(buf, errstr, sizeof(buf));
+	}
+	ft_dprintf(STDERR, "%s\n", buf);
 	exit(EXIT_FAILURE);
 }
 
-void	assert_error(const char *msg)
-{
-	ft_dprintf(STDERR_FILENO, "Error: %s\n", msg);
-	exit(EXIT_FAILURE);
-}
-
-void	tokenize_error(const char *msg, t_data *data, char **line)
+void	tokenize_error(t_data *data, const char *msg, char **line)
 {
 	char	*cur;
 
@@ -32,13 +26,13 @@ void	tokenize_error(const char *msg, t_data *data, char **line)
 	data->is_abort = 1;
 	data->exit_status = ERROR_SYNTAX;
 	if (msg != NULL)
-		ft_dprintf(STDERR_FILENO, HEADER "syntax error: %s\n", msg);
+		ft_dprintf(STDERR, HEADER "syntax error: %s\n", msg);
 	while (*cur != '\0')
 		cur++;
 	*line = cur;
 }
 
-void	parse_error(const char *msg, t_data *data, t_token **token)
+void	parse_error(t_data *data, const char *msg, t_token **token)
 {
 	t_token	*cur;
 
@@ -46,15 +40,24 @@ void	parse_error(const char *msg, t_data *data, t_token **token)
 	data->is_abort = 1;
 	data->exit_status = ERROR_SYNTAX;
 	if (msg != NULL)
-		ft_dprintf(STDERR_FILENO, HEADER "syntax error: %s\n", msg);
+		ft_dprintf(STDERR, HEADER "syntax error: %s\n", msg);
 	while (cur != NULL)
 		cur = cur->next;
 	*token = cur;
 }
 
-void	expand_error(const char *msg, t_data *data)
+void	builtin_error(t_data *data, const char *msg, const char *errstr)
 {
-	data->is_abort = 1;
+	char	buf[1024];
+
+	ft_strlcpy(buf, HEADER, sizeof(buf));
 	if (msg != NULL)
-		ft_dprintf(STDERR_FILENO, HEADER "%s\n", msg);
+		ft_strlcat(buf, msg, sizeof(buf));
+	if (errstr != NULL)
+	{
+		ft_strlcat(buf, ": ", sizeof(buf));
+		ft_strlcat(buf, errstr, sizeof(buf));
+	}
+	ft_dprintf(STDERR, "%s\n", buf);
+	data->exit_status = EXIT_FAILURE;
 }

@@ -2,11 +2,18 @@
 
 #include "minishell.h"
 
-static void	init_data(t_data *data)
+static void	setup_shell(t_data *data, char **envp)
 {
+	rl_outstream = stderr;
+	setup_signal();
 	data->exit_status = 0;
 	data->is_abort = 0;
-	data->env = NULL;
+	data->env = init_env(envp);
+}
+
+static void	reset_shell(t_data *data)
+{
+	free_env(&data->env);
 }
 
 static void	process_line(t_data *data, char *line)
@@ -16,9 +23,7 @@ static void	process_line(t_data *data, char *line)
 
 	data->is_abort = 0;
 	token = tokenize(data, line);
-	// print_token(token);
 	node = parse(data, token);
-	// print_node(node);
 	expand(data, node);
 	if (!data->is_abort)
 		execute(data, node);
@@ -26,61 +31,31 @@ static void	process_line(t_data *data, char *line)
 	free_token(token);
 }
 
-static t_env *init_env_list(char **envp)
-{
-	t_env *env_list = NULL;
-	int    i = 0;
-
-	if (envp == NULL)
-		return NULL;
-	while (envp[i])
-	{
-		char *equal_pos = strchr(envp[i], '=');
-		if (equal_pos)
-		{
-			size_t keylen = equal_pos - envp[i];
-			char  *key = strndup(envp[i], keylen);
-			char  *val = strdup(equal_pos + 1);
-
-			set_env(&env_list, key, val);
-
-			free(key);
-			free(val);
-		}
-		i++;
-	}
-	return (env_list);
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 	char	*line;
-	(void)argc;
-	(void)argv;
 
-	rl_outstream = stderr;
-	init_data(&data);
-	data.env = init_env_list(envp);
-	setup_signal();
+	(void)argc, (void)argv;
+	setup_shell(&data, envp);
 	while (1)
 	{
 		g_signal = 0;
 		rl_event_hook = check_signal_main;
-		if (isatty(STDIN_FILENO))
+		if (isatty(STDIN))
 			line = readline(PROMPT);
 		else
-			line = get_next_line_nonl(STDIN_FILENO);
+			line = get_next_line_nonl(STDIN);
 		if (line == NULL)
 			break ;
-		if (*line)
+		if (*line != '\0')
 		{
 			add_history(line);
 			process_line(&data, line);
 		}
 		free(line);
 	}
-	if (isatty(STDIN_FILENO))
-		ft_dprintf(STDERR_FILENO, "exit\n");
-	return (data.exit_status);
+	if (isatty(STDIN))
+		ft_dprintf(STDERR, "exit\n");
+	return (reset_shell(&data), data.exit_status);
 }

@@ -9,12 +9,12 @@ void	append_char(char **s, char c)
 
 	size = 2;
 	if (*s != NULL)
-		size += strlen(*s);
+		size += ft_strlen(*s);
 	new = malloc(size * sizeof(char));
 	if (new == NULL)
 	{
 		free(*s);
-		fatal_error("malloc");
+		fatal_error("malloc", strerror(errno));
 	}
 	if (*s != NULL)
 		ft_strlcpy(new, *s, size);

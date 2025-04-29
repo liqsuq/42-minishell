@@ -19,7 +19,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <limits.h>
-# include <stdbool.h>
 # include "libft/libft.h"
 
 # ifndef PATH_MAX
@@ -30,9 +29,9 @@
 # define HEADER "minishell: "
 # define PROMPT "minish$ "
 # define PROMPT_HEREDOC "> "
-# define SQUOTE '\''
-# define DQUOTE '\"'
-# define ERROR_GENERAL 1
+# define STDIN STDIN_FILENO
+# define STDOUT STDOUT_FILENO
+# define STDERR STDERR_FILENO
 # define ERROR_SYNTAX 2
 # define ERROR_NOPERM 126
 # define ERROR_NOFILE 127
@@ -84,7 +83,7 @@ typedef struct s_data
 {
 	int				exit_status;
 	int				is_abort;
-	t_env 		*env;
+	t_env			*env;
 }					t_data;
 
 extern volatile sig_atomic_t	g_signal;
@@ -93,17 +92,21 @@ extern volatile sig_atomic_t	g_signal;
 int		is_blank(char c);
 int		is_metacharacter(char c);
 t_token	*tokenize(t_data *data, char *line);
-
+// tokenize/tokenize_operator.c
+int		is_operator(const char *s);
+t_token	*tokenize_operator(t_data *data, char **line);
+// tokenize/tokenize_word.c
+int		is_word(const char *s);
+t_token	*tokenize_word(t_data *data, char **line);
 // tokenize/tokenuils.c
-int		tokenlen(t_token *token);
 t_token	*new_token(char *word, t_token_kind kind);
 t_token	*add_token(t_token **head, t_token *new);
-t_token	*dup_token(t_token *token);
 void	free_token(t_token *token);
+t_token	*dup_token(t_token *token);
+void	pop_token(t_token **head, t_token *token, t_token *prev);
 
 // parse/parse.c
 t_node	*parse(t_data *data, t_token *token);
-
 // parse/nodeutils.c
 t_node	*new_node(t_node_kind kind);
 t_node	*add_node(t_node **head, t_node *new);
@@ -112,86 +115,67 @@ void	free_node(t_node *node);
 // expand/expand.c
 void	expand(t_data *data, t_node *node);
 void	append_char(char **s, char c);
-
 // expand/expand_variable.c
 void	expand_variable(t_data *data, t_node *node);
 void	expand_variable_token(t_token *token, int force, t_env *env);
-
 // expand/expand_parameter.c
 void	expand_parameter(t_data *data, t_node *node);
 void	expand_parameter_token(t_data *data, t_token *token, int force);
-
 // expand/expand_word.c
 void	expand_word(t_data *data, t_node *node);
-
 // expand/expand_quote.c
 void	expand_quote(t_data *data, t_node *node);
 void	expand_quote_token(t_token *token);
-
 // expand/expand_heredoc.c
 void	expand_heredoc(t_data *data, t_node *node);
 
 // execute/execute.c
 void	execute(t_data *data, t_node *node);
-void 	execute_command(t_data *data, t_node *node);
+void	execute_command(t_data *data, t_node *node);
 int		is_builtin(t_token *args);
 void	execute_builtin(t_data *data, t_node *node);
-
-// execute/argvutils.c
+// execute/executils.c
 char	**new_argv(t_token *args);
 void	free_argv(char **argv);
-
-// execute/pathutils.c
-char	*resolve_path(t_env *env, char *line);
+char	*find_path(t_env *env, char *line);
 
 // redirect/redirect.c
-void	redirect(t_node *redi, t_env **env);
+void	setup_redirect(t_node *redi, t_env **env);
 void	reset_redirect(t_node *redi);
 
 // pipeline/pipeline.c
-int 	pipeline(t_data *data, t_node *node, int prev_pipeout);
+int		pipeline(t_data *data, t_node *node, int prev_pipeout);
 
 // builtin
-void	builtin_env(t_data *data);
-void	builtin_cd(t_data *data, char **argv);
-void	builtin_pwd(t_data *data, char **argv);
-void	builtin_exit(t_data *data, char **argv);
 void	builtin_echo(t_data *data, char **argv);
-void	builtin_unset(t_data *data, char **argv);
+void	builtin_cd(t_data *data, char **argv);
+void	builtin_pwd(t_data *data);
 void	builtin_export(t_data *data, char **argv);
-
-// misc/error.c
-void	fatal_error(const char *msg);
-void	assert_error(const char *msg);
-void	tokenize_error(const char *msg, t_data *data, char **line);
-void	parse_error(const char *msg, t_data *data, t_token **token);
-void	expand_error(const char *msg, t_data *data);
-
-// misc/debug.c
-void	print_argv(char **str);
-void	print_token(t_token *token);
-void	print_env(t_env *env);
-void	print_redir(t_node *redir);
-void	print_node(t_node *node);
-
-// misc/ft_funcs.c
-int		ft_strcmp(const char *s1, const char *s2);
-char	*get_next_line_nonl(int fd);
-// void	*ft_realloc(void *ptr, size_t size);
+void	builtin_unset(t_data *data, char **argv);
+void	builtin_env(t_data *data);
+void	builtin_exit(t_data *data, char **argv);
 
 // misc/signal.c
 int		check_signal_main(void);
 int		check_signal_heredoc(void);
 void	setup_signal(void);
 void	reset_signal(void);
-
+// misc/environ.c
+char	**dump_environ(t_env *env);
+void	free_environ(char ***envp);
 // misc/envutils.c
 t_env	*new_env(char *key, char *value);
-t_env	*free_env(t_env *env);
+void	free_env(t_env **env);
 char	*get_env(t_env *env, char *key);
 int		set_env(t_env **env, char *key, char *value);
-int		unset_env(t_env **env, char *key);
-char	**dump_env(t_env *env);
-void	free_envp(char **envp);
+t_env	*init_env(char **envp);
+// misc/error.c
+void	fatal_error(const char *msg, const char *errstr);
+void	tokenize_error(t_data *data, const char *msg, char **line);
+void	parse_error(t_data *data, const char *msg, t_token **token);
+void	builtin_error(t_data *data, const char *msg, const char *errstr);
+// misc/ft_funcs.c
+int		ft_strcmp(const char *s1, const char *s2);
+char	*get_next_line_nonl(int fd);
 
 #endif

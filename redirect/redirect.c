@@ -8,12 +8,12 @@ static void	open_redirect(t_node *redi, int srcfd, int flags, mode_t mode)
 
 	dstfd = open(redi->args->word, flags, mode);
 	if (dstfd < 0)
-		fatal_error(redi->args->word);
+		fatal_error(redi->args->word, strerror(errno));
 	redi->stashed_fd = dup(srcfd);
 	if (redi->stashed_fd < 0)
-		fatal_error("dup");
+		fatal_error("dup", strerror(errno));
 	if (dup2(dstfd, srcfd) < 0)
-		fatal_error("dup2");
+		fatal_error("dup2", strerror(errno));
 	close(dstfd);
 }
 
@@ -31,30 +31,30 @@ static void	open_heredoc(t_node *redi)
 	int	pipefd[2];
 
 	if (pipe(pipefd) < 0)
-		fatal_error("pipe");
+		fatal_error("pipe", strerror(errno));
 	write_heredoc(pipefd[1], redi->args->next);
 	close(pipefd[1]);
-	redi->stashed_fd = dup(STDIN_FILENO);
+	redi->stashed_fd = dup(STDIN);
 	if (redi->stashed_fd < 0)
-		fatal_error("dup");
-	if (dup2(pipefd[0], STDIN_FILENO) < 0)
-		fatal_error("dup2");
+		fatal_error("dup", strerror(errno));
+	if (dup2(pipefd[0], STDIN) < 0)
+		fatal_error("dup2", strerror(errno));
 	close(pipefd[0]);
 }
 
-void	redirect(t_node *redi, t_env **env)
+void	setup_redirect(t_node *redi, t_env **env)
 {
 	if (redi == NULL)
 		return ;
 	if (redi->kind == ND_REDIR_OUT)
-		open_redirect(redi, STDOUT_FILENO, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		open_redirect(redi, STDOUT, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	else if (redi->kind == ND_REDIR_IN)
-		open_redirect(redi, STDIN_FILENO, O_RDONLY, 0644);
+		open_redirect(redi, STDIN, O_RDONLY, 0644);
 	else if (redi->kind == ND_REDIR_APPEND)
-		open_redirect(redi, STDOUT_FILENO, O_CREAT | O_WRONLY | O_APPEND, 0644);
+		open_redirect(redi, STDOUT, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else if (redi->kind == ND_REDIR_HEREDOC)
 		open_heredoc(redi);
-	return (redirect(redi->next, env));
+	return (setup_redirect(redi->next, env));
 }
 
 void	reset_redirect(t_node *redi)
@@ -65,10 +65,10 @@ void	reset_redirect(t_node *redi)
 		return ;
 	reset_redirect(redi->next);
 	if (redi->kind == ND_REDIR_IN || redi->kind == ND_REDIR_HEREDOC)
-		fd = STDIN_FILENO;
+		fd = STDIN;
 	else
-		fd = STDOUT_FILENO;
+		fd = STDOUT;
 	if (dup2(redi->stashed_fd, fd) < 0)
-		fatal_error("dup2");
+		fatal_error("dup2", strerror(errno));
 	close(redi->stashed_fd);
 }

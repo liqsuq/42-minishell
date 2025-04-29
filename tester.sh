@@ -294,17 +294,16 @@ assert 1 'exit 9223372036854775808'
 assert 1 'exit 3141592653589793238462643383279'
 
 ## export
-export BLKLST="OLDPWD|SHLVL|_="
+export BLKLST="^OLDPWD|^SHLVL|^_="
 assert 1 'export TEST=test'
-assert 1 'export|sort|vgrep $BLKLST'
-assert 1 'export FUGA=test\nexport|sort|vgrep $BLKLST'
-assert 1 'export FUGA=te HOGE=st\nexport|sort|vgrep $BLKLST'
-assert 1 'export [WRONG]'
-assert 1 'export [WRONG]\nexport|sort|vgrep $BLKLST'
-assert 1 'export [WRONG]=test\nexport|sort|vgrep $BLKLST'
-assert 1 'export [WRONG]=te HOGE=st\nexport|sort|vgrep $BLKLST'
-assert 1 'export HOGE=[OK] FUGA=tst\nexport|sort|vgrep $BLKLST'
-assert 1 'export HOGE="HOGE=hoge"\nexport|sort|vgrep $BLKLST'
+assert 1 'export HOGE=test\nenv|sort|grep -vE "$BLKLST"'
+assert 1 'export HOGE=te FUGA=st\nenv|sort|grep -vE "$BLKLST"'
+assert 1 'export [NG]'
+assert 1 'export [NG]\nenv|sort|grep -vE "$BLKLST"'
+assert 1 'export [NG]=test\nenv|sort|grep -vE "$BLKLST"'
+assert 1 'export [NG]=te =st\nenv|sort|grep -vE "$BLKLST"'
+assert 1 'export HO=[OK] GE=tst\nenv|sort|grep -vE "$BLKLST"'
+assert 1 'export HO="HO=hoge"\nenv|sort|grep -vE "$BLKLST"'
 
 ## echo
 assert 1 'echo'
