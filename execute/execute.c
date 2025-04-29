@@ -34,7 +34,7 @@ void	execute_command(t_data *data, t_node *node)
 
 int	is_builtin(t_token *args)
 {
-	char *const	cmd[] = {"exit", "echo", "unset", "env", "export", "cd", "pwd"};
+	char *const	cmd[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
 	size_t		i;
 
 	if (args == NULL)
@@ -55,20 +55,20 @@ void	execute_builtin(t_data *data, t_node *node)
 	if (argv == NULL)
 		exit(EXIT_FAILURE);
 	setup_redirect(node->redirects, NULL);
-	if (ft_strncmp(node->args->word, "exit", 5) == 0)
-		builtin_exit(data, argv);
-	else if (ft_strncmp(node->args->word, "export", 7) == 0)
-		builtin_export(data, argv);
-	else if (ft_strncmp(node->args->word, "echo", 5) == 0)
+	if (ft_strncmp(node->args->word, "echo", 5) == 0)
 		builtin_echo(data, argv);
-	else if (ft_strncmp(node->args->word, "unset", 6) == 0)
-		builtin_unset(data, argv);
-	else if (ft_strncmp(node->args->word, "env", 4) == 0)
-		builtin_env(data);
 	else if (ft_strncmp(node->args->word, "cd", 3) == 0)
 		builtin_cd(data, argv);
 	else if (ft_strncmp(node->args->word, "pwd", 4) == 0)
 		builtin_pwd(data);
+	else if (ft_strncmp(node->args->word, "export", 7) == 0)
+		builtin_export(data, argv);
+	else if (ft_strncmp(node->args->word, "unset", 6) == 0)
+		builtin_unset(data, argv);
+	else if (ft_strncmp(node->args->word, "env", 4) == 0)
+		builtin_env(data);
+	else if (ft_strncmp(node->args->word, "exit", 5) == 0)
+		builtin_exit(data, argv);
 	reset_redirect(node->redirects);
 	free_argv(argv);
 }
