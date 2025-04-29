@@ -1,4 +1,14 @@
-// envutils.c
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   envutils.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/29 18:59:24 by kadachi           #+#    #+#             */
+/*   Updated: 2025/04/29 18:59:26 by kadachi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -8,7 +18,7 @@ t_env	*new_env(char *key, char *value)
 
 	if (!key || !value)
 		return (NULL);
-	env = calloc(1, sizeof(t_env));
+	env = ft_calloc(1, sizeof(t_env));
 	if (env == NULL)
 		return (NULL);
 	env->key = ft_strdup(key);

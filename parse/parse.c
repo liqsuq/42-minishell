@@ -1,4 +1,14 @@
-// parse.c
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/29 18:46:20 by kadachi           #+#    #+#             */
+/*   Updated: 2025/04/29 18:59:05 by kadachi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -31,7 +41,7 @@ static t_token	*parse_redirect(t_data *data, t_node *node, t_token *token)
 		nd = add_node(&node->redirects, new_node(ND_REDIR_IN));
 	else
 		nd = add_node(&node->redirects, new_node(ND_REDIR_HEREDOC));
-	tk = tk->next; // 次のトークンがデリミタ or ファイル名
+	tk = tk->next;
 	nd->args = dup_token(tk);
 	tk = tk->next;
 	return (tk);
