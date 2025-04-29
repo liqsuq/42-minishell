@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 10:00:31 by kadachi           #+#    #+#             */
-/*   Updated: 2024/12/21 14:04:52 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/04/29 17:44:09 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
 int		ft_printf(const char *format, ...);
 int		ft_dprintf(int fd, const char *format, ...);
-int		ft_vdprintf(int fd, const char *format, va_list argp);
+int		ft_vdprintf(int fd, const char *format, va_list *argp);
 
 char	*get_next_line(int fd);
 int		ft_fgetc(int fd);

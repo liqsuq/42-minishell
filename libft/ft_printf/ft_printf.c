@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 15:12:47 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/29 13:25:42 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/04/29 17:41:30 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,17 @@ static int	select_format(int fd, const char *format, va_list *argp)
 	return (-1);
 }
 
-int	ft_vdprintf(int fd, const char *format, va_list argp)
+int	ft_vdprintf(int fd, const char *format, va_list *argp)
 {
-	int	size;
-	int	tmp;
+	int		size;
+	int		tmp;
 
 	size = 0;
 	while (*format != '\0')
 	{
 		if (*format == '%')
 		{
-			tmp = select_format(fd, format, &argp);
+			tmp = select_format(fd, format, argp);
 			if (tmp == -1)
 				return (-1);
 			format += 2;
@@ -68,7 +68,7 @@ int	ft_printf(const char *format, ...)
 	if (format == NULL)
 		return (-1);
 	va_start(argp, format);
-	size = ft_vdprintf(1, format, argp);
+	size = ft_vdprintf(1, format, &argp);
 	va_end(argp);
 	return (size);
 }
@@ -81,7 +81,7 @@ int	ft_dprintf(int fd, const char *format, ...)
 	if (format == NULL)
 		return (-1);
 	va_start(argp, format);
-	size = ft_vdprintf(fd, format, argp);
+	size = ft_vdprintf(fd, format, &argp);
 	va_end(argp);
 	return (size);
 }
