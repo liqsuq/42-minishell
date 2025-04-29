@@ -65,7 +65,7 @@ static t_token	*tokenize_operator(t_data *data, char **line)
 			return (new_token(op, TK_OP));
 		}
 	}
-	return (tokenize_error("unexpected operator", data, line), NULL);
+	return (tokenize_error(data, "unexpected operator", line), NULL);
 }
 
 static t_token	*tokenize_word(t_data *data, char **line)
@@ -84,7 +84,7 @@ static t_token	*tokenize_word(t_data *data, char **line)
 				if (*cur == '\0')
 					break ;
 			if (*cur == '\0')
-				return (tokenize_error("unmatched quote", data, line), NULL);
+				return (tokenize_error(data, "unmatched quote", line), NULL);
 		}
 		cur++;
 	}
@@ -109,7 +109,7 @@ t_token	*tokenize(t_data *data, char *line)
 		else if (is_word(line))
 			add_token(&head, tokenize_word(data, &line));
 		else
-			tokenize_error("unknown tokenize error", data, &line);
+			tokenize_error(data, "unknown tokenize error", &line);
 	}
 	return (head);
 }

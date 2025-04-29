@@ -72,11 +72,11 @@ static t_token	*parse_pipeline(t_data *data, t_node **node, t_token *token)
 			if (tk->next)
 				tk = parse_pipeline(data, node, tk->next);
 			else
-				parse_error("unexpected end of file", data, &tk);
+				parse_error(data, "unexpected end of file", &tk);
 		}
 	}
 	else
-		parse_error("unexpected token", data, &tk);
+		parse_error(data, "unexpected token", &tk);
 	return (tk);
 }
 

@@ -18,7 +18,7 @@ void	fatal_error(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
-void	tokenize_error(const char *msg, t_data *data, char **line)
+void	tokenize_error(t_data *data, const char *msg, char **line)
 {
 	char	*cur;
 
@@ -32,7 +32,7 @@ void	tokenize_error(const char *msg, t_data *data, char **line)
 	*line = cur;
 }
 
-void	parse_error(const char *msg, t_data *data, t_token **token)
+void	parse_error(t_data *data, const char *msg, t_token **token)
 {
 	t_token	*cur;
 
@@ -46,14 +46,14 @@ void	parse_error(const char *msg, t_data *data, t_token **token)
 	*token = cur;
 }
 
-void	expand_error(const char *msg, t_data *data)
+void	expand_error(t_data *data, const char *msg)
 {
 	data->is_abort = 1;
 	if (msg != NULL)
 		ft_dprintf(STDERR, HEADER "%s\n", msg);
 }
 
-void	builtin_error(const char *msg, t_data *data, const char *errstr)
+void	builtin_error(t_data *data, const char *msg, const char *errstr)
 {
 	char	buf[1024];
 
