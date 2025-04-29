@@ -9,7 +9,7 @@ void	append_char(char **s, char c)
 
 	size = 2;
 	if (*s != NULL)
-		size += strlen(*s);
+		size += ft_strlen(*s);
 	new = malloc(size * sizeof(char));
 	if (new == NULL)
 	{
