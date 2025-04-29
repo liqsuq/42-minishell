@@ -28,11 +28,7 @@ static int	check_name(t_data *data, char *arg)
 	else
 		key_len = ft_strlen(arg);
 	if (!is_valid_identifier(arg, key_len))
-	{
-		ft_dprintf(STDERR, HEADER "export: not a valid identifier\n");
-		data->exit_status = 1;
-		return (0);
-	}
+		return (builtin_error(data, "export: not a valid identifier", NULL), 0);
 	return (1);
 }
 

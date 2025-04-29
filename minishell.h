@@ -146,7 +146,7 @@ void	builtin_echo(t_data *data, char **argv);
 // builtin/builtin_cd.c
 void	builtin_cd(t_data *data, char **argv);
 // builtin/builtin_pwd.c
-void	builtin_pwd(t_data *data, char **argv);
+void	builtin_pwd(t_data *data);
 // builtin/builtin_export.c
 void	builtin_export(t_data *data, char **argv);
 // builtin/builtin_unset.c

@@ -19,9 +19,9 @@ static int	is_opt_newline(char *str)
 
 void	builtin_echo(t_data *data, char **argv)
 {
-	int		opt_newline;
-	int		done_optparse;
-	int		i;
+	int	opt_newline;
+	int	done_optparse;
+	int	i;
 
 	opt_newline = 0;
 	done_optparse = 0;

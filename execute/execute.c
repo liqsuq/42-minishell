@@ -68,7 +68,7 @@ void	execute_builtin(t_data *data, t_node *node)
 	else if (ft_strncmp(node->args->word, "cd", 3) == 0)
 		builtin_cd(data, argv);
 	else if (ft_strncmp(node->args->word, "pwd", 4) == 0)
-		builtin_pwd(data, argv);
+		builtin_pwd(data);
 	reset_redirect(node->redirects);
 	free_argv(argv);
 }
