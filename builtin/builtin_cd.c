@@ -9,16 +9,14 @@ static void	change_directory(t_data *data, char *path)
 		return ;
 	if (chdir(path) < 0)
 	{
-		ft_dprintf(STDERR, HEADER "cd: %s\n", strerror(errno));
-		data->exit_status = 1;
+		builtin_error("cd: chdir", data, strerror(errno));
 		return ;
 	}
 	if (get_env(data->env, "PWD") != NULL)
 	{
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 		{
-			ft_dprintf(STDERR, HEADER "cd: getcwd: %s\n", strerror(errno));
-			data->exit_status = 1;
+			builtin_error("cd: getcwd", data, strerror(errno));
 			return ;
 		}
 		set_env(&data->env, "PWD", cwd);
@@ -37,8 +35,7 @@ static void change_relative(t_data *data, const char *relpath)
 	{
 		if (getcwd(cwd, PATH_MAX) == NULL)
 		{
-			ft_dprintf(STDERR, HEADER "cd: getcwd: %s\n", strerror(errno));
-			data->exit_status = 1;
+			builtin_error("cd: getcwd", data, strerror(errno));
 			return ;
 		}
 		wd = cwd;
@@ -56,8 +53,7 @@ static void change_homedir(t_data *data)
 	home = get_env(data->env, "HOME");
 	if (home == NULL)
 	{
-		ft_dprintf(STDERR, HEADER "cd: HOME not set\n");
-		data->exit_status = 1;
+		builtin_error("cd: HOME not set", data, NULL);
 		return ;
 	}
 	change_directory(data, home);
@@ -70,10 +66,7 @@ void	builtin_cd(t_data *data, char **argv)
 	if (argv[1] == NULL)
 		change_homedir(data);
 	else if (argv[2] != NULL)
-	{
-		ft_dprintf(STDERR, HEADER "cd: too many arguments\n");
-		data->exit_status = 1;
-	}
+		builtin_error("cd: too many arguments", data, NULL);
 	else if (argv[1][0] == '/')
 		change_directory(data, argv[1]);
 	else

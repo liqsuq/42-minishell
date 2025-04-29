@@ -52,3 +52,19 @@ void	expand_error(const char *msg, t_data *data)
 	if (msg != NULL)
 		ft_dprintf(STDERR, HEADER "%s\n", msg);
 }
+
+void	builtin_error(const char *msg, t_data *data, const char *errstr)
+{
+	char	buf[1024];
+
+	ft_strlcpy(buf, HEADER, sizeof(buf));
+	if (msg != NULL)
+		ft_strlcat(buf, msg, sizeof(buf));
+	if (errstr != NULL)
+	{
+		ft_strlcat(buf, ": ", sizeof(buf));
+		ft_strlcat(buf, errstr, sizeof(buf));
+	}
+	ft_dprintf(STDERR, "%s\n", buf);
+	data->exit_status = EXIT_FAILURE;
+}

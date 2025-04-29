@@ -161,6 +161,7 @@ void	fatal_error(const char *msg);
 void	tokenize_error(const char *msg, t_data *data, char **line);
 void	parse_error(const char *msg, t_data *data, t_token **token);
 void	expand_error(const char *msg, t_data *data);
+void	builtin_error(const char *msg, t_data *data, const char *errstr);
 // misc/ft_funcs.c
 int		ft_strcmp(const char *s1, const char *s2);
 char	*get_next_line_nonl(int fd);
