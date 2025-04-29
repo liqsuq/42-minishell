@@ -88,9 +88,9 @@ static void	wait_pids(t_data *data, pid_t pid)
 			else if (WIFSIGNALED(status))
 			{
 				if (WTERMSIG(status) == SIGQUIT)
-					ft_dprintf(STDERR_FILENO, "Quit\n");
+					ft_dprintf(STDERR, "Quit\n");
 				else if (WTERMSIG(status) == SIGINT)
-					ft_dprintf(STDERR_FILENO, "\n");
+					ft_dprintf(STDERR, "\n");
 				data->exit_status = WTERMSIG(status) + 128;
 			}
 		}

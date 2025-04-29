@@ -22,13 +22,13 @@ static void	read_heredoc(t_data *data, t_node **node)
 	{
 		g_signal = 0;
 		rl_event_hook = check_signal_heredoc;
-		if (isatty(STDIN_FILENO))
+		if (isatty(STDIN))
 			line = readline(PROMPT_HEREDOC);
 		else
-			line = get_next_line_nonl(STDIN_FILENO);
+			line = get_next_line_nonl(STDIN);
 		if (line == NULL)
 		{
-			ft_dprintf(STDERR_FILENO,
+			ft_dprintf(STDERR,
 				HEADER "warning: here-document delimited by end-of-file\n");
 			break ;
 		}

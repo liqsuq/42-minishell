@@ -42,10 +42,10 @@ int	main(int argc, char **argv, char **envp)
 	{
 		g_signal = 0;
 		rl_event_hook = check_signal_main;
-		if (isatty(STDIN_FILENO))
+		if (isatty(STDIN))
 			line = readline(PROMPT);
 		else
-			line = get_next_line_nonl(STDIN_FILENO);
+			line = get_next_line_nonl(STDIN);
 		if (line == NULL)
 			break ;
 		if (*line != '\0')
@@ -55,7 +55,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		free(line);
 	}
-	if (isatty(STDIN_FILENO))
-		ft_dprintf(STDERR_FILENO, "exit\n");
+	if (isatty(STDIN))
+		ft_dprintf(STDERR, "exit\n");
 	return (reset_shell(&data), data.exit_status);
 }

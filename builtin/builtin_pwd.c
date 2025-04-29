@@ -10,7 +10,7 @@ void	builtin_pwd(t_data *data, char **argv)
 	pwd_env = get_env(data->env, "PWD");
 	if (pwd_env)
 	{
-		ft_putendl_fd(pwd_env, STDOUT_FILENO);
+		ft_putendl_fd(pwd_env, STDOUT);
 		data->exit_status = 0;
 		return ;
 	}
@@ -18,12 +18,12 @@ void	builtin_pwd(t_data *data, char **argv)
 	{
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 		{
-			ft_dprintf(STDERR_FILENO, HEADER "pwd: getcwd: %s\n",
+			ft_dprintf(STDERR, HEADER "pwd: getcwd: %s\n",
 				strerror(errno));
 			data->exit_status = 1;
 			return ;
 		}
-		ft_putendl_fd(cwd, STDOUT_FILENO);
+		ft_putendl_fd(cwd, STDOUT);
 		data->exit_status = 0;
 	}
 }

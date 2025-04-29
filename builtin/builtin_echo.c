@@ -34,11 +34,11 @@ void	builtin_echo(t_data *data, char **argv)
 			continue ;
 		}
 		done_optparse = 1;
-		ft_putstr_fd(argv[i], STDOUT_FILENO);
+		ft_putstr_fd(argv[i], STDOUT);
 		if (argv[i + 1] != NULL)
-			ft_putchar_fd(' ', STDOUT_FILENO);
+			ft_putchar_fd(' ', STDOUT);
 	}
 	if (!opt_newline)
-		ft_putchar_fd('\n', STDOUT_FILENO);
+		ft_putchar_fd('\n', STDOUT);
 	data->exit_status = 0;
 }

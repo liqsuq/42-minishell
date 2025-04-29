@@ -25,14 +25,14 @@ static void	attach_pipe(t_node *node, int prev_pipeout, int *pipefd)
 
 	if (prev_pipeout != -1)
 	{
-		move_fd(prev_pipeout, STDIN_FILENO);
+		move_fd(prev_pipeout, STDIN);
 	}
 	if (has_pipe(node))
 	{
 		retval = close(pipefd[0]);
 		if (retval < 0)
 			fatal_error("close");
-		move_fd(pipefd[1], STDOUT_FILENO);
+		move_fd(pipefd[1], STDOUT);
 	}
 }
 

@@ -20,7 +20,7 @@ void	fatal_error(const char *msg)
 
 void	assert_error(const char *msg)
 {
-	ft_dprintf(STDERR_FILENO, "Error: %s\n", msg);
+	ft_dprintf(STDERR, "Error: %s\n", msg);
 	exit(EXIT_FAILURE);
 }
 
@@ -32,7 +32,7 @@ void	tokenize_error(const char *msg, t_data *data, char **line)
 	data->is_abort = 1;
 	data->exit_status = ERROR_SYNTAX;
 	if (msg != NULL)
-		ft_dprintf(STDERR_FILENO, HEADER "syntax error: %s\n", msg);
+		ft_dprintf(STDERR, HEADER "syntax error: %s\n", msg);
 	while (*cur != '\0')
 		cur++;
 	*line = cur;
@@ -46,7 +46,7 @@ void	parse_error(const char *msg, t_data *data, t_token **token)
 	data->is_abort = 1;
 	data->exit_status = ERROR_SYNTAX;
 	if (msg != NULL)
-		ft_dprintf(STDERR_FILENO, HEADER "syntax error: %s\n", msg);
+		ft_dprintf(STDERR, HEADER "syntax error: %s\n", msg);
 	while (cur != NULL)
 		cur = cur->next;
 	*token = cur;
@@ -56,5 +56,5 @@ void	expand_error(const char *msg, t_data *data)
 {
 	data->is_abort = 1;
 	if (msg != NULL)
-		ft_dprintf(STDERR_FILENO, HEADER "%s\n", msg);
+		ft_dprintf(STDERR, HEADER "%s\n", msg);
 }
