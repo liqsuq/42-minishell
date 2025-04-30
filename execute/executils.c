@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:43:18 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/30 14:16:12 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/04/30 17:21:00 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,6 @@ char	*find_path(t_env *env, char path[PATH_MAX], char *line)
 			break ;
 		env_value = end + 1;
 	}
+	ft_dprintf(STDERR, HEADER "command not found\n");
 	return (NULL);
 }
