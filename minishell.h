@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:51:30 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/29 19:00:56 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/04/30 13:13:58 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,8 @@ void	execute_builtin(t_data *data, t_node *node);
 // execute/executils.c
 char	**new_argv(t_token *args);
 void	free_argv(char **argv);
-char	*find_path(t_env *env, char *line);
+// char	*find_path(t_env *env, char *line);
+char	*find_path(t_env *env, char path[PATH_MAX], char *line);
 
 // redirect/redirect.c
 void	setup_redirect(t_node *redi, t_env **env);
