@@ -1,18 +1,27 @@
-// execute.c
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/29 18:43:05 by kadachi           #+#    #+#             */
+/*   Updated: 2025/04/30 13:14:26 by kadachi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
 void	execute_command(t_data *data, t_node *node)
 {
 	char	**argv;
-	char	*path;
+	char	path[PATH_MAX];
 	char	**envp;
 
 	argv = new_argv(node->args);
 	if (argv == NULL)
 		exit(EXIT_FAILURE);
-	path = find_path(data->env, argv[0]);
-	if (path == NULL)
+	if (find_path(data->env, path, argv[0]) == NULL)
 	{
 		free_argv(argv);
 		exit(ERROR_NOFILE);
@@ -22,7 +31,6 @@ void	execute_command(t_data *data, t_node *node)
 	execve(path, argv, envp);
 	reset_redirect(node->redirects);
 	free_argv(argv);
-	free(path);
 	free_environ(&envp);
 	if (errno == ENOENT)
 		exit(ERROR_NOFILE);

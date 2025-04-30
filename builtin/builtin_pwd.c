@@ -1,4 +1,15 @@
-// builtin_pwd.c
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_pwd.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/29 18:42:29 by kadachi           #+#    #+#             */
+/*   Updated: 2025/04/29 18:58:44 by kadachi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	builtin_pwd(t_data *data)
@@ -10,7 +21,6 @@ void	builtin_pwd(t_data *data)
 	if (pwd)
 	{
 		ft_printf("%s\n", pwd);
-		// ft_putendl_fd(pwd_env, STDOUT);
 		data->exit_status = 0;
 	}
 	else
@@ -18,7 +28,6 @@ void	builtin_pwd(t_data *data)
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 			return (builtin_error(data, "pwd: getcwd", strerror(errno)));
 		ft_printf("%s\n", cwd);
-		// ft_putendl_fd(cwd, STDOUT);
 		data->exit_status = 0;
 	}
 }

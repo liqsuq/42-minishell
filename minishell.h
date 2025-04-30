@@ -1,4 +1,14 @@
-// minisehll.h
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/29 18:51:30 by kadachi           #+#    #+#             */
+/*   Updated: 2025/04/30 13:13:58 by kadachi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -52,31 +62,27 @@ typedef struct s_token
 
 typedef enum e_node_kind
 {
-	ND_SIMPLE_CMD,		// 単純なコマンド
-	ND_REDIR_OUT,		// 標準出力リダイレクト
-	ND_REDIR_IN,		// 標準入力リダイレクト
-	ND_REDIR_APPEND,	// 出力の追加リダイレクト
-	ND_REDIR_HEREDOC,	// ヒアドキュメント
+	ND_SIMPLE_CMD,
+	ND_REDIR_OUT,
+	ND_REDIR_IN,
+	ND_REDIR_APPEND,
+	ND_REDIR_HEREDOC,
 }	t_node_kind;
 
-// コマンドやリダイレクトを表すノード構造体
-// args: arguments of the command or redirection
-//       NOTE: if node is a heredoc, args->next contains heredoc contents
 typedef struct s_node
 {
-	t_node_kind		kind;				// ノードの種類
-	t_token			*args;				// 引数リスト・リダイレクトの引数
-	struct s_node	*redirects;			// リダイレクトリスト
-	int				stashed_fd;			// 保持している標準ファイルディスクリプタ
-	struct s_node	*next;				// 次のノード
+	t_node_kind		kind;
+	t_token			*args;
+	struct s_node	*redirects;
+	int				stashed_fd;
+	struct s_node	*next;
 }					t_node;
 
-// 環境変数のキーと値を格納するリスト構造体
 typedef struct s_env
 {
-	char			*key;	// 環境変数のキー
-	char			*value;	// 環境変数の値
-	struct s_env	*next;	// 次の環境変数
+	char			*key;
+	char			*value;
+	struct s_env	*next;
 }					t_env;
 
 typedef struct s_data
@@ -137,7 +143,8 @@ void	execute_builtin(t_data *data, t_node *node);
 // execute/executils.c
 char	**new_argv(t_token *args);
 void	free_argv(char **argv);
-char	*find_path(t_env *env, char *line);
+// char	*find_path(t_env *env, char *line);
+char	*find_path(t_env *env, char path[PATH_MAX], char *line);
 
 // redirect/redirect.c
 void	setup_redirect(t_node *redi, t_env **env);

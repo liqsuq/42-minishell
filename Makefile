@@ -12,14 +12,14 @@ REDSRC := $(addprefix redirect/, \
 	redirect.c)
 PIPSRC := $(addprefix pipeline/, \
 	pipeline.c)
-MSCSRC := $(addprefix misc/, \
-	signal.c environ.c envutils.c error.c ft_funcs.c)
 BLTSRC := $(addprefix builtin/, \
 	builtin_echo.c builtin_cd.c builtin_pwd.c builtin_export.c \
-	builtin_unset.c builtin_env.c builtin_exit.c) 
+	builtin_unset.c builtin_env.c builtin_exit.c)
+MSCSRC := $(addprefix misc/, \
+	signal.c environ.c envutils.c error.c ft_funcs.c)
 SOURCE := main.c \
 	$(TOKSRC) $(PARSRC) $(EXPSRC) $(EXESRC) \
-	$(REDSRC) $(PIPSRC) $(MSCSRC) $(BLTSRC)
+	$(REDSRC) $(PIPSRC) $(BLTSRC) $(MSCSRC)
 OBJECT := $(SOURCE:.c=.o)
 LFTDIR := libft
 LFT := $(LFTDIR)/libft.a
