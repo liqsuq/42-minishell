@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:45:36 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/29 18:45:40 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/01 17:19:14 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,19 @@ char	**dump_environ(t_env *env)
 	size_t	i;
 	size_t	len;
 
+	if (env == NULL)
+		return (NULL);
 	count = envcount(env);
 	envp = malloc((count + 1) * sizeof(char *));
-	if (!envp)
-		fatal_error("malloc", strerror(errno));
+	if (envp == NULL)
+		return (NULL);
 	i = 0;
 	while (i < count)
 	{
 		len = ft_strlen(env->key) + 1 + ft_strlen(env->value) + 1;
 		envp[i] = malloc(len * sizeof(char));
-		if (!envp[i])
-			fatal_error("malloc", strerror(errno));
+		if (envp[i] == NULL)
+			return (free_environ(&envp), NULL);
 		ft_strlcpy(envp[i], env->key, len);
 		ft_strlcat(envp[i], "=", len);
 		ft_strlcat(envp[i++], env->value, len);

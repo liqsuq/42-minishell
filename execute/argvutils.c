@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executils.c                                        :+:      :+:    :+:   */
+/*   argvutils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:43:18 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/30 14:16:12 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/01 17:00:13 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	trans_args(char **argv, t_token *args)
+static char	**trans_args(char **argv, t_token *args)
 {
 	if (args == NULL)
-		return ;
+		return (argv);
 	*argv = ft_strdup(args->word);
-	trans_args(argv + 1, args->next);
+	if (*argv == NULL)
+		return (NULL);
+	return (trans_args(argv + 1, args->next));
 }
 
 char	**new_argv(t_token *args)
@@ -35,43 +37,19 @@ char	**new_argv(t_token *args)
 	}
 	argv = ft_calloc((len + 1), sizeof(char *));
 	if (argv == NULL)
-		fatal_error("ft_calloc", strerror(errno));
-	trans_args(argv, args);
+		return (NULL);
+	if (trans_args(argv, args) == NULL)
+		return (free_argv(&argv), NULL);
 	return (argv);
 }
 
-void	free_argv(char **argv)
+void	free_argv(char ***argv)
 {
 	char	**cur;
 
-	cur = argv;
+	cur = *argv;
 	while (*cur != NULL)
 		free(*cur++);
-	free(argv);
-}
-
-char	*find_path(t_env *env, char path[PATH_MAX], char *line)
-{
-	char	*env_value;
-	char	*end;
-
-	if (ft_strchr(line, '/'))
-		return (ft_strlcpy(path, line, PATH_MAX), path);
-	env_value = get_env(env, "PATH");
-	while (line && *line && env_value && *env_value)
-	{
-		ft_bzero(path, PATH_MAX);
-		end = ft_strchr(env_value, ':');
-		if (end == NULL)
-			end = env_value + ft_strlen(env_value);
-		ft_strlcpy(path, env_value, end - env_value + 1);
-		ft_strlcat(path, "/", PATH_MAX);
-		ft_strlcat(path, line, PATH_MAX);
-		if (access(path, X_OK) == 0)
-			return (path);
-		if (*end == '\0')
-			break ;
-		env_value = end + 1;
-	}
-	return (NULL);
+	free(*argv);
+	*argv = NULL;
 }

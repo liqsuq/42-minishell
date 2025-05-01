@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:51:30 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/30 13:13:58 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/01 17:38:55 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 # define HEADER "minishell: "
 # define PROMPT "minish$ "
 # define PROMPT_HEREDOC "> "
+# define BUFFER_SIZE 1024
 # define STDIN STDIN_FILENO
 # define STDOUT STDOUT_FILENO
 # define STDERR STDERR_FILENO
@@ -46,6 +47,7 @@
 # define ERROR_NOPERM 126
 # define ERROR_NOFILE 127
 # define ERROR_INVALID 128
+# define WARN_NONDELIM "warning: here-document delimited by end-of-file\n"
 
 typedef enum e_token_kind
 {
@@ -94,6 +96,9 @@ typedef struct s_data
 
 extern volatile sig_atomic_t	g_signal;
 
+// main.c
+void	exit_shell(t_data *data, int status);
+
 // tokenize/tokenize.c
 int		is_blank(char c);
 int		is_metacharacter(char c);
@@ -107,7 +112,7 @@ t_token	*tokenize_word(t_data *data, char **line);
 // tokenize/tokenuils.c
 t_token	*new_token(char *word, t_token_kind kind);
 t_token	*add_token(t_token **head, t_token *new);
-void	free_token(t_token *token);
+void	free_token(t_token **token);
 t_token	*dup_token(t_token *token);
 void	pop_token(t_token **head, t_token *token, t_token *prev);
 
@@ -116,7 +121,7 @@ t_node	*parse(t_data *data, t_token *token);
 // parse/nodeutils.c
 t_node	*new_node(t_node_kind kind);
 t_node	*add_node(t_node **head, t_node *new);
-void	free_node(t_node *node);
+void	free_node(t_node **node);
 
 // expand/expand.c
 void	expand(t_data *data, t_node *node);
@@ -140,14 +145,14 @@ void	execute(t_data *data, t_node *node);
 void	execute_command(t_data *data, t_node *node);
 int		is_builtin(t_token *args);
 void	execute_builtin(t_data *data, t_node *node);
-// execute/executils.c
+// execute/argvutils.c
 char	**new_argv(t_token *args);
-void	free_argv(char **argv);
-// char	*find_path(t_env *env, char *line);
+void	free_argv(char ***argv);
+// execute/find_path.c
 char	*find_path(t_env *env, char path[PATH_MAX], char *line);
 
 // redirect/redirect.c
-void	setup_redirect(t_node *redi, t_env **env);
+void	setup_redirect(t_node *redi);
 void	reset_redirect(t_node *redi);
 
 // pipeline/pipeline.c

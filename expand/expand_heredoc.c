@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:58:19 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/29 18:58:22 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/01 15:35:39 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,17 @@ static void	read_heredoc(t_data *data, t_node **node)
 {
 	char	*line;
 
+	g_signal = 0;
+	rl_event_hook = check_signal_heredoc;
 	while (1)
 	{
-		g_signal = 0;
-		rl_event_hook = check_signal_heredoc;
 		if (isatty(STDIN))
 			line = readline(PROMPT_HEREDOC);
 		else
 			line = get_next_line_nonl(STDIN);
 		if (line == NULL)
 		{
-			ft_dprintf(STDERR,
-				HEADER "warning: here-document delimited by end-of-file\n");
+			ft_dprintf(STDERR, HEADER WARN_NONDELIM);
 			break ;
 		}
 		if (ft_strcmp(line, (*node)->args->word) == 0 || g_signal == SIGINT)
@@ -47,7 +46,8 @@ static void	read_heredoc(t_data *data, t_node **node)
 			free(line);
 			break ;
 		}
-		add_token(&(*node)->args, new_token(line, TK_WORD));
+		if (add_token(&(*node)->args, new_token(line, TK_WORD)) == NULL)
+			(free(line), fatal_error("add_token", strerror(errno)));
 	}
 	if (g_signal == SIGINT)
 		interrupt_heredoc(data);

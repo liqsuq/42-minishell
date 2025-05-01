@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:46:56 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/29 18:47:03 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/01 16:58:40 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,15 @@ t_token	*tokenize(t_data *data, char *line)
 		if (skip_blank(&line))
 			continue ;
 		else if (is_operator(line))
-			add_token(&head, tokenize_operator(data, &line));
+		{
+			if (add_token(&head, tokenize_operator(data, &line)) == NULL)
+				fatal_error("add_token", strerror(errno));
+		}
 		else if (is_word(line))
-			add_token(&head, tokenize_word(data, &line));
+		{
+			if (add_token(&head, tokenize_word(data, &line)) == NULL)
+				fatal_error("add_token", strerror(errno));
+		}
 		else
 			tokenize_error(data, "unknown tokenize error", &line);
 	}
