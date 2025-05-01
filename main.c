@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:47:39 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/01 17:41:06 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/01 17:56:53 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static void	setup_shell(t_data *data, char **envp)
 	data->exit_status = 0;
 	data->is_abort = 0;
 	data->env = init_env(envp);
+	if (data->env == NULL)
+		fatal_error("init_env", strerror(errno));
 }
 
 static void	reset_shell(t_data *data)
