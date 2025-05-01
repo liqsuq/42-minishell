@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:42:13 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/01 18:10:25 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/01 18:22:08 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ static void	export_arg(t_data *data, char *arg)
 	arg[key_len] = '=';
 	if (retval != 0)
 		builtin_error(data, "export: set_env", strerror(errno));
-	
 }
 
 void	builtin_export(t_data *data, char **argv)
