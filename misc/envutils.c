@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:59:24 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/01 17:59:05 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/01 18:20:32 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,11 @@ t_env	*init_env(char **envp)
 	char	*eq_pos;
 	char	*key;
 
+	if (envp == NULL)
+		return (NULL);
 	env = NULL;
 	i = -1;
-	while (envp != NULL && envp[++i] != NULL)
+	while (envp[++i] != NULL)
 	{
 		eq_pos = ft_strchr(envp[i], '=');
 		if (eq_pos == NULL)
