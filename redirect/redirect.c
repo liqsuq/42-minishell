@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:46:34 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/29 18:46:37 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/01 17:12:54 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	open_heredoc(t_node *redi)
 	close(pipefd[0]);
 }
 
-void	setup_redirect(t_node *redi, t_env **env)
+void	setup_redirect(t_node *redi)
 {
 	if (redi == NULL)
 		return ;
@@ -64,7 +64,7 @@ void	setup_redirect(t_node *redi, t_env **env)
 		open_redirect(redi, STDOUT, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else if (redi->kind == ND_REDIR_HEREDOC)
 		open_heredoc(redi);
-	return (setup_redirect(redi->next, env));
+	return (setup_redirect(redi->next));
 }
 
 void	reset_redirect(t_node *redi)

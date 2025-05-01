@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:41:14 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/29 18:41:35 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/01 18:04:35 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ static void	change_directory(t_data *data, char *path)
 	{
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 			return (builtin_error(data, "cd: getcwd", strerror(errno)));
-		set_env(&data->env, "PWD", cwd);
+		if (set_env(&data->env, "PWD", cwd))
+			return (builtin_error(data, "cd: set_env", strerror(errno)));
 	}
 	data->exit_status = 0;
 }

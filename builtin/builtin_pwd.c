@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:42:29 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/29 18:58:44 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/01 18:12:51 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	builtin_pwd(t_data *data)
 	char	cwd[PATH_MAX];
 
 	pwd = get_env(data->env, "PWD");
-	if (pwd)
+	if (pwd != NULL)
 	{
 		ft_printf("%s\n", pwd);
 		data->exit_status = 0;

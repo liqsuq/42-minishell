@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:43:05 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/30 13:14:26 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/01 17:21:38 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,29 @@
 
 void	execute_command(t_data *data, t_node *node)
 {
-	char	**argv;
 	char	path[PATH_MAX];
+	char	**argv;
 	char	**envp;
 
+	if (find_path(data->env, path, node->args->word) == NULL)
+		exit_shell(data, ERROR_NOFILE);
 	argv = new_argv(node->args);
 	if (argv == NULL)
-		exit(EXIT_FAILURE);
-	if (find_path(data->env, path, argv[0]) == NULL)
-	{
-		free_argv(argv);
-		exit(ERROR_NOFILE);
-	}
+		fatal_error("new_argv", strerror(errno));
 	envp = dump_environ(data->env);
-	setup_redirect(node->redirects, &data->env);
+	if (envp == NULL)
+		fatal_error("dump_environ", strerror(errno));
+	setup_redirect(node->redirects);
 	execve(path, argv, envp);
 	reset_redirect(node->redirects);
-	free_argv(argv);
+	free_argv(&argv);
 	free_environ(&envp);
 	if (errno == ENOENT)
-		exit(ERROR_NOFILE);
+		exit_shell(data, ERROR_NOFILE);
 	else if (errno == EACCES || errno == ENOEXEC)
-		exit(ERROR_NOPERM);
+		exit_shell(data, ERROR_NOPERM);
 	else
-		exit(EXIT_FAILURE);
+		exit_shell(data, EXIT_FAILURE);
 }
 
 int	is_builtin(t_token *args)
@@ -60,8 +59,8 @@ void	execute_builtin(t_data *data, t_node *node)
 
 	argv = new_argv(node->args);
 	if (argv == NULL)
-		exit(EXIT_FAILURE);
-	setup_redirect(node->redirects, NULL);
+		fatal_error("new_argv", strerror(errno));
+	setup_redirect(node->redirects);
 	if (ft_strcmp(node->args->word, "echo") == 0)
 		builtin_echo(data, argv);
 	else if (ft_strcmp(node->args->word, "cd") == 0)
@@ -77,7 +76,7 @@ void	execute_builtin(t_data *data, t_node *node)
 	else if (ft_strcmp(node->args->word, "exit") == 0)
 		builtin_exit(data, argv);
 	reset_redirect(node->redirects);
-	free_argv(argv);
+	free_argv(&argv);
 }
 
 static void	wait_pids(t_data *data, pid_t pid)

@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:46:20 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/29 18:59:05 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/01 17:31:42 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,11 @@ static int	is_redirect(t_token *token)
 	return (0);
 }
 
-static t_token	*parse_redirect(t_data *data, t_node *node, t_token *token)
+static t_token	*parse_redirect(t_node *node, t_token *token)
 {
 	t_node	*nd;
 	t_token	*tk;
 
-	(void)data;
 	tk = token;
 	if (!ft_strcmp(tk->word, ">"))
 		nd = add_node(&node->redirects, new_node(ND_REDIR_OUT));
@@ -41,13 +40,15 @@ static t_token	*parse_redirect(t_data *data, t_node *node, t_token *token)
 		nd = add_node(&node->redirects, new_node(ND_REDIR_IN));
 	else
 		nd = add_node(&node->redirects, new_node(ND_REDIR_HEREDOC));
+	if (nd == NULL)
+		fatal_error("add_node", strerror(errno));
 	tk = tk->next;
 	nd->args = dup_token(tk);
 	tk = tk->next;
 	return (tk);
 }
 
-static t_token	*parse_simple_cmd(t_data *data, t_node **node, t_token *token)
+static t_token	*parse_simple_cmd(t_node **node, t_token *token)
 {
 	t_node	*nd;
 	t_token	*tk;
@@ -58,11 +59,12 @@ static t_token	*parse_simple_cmd(t_data *data, t_node **node, t_token *token)
 	{
 		if (tk->kind == TK_WORD)
 		{
-			add_token(&nd->args, dup_token(tk));
+			if (add_token(&nd->args, dup_token(tk)) == NULL)
+				fatal_error("add_token", strerror(errno));
 			tk = tk->next;
 		}
 		else if (is_redirect(tk))
-			tk = parse_redirect(data, nd, tk);
+			tk = parse_redirect(nd, tk);
 		else
 			break ;
 	}
@@ -76,7 +78,7 @@ static t_token	*parse_pipeline(t_data *data, t_node **node, t_token *token)
 	tk = token;
 	if (tk && (tk->kind == TK_WORD || is_redirect(tk)))
 	{
-		tk = parse_simple_cmd(data, node, tk);
+		tk = parse_simple_cmd(node, tk);
 		if (tk && tk->kind == TK_OP && !ft_strcmp(tk->word, "|"))
 		{
 			if (tk->next)

@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:46:27 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/29 18:46:29 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/01 15:51:56 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	pipeline(t_data *data, t_node *node, int prev_pipeout)
 		if (!is_builtin(node->args))
 			execute_command(data, node);
 		execute_builtin(data, node);
-		exit(data->exit_status);
+		exit_shell(data, data->exit_status);
 	}
 	detach_pipe(node, prev_pipeout, pipefd);
 	if (has_pipe(node))

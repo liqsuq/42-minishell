@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:42:02 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/29 18:42:07 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/01 17:11:28 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ void	builtin_exit(t_data *data, char **argv)
 	long long	num;
 	char		*endptr;
 
-	ft_dprintf(STDERR, "exit\n");
+	if (isatty(STDIN))
+		ft_dprintf(STDERR, "exit\n");
 	if (argv[1] == NULL)
 		summarize(&stat, NULL, data->exit_status);
 	else if (argv[2] != NULL)
@@ -98,6 +99,6 @@ void	builtin_exit(t_data *data, char **argv)
 		else
 			summarize(&stat, NULL, (int)(unsigned int)(num % 256));
 	}
-	free_argv(argv);
-	exit(stat);
+	free_argv(&argv);
+	exit_shell(data, stat);
 }
