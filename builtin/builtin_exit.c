@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:42:02 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/01 17:11:28 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/02 19:43:30 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,10 @@ void	builtin_exit(t_data *data, char **argv)
 		ft_dprintf(STDERR, "exit\n");
 	if (argv[1] == NULL)
 		summarize(&stat, NULL, data->exit_status);
-	else if (argv[2] != NULL)
-		summarize(&stat, "exit: too many arguments\n", EXIT_FAILURE);
 	else if (!is_number(argv[1]))
 		summarize(&stat, "exit: numeric argument required\n", ERROR_SYNTAX);
+	else if (argv[2] != NULL)
+		summarize(&stat, "exit: too many arguments\n", EXIT_FAILURE);
 	else
 	{
 		num = ft_strtoll(argv[1], &endptr);
