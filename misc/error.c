@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:45:45 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/01 17:21:10 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/02 16:02:41 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	parse_error(t_data *data, const char *msg, t_token **token)
 	*token = cur;
 }
 
-void	builtin_error(t_data *data, const char *msg, const char *errstr)
+void	bltin_error(t_data *data, const char *msg, const char *errstr)
 {
 	char	buf[BUFFER_SIZE];
 

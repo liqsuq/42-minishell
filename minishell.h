@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:51:30 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/01 17:38:55 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/02 16:05:09 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,12 @@ typedef struct s_env
 	struct s_env	*next;
 }					t_env;
 
+typedef struct s_path
+{
+	char			*name;
+	struct s_path	*next;
+}					t_path;
+
 typedef struct s_data
 {
 	int				exit_status;
@@ -166,6 +172,12 @@ void	builtin_export(t_data *data, char **argv);
 void	builtin_unset(t_data *data, char **argv);
 void	builtin_env(t_data *data);
 void	builtin_exit(t_data *data, char **argv);
+// builtin/pathutils.c
+t_path	*new_path(char *name, size_t len);
+t_path	*push_path(t_path **head, t_path *new);
+void	pop_path(t_path **head, t_path *prev);
+char	*dump_path(t_path *head);
+void	free_path(t_path **path);
 
 // misc/signal.c
 int		check_signal_main(void);
@@ -185,7 +197,7 @@ t_env	*init_env(char **envp);
 void	fatal_error(const char *msg, const char *errstr);
 void	tokenize_error(t_data *data, const char *msg, char **line);
 void	parse_error(t_data *data, const char *msg, t_token **token);
-void	builtin_error(t_data *data, const char *msg, const char *errstr);
+void	bltin_error(t_data *data, const char *msg, const char *errstr);
 // misc/ft_funcs.c
 int		ft_strcmp(const char *s1, const char *s2);
 char	*get_next_line_nonl(int fd);

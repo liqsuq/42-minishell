@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:42:13 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/01 18:22:08 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/02 16:02:41 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	check_name(t_data *data, char *arg)
 	else
 		key_len = ft_strlen(arg);
 	if (!is_valid_identifier(arg, key_len))
-		return (builtin_error(data, "export: not a valid identifier", NULL), 0);
+		return (bltin_error(data, "export: not a valid identifier", NULL), 0);
 	return (1);
 }
 
@@ -56,7 +56,7 @@ static void	export_arg(t_data *data, char *arg)
 	retval = set_env(&data->env, arg, eq + 1);
 	arg[key_len] = '=';
 	if (retval != 0)
-		builtin_error(data, "export: set_env", strerror(errno));
+		bltin_error(data, "export: set_env", strerror(errno));
 }
 
 void	builtin_export(t_data *data, char **argv)
