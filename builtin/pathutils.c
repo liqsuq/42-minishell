@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 18:41:34 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/02 11:48:07 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/02 16:03:34 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,6 @@ void	pop_path(t_path **head, t_path *prev)
 	}
 	pop_path(&(*head)->next, *head);
 }
-
-// void	pop_path(t_path **head, t_path *prev)
-// {
-// 	if (head == NULL || *head == NULL)
-// 		return ;
-// 	if ((*head)->next == NULL)
-// 	{
-
-// 	pop_path(&(*head)->next, *head);
-// }
 
 char	*dump_path(t_path *head)
 {

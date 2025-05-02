@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:41:14 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/02 15:56:20 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/02 16:05:27 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,41 +14,30 @@
 
 static void	change_directory(t_data *data, t_path *path)
 {
-	char	*str;
+	char	*s;
 
-	str = dump_path(path);
-	if (str == NULL)
-		return (builtin_error(data, "cd: dump_path", strerror(errno)));
-	if (chdir(str) < 0)
-		return (free(str), builtin_error(data, "cd: chdir", strerror(errno)));
-	if (get_env(data->env, "PWD") != NULL)
-		if (set_env(&data->env, "PWD", str) < 0)
-			return (free(str), builtin_error(data, "cd: set_env", strerror(errno)));
-	free(str);
+	s = dump_path(path);
+	if (s == NULL)
+		return (bltin_error(data, "cd: dump_path", strerror(errno)));
+	if (chdir(s) < 0)
+		return (free(s), bltin_error(data, "cd: chdir", strerror(errno)));
+	if (get_env(data->env, "PWD") != NULL && set_env(&data->env, "PWD", s) < 0)
+		return (free(s), bltin_error(data, "cd: set_env", strerror(errno)));
+	free(s);
 	data->exit_status = 0;
 }
 
-static int stuck_path(t_data *data, t_path **path, char *arg)
+static int	stuck_path(t_data *data, t_path **path, char *arg)
 {
 	char	*slash;
 	size_t	len;
 
-	// {
-	// 	t_path *cur;
-	// 	cur = *path;
-	// 	printf("before path: /");
-	// 	while (cur != NULL)
-	// 	{
-	// 		printf("%s/", cur->name);
-	// 		cur = cur->next;
-	// 	}
-	// 	printf("\n");
-	// }
 	while (*arg != '\0')
 	{
 		if (*arg == '/' || (*arg == '.' && (*(arg + 1) == '/' || !*(arg + 1))))
 			arg += 1;
-		else if (*arg == '.' && *(arg + 1) == '.' && (*(arg + 2) == '/' || !*(arg + 2)))
+		else if (*arg == '.' && *(arg + 1) == '.'
+			&& (*(arg + 2) == '/' || !*(arg + 2)))
 			arg += (pop_path(path, NULL), 2);
 		else
 		{
@@ -58,21 +47,10 @@ static int stuck_path(t_data *data, t_path **path, char *arg)
 			else
 				len = ft_strlen(arg);
 			if (push_path(path, new_path(arg, len)) == NULL)
-				return (builtin_error(data, "cd: push_path", strerror(errno)), 1);
+				return (bltin_error(data, "cd: push_path", strerror(errno)), 1);
 			arg += len;
 		}
 	}
-	// {
-	// 	t_path *cur;
-	// 	cur = *path;
-	// 	printf("after path: /");
-	// 	while (cur != NULL)
-	// 	{
-	// 		printf("%s/", cur->name);
-	// 		cur = cur->next;
-	// 	}
-	// 	printf("\n");
-	// }
 	return (0);
 }
 
@@ -82,9 +60,9 @@ static t_path	*stuck_home(t_data *data, t_path **path)
 
 	home = get_env(data->env, "HOME");
 	if (home == NULL)
-		return (builtin_error(data, "cd: HOME not set", NULL), NULL);
+		return (bltin_error(data, "cd: HOME not set", NULL), NULL);
 	if (stuck_path(data, path, home))
-		return (builtin_error(data, "cd: stuck_path1", strerror(errno)), NULL);
+		return (bltin_error(data, "cd: stuck_path", strerror(errno)), NULL);
 	return (*path);
 }
 
@@ -97,11 +75,11 @@ static t_path	*stuck_wd(t_data *data, t_path **path)
 	if (wd == NULL)
 	{
 		if (getcwd(cwd, PATH_MAX) == NULL)
-			return (builtin_error(data, "cd: getcwd", strerror(errno)), NULL);
+			return (bltin_error(data, "cd: getcwd", strerror(errno)), NULL);
 		wd = cwd;
 	}
 	if (stuck_path(data, path, wd))
-		return (builtin_error(data, "cd: stuck_path2", strerror(errno)), NULL);
+		return (bltin_error(data, "cd: stuck_path", strerror(errno)), NULL);
 	return (*path);
 }
 
@@ -120,7 +98,7 @@ void	builtin_cd(t_data *data, char **argv)
 			return ;
 	}
 	else if (argv[2] != NULL)
-		return (builtin_error(data, "cd: too many arguments", NULL));
+		return (bltin_error(data, "cd: too many arguments", NULL));
 	else if (argv[1][0] == '/')
 		str = argv[1];
 	else if (stuck_wd(data, &path) != NULL)
@@ -128,7 +106,7 @@ void	builtin_cd(t_data *data, char **argv)
 	else
 		return ;
 	if (str != NULL && stuck_path(data, &path, str))
-		builtin_error(data, "cd: stuck_path3", strerror(errno));
+		bltin_error(data, "cd: stuck_path", strerror(errno));
 	change_directory(data, path);
 	free_path(&path);
 }
