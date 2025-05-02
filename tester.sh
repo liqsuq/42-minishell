@@ -163,6 +163,8 @@ assert 1 'true\necho $?'
 assert 1 'false\necho $?'
 assert 1 'true\n\necho $?'
 assert 1 'false\n\necho $?'
+assert 1 'true\necho "$?"'
+assert 1 'false\necho "$?"'
 
 # Word Splitting
 export MINISHTESTER1="hello    world"

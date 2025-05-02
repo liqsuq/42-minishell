@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:44:20 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/29 18:44:22 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/02 17:26:22 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	append_quote_para(char **dst, char **str, t_data *data)
 	append_char(dst, *cur++);
 	while (*cur != c)
 	{
-		if (c == '\"' && (*str)[0] == '$' && (*str)[1] == '?')
+		if (c == '\"' && cur[0] == '$' && cur[1] == '?')
 			append_status(dst, &cur, data);
 		else
 			append_char(dst, *cur++);
