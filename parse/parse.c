@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
+/*   By: nateshim <nateshim@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:46:20 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/01 17:31:42 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/03 03:43:06 by nateshim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,37 +48,44 @@ static t_token	*parse_redirect(t_node *node, t_token *token)
 	return (tk);
 }
 
-static t_token	*parse_simple_cmd(t_node **node, t_token *token)
+static t_token	*parse_simple_cmd(t_data *data, t_node **node, t_token *token)
 {
 	t_node	*nd;
-	t_token	*tk;
 
-	tk = token;
 	nd = add_node(node, new_node(ND_SIMPLE_CMD));
-	while (tk != NULL)
+	while (token != NULL)
 	{
-		if (tk->kind == TK_WORD)
+		if (token->kind == TK_WORD)
 		{
-			if (add_token(&nd->args, dup_token(tk)) == NULL)
+			if (add_token(&nd->args, dup_token(token)) == NULL)
 				fatal_error("add_token", strerror(errno));
-			tk = tk->next;
+			token = token->next;
 		}
-		else if (is_redirect(tk))
-			tk = parse_redirect(nd, tk);
+		else if (is_redirect(token))
+			token = parse_redirect(nd, token);
 		else
+		{
+			if (token->kind == TK_OP && ft_strcmp(token->word, "|") == 0)
+				break ;
+			if (token->kind == TK_OP)
+				parse_error(data, "newline", &token);
+			else
+				parse_error(data, token->word, &token);
 			break ;
+		}
 	}
-	return (tk);
+	return (token);
 }
 
 static t_token	*parse_pipeline(t_data *data, t_node **node, t_token *token)
 {
-	t_token	*tk;
+	t_token		*tk;
+	const char	*msg;
 
 	tk = token;
 	if (tk && (tk->kind == TK_WORD || is_redirect(tk)))
 	{
-		tk = parse_simple_cmd(node, tk);
+		tk = parse_simple_cmd(data, node, tk);
 		if (tk && tk->kind == TK_OP && !ft_strcmp(tk->word, "|"))
 		{
 			if (tk->next)
@@ -88,7 +95,13 @@ static t_token	*parse_pipeline(t_data *data, t_node **node, t_token *token)
 		}
 	}
 	else
-		parse_error(data, "unexpected token", &tk);
+	{
+		if (tk == NULL || tk->word == NULL)
+			msg = "newline";
+		else
+			msg = tk->word;
+		parse_error(data, msg, &tk);
+	}
 	return (tk);
 }
 

@@ -369,6 +369,16 @@ assert 1 'cd src\npwd'
 assert 1 'cd /etc\npwd'
 assert 1 'unset PWD\npwd\ncd /etc\npwd'
 
+## syntax error
+assert 1 '>'
+assert 1 '|'
+assert 1 'echo >'
+assert 1 'cat <'
+assert 1 'cat <<\n'
+assert 1 'echo foo |\n'
+assert 1 'echo > | ls'
+assert 1 'echo > >>'
+
 echo "==========================================================================="
 if [ $STATUS -eq 0 ]; then
 	echo "All tests passed"

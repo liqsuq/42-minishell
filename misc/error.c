@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
+/*   By: nateshim <nateshim@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:45:45 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/02 16:02:41 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/02 21:06:32 by nateshim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,30 @@ void	tokenize_error(t_data *data, const char *msg, char **line)
 
 void	parse_error(t_data *data, const char *msg, t_token **token)
 {
-	t_token	*cur;
+	const char	*tok;
+	t_token		*cur;
 
 	cur = *token;
 	data->is_abort = 1;
 	data->exit_status = ERROR_SYNTAX;
-	if (msg != NULL)
-		ft_dprintf(STDERR, HEADER "syntax error: %s\n", msg);
-	while (cur != NULL)
-		cur = cur->next;
-	*token = cur;
+	if (msg != NULL && *msg != '\0')
+		tok = msg;
+	else if (token != NULL && *token != NULL && (*token)->word != NULL)
+		tok = (*token)->word;
+	else
+		tok = "newline";
+	ft_dprintf(STDERR, HEADER "syntax error near unexpected token `%s'\n", tok);
+	if (token != NULL)
+	{
+		while (cur != NULL)
+		{
+			while (cur != NULL)
+				cur = cur->next;
+			*token = cur;
+		}
+		free(*token);
+		*token = NULL;
+	}
 }
 
 void	bltin_error(t_data *data, const char *msg, const char *errstr)
