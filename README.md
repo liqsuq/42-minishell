@@ -2,7 +2,7 @@
 
 <p align="center">
   <picture>
-    <img height="300" alt="minishellImage" src="https://github.com/user-attachments/assets/0b2786c2-d77e-450d-b866-a56cf853eec8">
+    <img height="400" alt="minishellImage" src="https://github.com/user-attachments/assets/96aab2ee-f9e3-4db8-ac33-61ad4aed5ad8">
   </picture>
 </p>
 
