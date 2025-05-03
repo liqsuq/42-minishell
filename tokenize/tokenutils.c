@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:47:08 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/01 13:58:52 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/03 12:47:25 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_token	*new_token(char *word, t_token_kind kind)
 
 	if (word == NULL)
 		return (NULL);
-	token = malloc(sizeof(t_token));
+	token = ft_calloc(1, sizeof(t_token));
 	if (token == NULL)
 		return (NULL);
 	token->word = word;
