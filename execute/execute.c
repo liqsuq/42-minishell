@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:43:05 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/01 17:21:38 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/03 14:35:37 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,26 @@
 
 void	execute_command(t_data *data, t_node *node)
 {
-	char	path[PATH_MAX];
 	char	**argv;
+	char	path[PATH_MAX];
 	char	**envp;
+	int		error;
 
-	if (find_path(data->env, path, node->args->word) == NULL)
-		exit_shell(data, ERROR_NOFILE);
 	argv = new_argv(node->args);
 	if (argv == NULL)
 		fatal_error("new_argv", strerror(errno));
+	if (find_path(data->env, path, argv[0]) == NULL)
+		(void)(free_argv(&argv), exit_shell(data, ERROR_NOFILE));
 	envp = dump_environ(data->env);
 	if (envp == NULL)
 		fatal_error("dump_environ", strerror(errno));
 	setup_redirect(node->redirects);
 	execve(path, argv, envp);
+	error = errno;
 	reset_redirect(node->redirects);
-	free_argv(&argv);
-	free_environ(&envp);
-	if (errno == ENOENT)
+	(void)(free_argv(&argv), free_environ(&envp));
+	ft_dprintf(STDERR, HEADER "%s\n", strerror(error));
+	if (error == ENOENT)
 		exit_shell(data, ERROR_NOFILE);
 	else if (errno == EACCES || errno == ENOEXEC)
 		exit_shell(data, ERROR_NOPERM);
@@ -111,9 +113,9 @@ void	execute(t_data *data, t_node *node)
 {
 	pid_t	pid;
 
-	if (node == NULL)
+	if (node == NULL || node->args == NULL || node->args->word == NULL)
 	{
-		data->exit_status = 1;
+		data->exit_status = EXIT_SUCCESS;
 		return ;
 	}
 	if (node->next == NULL && is_builtin(node->args))

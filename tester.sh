@@ -82,10 +82,13 @@ assert 1 './a.out'
 # no such command
 assert 1 'a.out'
 assert 1 'nosuchfile'
+assert 1 '/nosuchfile'
 
 # Unquoted args
 assert 1 'ls /'
 assert 1 'echo hello    world'
+assert 1 \'\'
+assert 1 \''/bin/ls test'\'
 
 # Single quote
 assert 1 'echo '\''hello   world'\'' '\''42Tokyo'\'
@@ -94,6 +97,8 @@ assert 1 'echo hello'\''      world'\'
 # Double quote
 assert 1 'echo '\"'hello   world'\"' '\"'42Tokyo'\"
 assert 1 'echo hello'\"'      world'\"
+assert 1 \"\"
+assert 1 \"'/bin/ls test'\"
 
 # Combined quote
 assert 1 'echo '\'\"'hello   world'\"\'' '\''42Tokyo'\'
@@ -168,6 +173,15 @@ assert 1 'echo > | ls'
 assert 1 'echo $USER'
 assert 1 'echo $USER$HOME$PWD'
 assert 1 'echo "$USER  $HOME   $PWD"'
+assert 1 '$NOVAR'
+assert 1 '$NOVAR $NOVAR'
+export PIPECHAR="|" OUTCHAR=">" INCHAR="<" APPENDCHAR=">>" HEREDOCCHAR="<<"
+assert 1 'echo $PIPECHAR'
+assert 1 'echo $OUTCHAR'
+assert 1 'echo $INCHAR'
+assert 1 'echo $APPENDCHAR'
+assert 1 'echo $HEREDOCCHAR'
+unset PIPECHAR OUTCHAR INCHAR APPENDCHAR HEREDOCCHAR
 
 # Expand Parameter
 assert 1 'echo $?'
