@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:46:20 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/03 11:19:29 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/03 11:22:03 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static t_token	*parse_simple_cmd(t_data *data, t_node **node, t_token *token)
 		else if (is_redirect(token))
 			token = parse_redirect(data, nd, token);
 		else
-			break;
+			break ;
 	}
 	return (token);
 }
