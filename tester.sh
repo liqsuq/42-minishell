@@ -163,6 +163,8 @@ assert 1 'true\necho $?'
 assert 1 'false\necho $?'
 assert 1 'true\n\necho $?'
 assert 1 'false\n\necho $?'
+assert 1 'true\necho "$?"'
+assert 1 'false\necho "$?"'
 
 # Word Splitting
 export MINISHTESTER1="hello    world"
@@ -292,8 +294,16 @@ assert 1 'exit 42 Tokyo'
 assert 1 'exit Tokyo 42'
 assert 1 'exit 1 2'
 assert 1 'exit 1024'
+assert 1 'exit 9223372036854775805'
+assert 1 'exit 9223372036854775806'
 assert 1 'exit 9223372036854775807'
 assert 1 'exit 9223372036854775808'
+assert 1 'exit 9223372036854775809'
+assert 1 'exit -9223372036854775806'
+assert 1 'exit -9223372036854775807'
+assert 1 'exit -9223372036854775808'
+assert 1 'exit -9223372036854775809'
+assert 1 'exit -9223372036854775810'
 assert 1 'exit 3141592653589793238462643383279'
 
 ## export

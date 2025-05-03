@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:42:02 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/02 19:43:30 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/02 20:41:10 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ static int	is_overflow(const char *nptr, unsigned long long n, int sign)
 
 static long long	ft_strtoll(const char *nptr, char **endptr)
 {
-	long long	n;
-	int			sign;
+	unsigned long long	n;
+	int					sign;
 
 	n = 0;
 	sign = 1;
@@ -58,11 +58,11 @@ static long long	ft_strtoll(const char *nptr, char **endptr)
 	if (*nptr == '-' || *nptr == '+')
 		if (*nptr++ == '-')
 			sign = -1;
-	while (ft_isdigit(*nptr) && !is_overflow(nptr, (unsigned long long)n, sign))
+	while (ft_isdigit(*nptr) && !is_overflow(nptr, n, sign))
 		n = n * 10 + *nptr++ - '0';
 	if (endptr != NULL)
 		*endptr = (char *)nptr;
-	if (!is_overflow(nptr, n, sign))
+	if (*nptr == '\0')
 		return (n * sign);
 	if (sign > 0)
 		return (LLONG_MAX);
