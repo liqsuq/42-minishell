@@ -2,7 +2,7 @@
 
 <p align="center">
   <picture>
-    <img height="400" alt="minishellImage" src="https://github.com/user-attachments/assets/96aab2ee-f9e3-4db8-ac33-61ad4aed5ad8">
+    <img height="300" alt="minishellImage" src="https://github.com/user-attachments/assets/96aab2ee-f9e3-4db8-ac33-61ad4aed5ad8">
   </picture>
 </p>
 
@@ -64,26 +64,28 @@ pipeline/   … パイプノード生成／実行
 tester.sh   … Bash 互換性テストスクリプト
 ```
 ## テスト
-tester.sh を実行すると Bash と Minishell の出力差分と終了コード差分を自動比較し、主要機能が互換であるか一括検証できます。
-```
-$ ./tester.sh
-```
-## Norminetteへの準拠
-このプロジェクトは、42 School Norminetteルール（v3.3.55）に厳密に準拠しています。Norminetteは、42のすべてのCプロジェクトで一貫したコーディングスタイルを強制するものであり、以下のようなルールがあります：
+コンパイル後`tester.sh`を実行すると Bash と Minishell の出力差分と終了コード差分を自動比較し、主要機能が互換であるか一括検証できます。
+<p align="left">
+  <img src="https://github.com/user-attachments/assets/acb01f2c-5a10-4465-86d0-332571e75438" height="500">
+</p>
 
-- 関数あたり最大25行
+## Norminetteへの適応 ※2025年05月時点
+
+このプロジェクトでは、42 School Norminette ルール (v3.3.55) に忠実に従っています。
+[Norminette (42School/norminette)](https://github.com/42School/norminette)
+ は、42のC言語プロジェクトで一貫したスタイルを強制するためのツールです。主なルールの一例は以下のとおりです。
+
+- 1関数につき最大25行
 - 1行あたり最大80文字
-- ファイルあたり最大5関数
-- 特定の変数宣言と命名規則
-- 標準ライブラリ関数の使用制限
-- 構造化された関数ヘッダーフォーマット
-- forループ、switch文、do-whileループの禁止
-- インデントにタブの使用が必須
+- 1ファイルあたり最大5関数
+- 定められた形式の関数ヘッダ
+- 標準ライブラリ関数の利用制限
+- 変数宣言・命名に関する厳密な規定
+- インデントはタブを用いて揃えること
+- `for`, `switch`, `do-while` などの文を使用禁止
 
-このリポジトリのすべてのコードは、公式の42 Norminette検証ツールでエラーなく合格しています。
 
 ## 評価
-<img src="https://github.com/user-attachments/assets/765ec3c2-7927-4a92-b718-ec39fc93c64d" alt="grade" style="width:20%;"/>
 
 検証日：〇年〇月〇日
 
