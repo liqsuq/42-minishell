@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:46:20 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/01 17:31:42 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/03 11:22:03 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,78 +18,75 @@ static int	is_redirect(t_token *token)
 	size_t		i;
 
 	i = -1;
-	if (token->next == NULL || token->next->kind != TK_WORD)
-		return (0);
 	while (++i < sizeof(ops) / sizeof(*ops))
 		if (!ft_strcmp(token->word, ops[i]))
 			return (1);
 	return (0);
 }
 
-static t_token	*parse_redirect(t_node *node, t_token *token)
+static t_token	*parse_redirect(t_data *data, t_node *node, t_token *token)
 {
 	t_node	*nd;
-	t_token	*tk;
 
-	tk = token;
-	if (!ft_strcmp(tk->word, ">"))
+	if (!ft_strcmp(token->word, ">"))
 		nd = add_node(&node->redirects, new_node(ND_REDIR_OUT));
-	else if (!ft_strcmp(tk->word, ">>"))
+	else if (!ft_strcmp(token->word, ">>"))
 		nd = add_node(&node->redirects, new_node(ND_REDIR_APPEND));
-	else if (!ft_strcmp(tk->word, "<"))
+	else if (!ft_strcmp(token->word, "<"))
 		nd = add_node(&node->redirects, new_node(ND_REDIR_IN));
 	else
 		nd = add_node(&node->redirects, new_node(ND_REDIR_HEREDOC));
 	if (nd == NULL)
 		fatal_error("add_node", strerror(errno));
-	tk = tk->next;
-	nd->args = dup_token(tk);
-	tk = tk->next;
-	return (tk);
+	token = token->next;
+	if (token == NULL || token->kind != TK_WORD)
+		return (parse_error(data, "unexpected token", &token), token);
+	nd->args = dup_token(token);
+	if (nd->args == NULL)
+		fatal_error("dup_token", strerror(errno));
+	token = token->next;
+	return (token);
 }
 
-static t_token	*parse_simple_cmd(t_node **node, t_token *token)
+static t_token	*parse_simple_cmd(t_data *data, t_node **node, t_token *token)
 {
 	t_node	*nd;
-	t_token	*tk;
 
-	tk = token;
 	nd = add_node(node, new_node(ND_SIMPLE_CMD));
-	while (tk != NULL)
+	if (nd == NULL)
+		fatal_error("add_node", strerror(errno));
+	while (token != NULL)
 	{
-		if (tk->kind == TK_WORD)
+		if (token->kind == TK_WORD)
 		{
-			if (add_token(&nd->args, dup_token(tk)) == NULL)
+			if (add_token(&nd->args, dup_token(token)) == NULL)
 				fatal_error("add_token", strerror(errno));
-			tk = tk->next;
+			token = token->next;
 		}
-		else if (is_redirect(tk))
-			tk = parse_redirect(nd, tk);
+		else if (is_redirect(token))
+			token = parse_redirect(data, nd, token);
 		else
 			break ;
 	}
-	return (tk);
+	return (token);
 }
 
 static t_token	*parse_pipeline(t_data *data, t_node **node, t_token *token)
 {
-	t_token	*tk;
-
-	tk = token;
-	if (tk && (tk->kind == TK_WORD || is_redirect(tk)))
+	if (token && (token->kind == TK_WORD || is_redirect(token)))
 	{
-		tk = parse_simple_cmd(node, tk);
-		if (tk && tk->kind == TK_OP && !ft_strcmp(tk->word, "|"))
+		token = parse_simple_cmd(data, node, token);
+		if (token && token->kind == TK_OP && !ft_strcmp(token->word, "|"))
 		{
-			if (tk->next)
-				tk = parse_pipeline(data, node, tk->next);
+			if (token->next)
+				token = parse_pipeline(data, node, token->next);
 			else
-				parse_error(data, "unexpected end of file", &tk);
+				parse_error(data, "unexpected end of file", &token);
 		}
 	}
 	else
-		parse_error(data, "unexpected token", &tk);
-	return (tk);
+		parse_error(data, "unexpected token", &token);
+	return (token);
 }
 
 t_node	*parse(t_data *data, t_token *token)
