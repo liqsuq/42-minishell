@@ -156,8 +156,12 @@ assert 1 'cat <<EO"F" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
 export EOF="eof"
 assert 1 'cat <<$EOF         \neof\n$EOF\nEOF'
 assert 1 'cat <<"$EOF"       \neof\n$EOF\nEOF'
+unset EOF
 assert 1 '<<'
 assert 1 'cat <<'
+assert 1 'echo test > .'
+assert 1 'echo test | echo test > .'
+assert 1 'echo test > . | echo test'
 
 # Pipe
 assert 1 'cat Makefile | grep minishell'
@@ -343,6 +347,7 @@ assert 1 'export [NG]=test\nenv|sort|grep -vE "$BLKLST"'
 assert 1 'export [NG]=te =st\nenv|sort|grep -vE "$BLKLST"'
 assert 1 'export HO=[OK] GE=tst\nenv|sort|grep -vE "$BLKLST"'
 assert 1 'export HO="HO=hoge"\nenv|sort|grep -vE "$BLKLST"'
+unset BLKLST
 
 ## echo
 assert 1 'echo'
@@ -368,6 +373,7 @@ assert 1 'unset NOVAR\necho $TEST1 $TEST2'
 assert 1 'unset novar\necho $TEST1 $TEST2'
 assert 1 'unset TEST1 TEST2\necho $TEST1 $TEST2'
 assert 1 'unset TEST1 NOVAR TEST2\necho $TEST1 $TEST2'
+unset TEST1 TEST2
 
 # env
 assert 1 'env | vgrep "OLDPWD|SHLVL|_="'
