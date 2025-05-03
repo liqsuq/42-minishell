@@ -107,6 +107,11 @@ assert 1 'echo hello >f1>f2>f3'
 rm -f f1 f2 f3
 assert 1 'echo hello >hello.txt world'
 rm -f hello.txt
+assert 1 '>'
+assert 1 'echo >'
+assert 1 '>>'
+assert 1 'echo >>'
+assert 1 'echo > >>'
 
 ## Redirecting input
 assert 1 'cat <Makefile'
@@ -116,6 +121,8 @@ echo 42Tokyo >f3
 assert 1 'cat <f1<f2<f3'
 rm -f f1 f2 f3
 assert 1 'cat <hoge'
+assert 1 '<'
+assert 1 'cat <'
 
 ## Here Document
 assert 1 'cat <<EOF\nEOF'
@@ -144,6 +151,8 @@ assert 1 'cat <<EO"F" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
 export EOF="eof"
 assert 1 'cat <<$EOF         \neof\n$EOF\nEOF'
 assert 1 'cat <<"$EOF"       \neof\n$EOF\nEOF'
+assert 1 '<<'
+assert 1 'cat <<'
 
 # Pipe
 assert 1 'cat Makefile | grep minishell'
@@ -151,6 +160,9 @@ assert 1 'cat | cat | ls\n\n'
 assert 1 'ls -l | grep test'
 assert 1 'echo foo | cat -e'
 assert 1 'pwd | cat'
+assert 1 '|'
+assert 1 'echo foo |'
+assert 1 'echo > | ls'
 
 # Expand Variable
 assert 1 'echo $USER'
@@ -349,7 +361,6 @@ assert 1 'cd /tmp/'
 assert 1 'cd /tmp///'
 assert 1 'cd /../../../././.././'
 assert 1 'cd src'
-
 assert 1 'cd \n echo $PWD'
 assert 1 'cd \n echo $PWD'
 assert 1 'cd .\n echo $PWD'
@@ -368,16 +379,6 @@ assert 1 'cd\npwd'
 assert 1 'cd src\npwd'
 assert 1 'cd /etc\npwd'
 assert 1 'unset PWD\npwd\ncd /etc\npwd'
-
-## syntax error
-assert 1 '>'
-assert 1 '|'
-assert 1 'echo >'
-assert 1 'cat <'
-assert 1 'cat <<\n'
-assert 1 'echo foo |\n'
-assert 1 'echo > | ls'
-assert 1 'echo > >>'
 
 echo "==========================================================================="
 if [ $STATUS -eq 0 ]; then
