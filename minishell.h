@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:51:30 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/02 16:05:09 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/03 19:05:54 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ void	free_argv(char ***argv);
 char	*find_path(t_env *env, char path[PATH_MAX], char *line);
 
 // redirect/redirect.c
-void	setup_redirect(t_node *redi);
+int		setup_redirect(t_node *redi);
 void	reset_redirect(t_node *redi);
 
 // pipeline/pipeline.c

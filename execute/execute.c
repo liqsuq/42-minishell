@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:43:05 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/03 14:35:37 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/03 19:27:33 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ void	execute_command(t_data *data, t_node *node)
 	envp = dump_environ(data->env);
 	if (envp == NULL)
 		fatal_error("dump_environ", strerror(errno));
-	setup_redirect(node->redirects);
+	if (setup_redirect(node->redirects) != 0)
+		fatal_error("open", strerror(errno));
 	execve(path, argv, envp);
 	error = errno;
 	reset_redirect(node->redirects);
@@ -37,8 +38,7 @@ void	execute_command(t_data *data, t_node *node)
 		exit_shell(data, ERROR_NOFILE);
 	else if (errno == EACCES || errno == ENOEXEC)
 		exit_shell(data, ERROR_NOPERM);
-	else
-		exit_shell(data, EXIT_FAILURE);
+	exit_shell(data, EXIT_FAILURE);
 }
 
 int	is_builtin(t_token *args)
@@ -62,7 +62,11 @@ void	execute_builtin(t_data *data, t_node *node)
 	argv = new_argv(node->args);
 	if (argv == NULL)
 		fatal_error("new_argv", strerror(errno));
-	setup_redirect(node->redirects);
+	if (setup_redirect(node->redirects) != 0)
+	{
+		data->exit_status = EXIT_FAILURE;
+		return ((void)(reset_redirect(node->redirects), free_argv(&argv)));
+	}
 	if (ft_strcmp(node->args->word, "echo") == 0)
 		builtin_echo(data, argv);
 	else if (ft_strcmp(node->args->word, "cd") == 0)
@@ -77,8 +81,7 @@ void	execute_builtin(t_data *data, t_node *node)
 		builtin_env(data);
 	else if (ft_strcmp(node->args->word, "exit") == 0)
 		builtin_exit(data, argv);
-	reset_redirect(node->redirects);
-	free_argv(&argv);
+	(void)(reset_redirect(node->redirects), free_argv(&argv));
 }
 
 static void	wait_pids(t_data *data, pid_t pid)
