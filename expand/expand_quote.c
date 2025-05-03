@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:44:29 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/29 18:44:33 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/03 15:02:03 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	remove_quote(t_token *token)
 	if (new_word == NULL)
 		fatal_error("ft_calloc", strerror(errno));
 	cur = token->word;
-	while (*cur != '\0' && !is_metacharacter(*cur))
+	while (*cur != '\0')
 	{
 		if (*cur == '\'' || *cur == '\"')
 		{
