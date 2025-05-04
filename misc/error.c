@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:45:45 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/02 16:02:41 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/04 12:23:38 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,20 @@ void	parse_error(t_data *data, const char *msg, t_token **token)
 	while (cur != NULL)
 		cur = cur->next;
 	*token = cur;
+}
+
+void	expand_error(t_data *data, const char *msg, t_node **node)
+{
+	t_node	*cur;
+
+	cur = *node;
+	data->is_abort = 1;
+	data->exit_status = EXIT_FAILURE;
+	if (msg != NULL)
+		ft_dprintf(STDERR, HEADER "%s\n", msg);
+	while (cur != NULL)
+		cur = cur->next;
+	*node = cur;
 }
 
 void	bltin_error(t_data *data, const char *msg, const char *errstr)
