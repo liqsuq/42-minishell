@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:43:05 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/04 11:54:30 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/04 12:09:13 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	execute_command(t_data *data, t_node *node)
 	char	**envp;
 	int		error;
 
-	if (setup_redirect(node->redirects) != 0)
+	if (node && setup_redirect(node->redirects) != 0)
 		exit_shell(data, EXIT_FAILURE);
 	if (node == NULL || node->args == NULL || node->args->word == NULL)
 		exit_shell(data, EXIT_SUCCESS);
