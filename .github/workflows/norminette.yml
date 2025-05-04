@@ -6,13 +6,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  check-norminette:
-    name: Norminette
+  build:
     runs-on: ubuntu-latest
     steps:
+      - name: update apt-get
+        run: sudo apt-get update
+      - name: install dependencies
+        run: sudo apt-get install -y pipx
+      - name: install norminette
+        run: pipx install norminette && pipx ensurepath
       - name: checkout
-        uses: actions/checkout@v3
-      - name: norminette
-        uses: 42School/norminette@3.3.58
-        with:
-          args: '-RCheckForbiddenSourceHeader'
+        uses: actions/checkout@v4
+      - name: run norminette
+        run: norminette
