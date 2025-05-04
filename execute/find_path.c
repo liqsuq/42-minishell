@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:45:37 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/03 18:02:25 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/04 17:36:26 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ char	*find_path(t_env *env, char path[PATH_MAX], char *line)
 	if (ft_strchr(line, '/'))
 		return (ft_strlcpy(path, line, PATH_MAX), path);
 	env_value = get_env(env, "PATH");
-	while (line && *line && env_value && *env_value)
+	if (env_value == NULL)
+		return (ft_strlcpy(path, line, PATH_MAX), path);
+	while (line && *line && *env_value)
 	{
 		ft_bzero(path, PATH_MAX);
 		end = ft_strchr(env_value, ':');

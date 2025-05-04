@@ -381,6 +381,8 @@ assert 1 'unset novar\necho $TEST1 $TEST2'
 assert 1 'unset TEST1 TEST2\necho $TEST1 $TEST2'
 assert 1 'unset TEST1 NOVAR TEST2\necho $TEST1 $TEST2'
 unset TEST1 TEST2
+assert 1 'unset PATH\nls'
+assert 1 'cd /usr/bin\nunset PATH\nls'
 
 # env
 assert 1 'env | vgrep "OLDPWD|SHLVL|_="'
