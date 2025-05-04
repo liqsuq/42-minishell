@@ -9,12 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: update apt-get
-        run: sudo apt-get update
       - name: install norminette
         run: pip install norminette==3.3.58
       - name: checkout
         uses: actions/checkout@v4
       - name: run norminette
         run: |
-          norminette | grep -ve 'OK!' -ve 'Notice'
+          out=$(norminette|tee /dev/stderr)
+          echo "$out"|grep -v 'OK!'|grep -v 'Notice'|grep -q .&&exit 1||exit 0
