@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:44:58 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/29 18:45:01 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/04 20:09:27 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ static void	expand_word_token(t_token *token)
 void	expand_word(t_data *data, t_node *node)
 {
 	t_token	*cur;
+	t_token	*next;
 
 	if (node == NULL || data->is_abort)
 		return ;
@@ -111,9 +112,10 @@ void	expand_word(t_data *data, t_node *node)
 	cur = node->args;
 	while (cur != NULL)
 	{
+		next = cur->next;
 		if (cur->word != NULL && ft_strlen(cur->word) == 0)
 			pop_token(&node->args, cur, NULL);
-		cur = cur->next;
+		cur = next;
 	}
 	expand_word(data, node->next);
 }
