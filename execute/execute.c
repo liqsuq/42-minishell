@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:43:05 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/04 12:09:13 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/04 17:16:26 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	execute_command(t_data *data, t_node *node)
 	char	**envp;
 	int		error;
 
-	if (node && setup_redirect(node->redirects) != 0)
+	if (setup_redirect(node->redirects) != 0)
 		exit_shell(data, EXIT_FAILURE);
-	if (node == NULL || node->args == NULL || node->args->word == NULL)
+	if (node->args == NULL || node->args->word == NULL)
 		exit_shell(data, EXIT_SUCCESS);
 	argv = new_argv(node->args);
 	if (argv == NULL)
@@ -110,6 +110,8 @@ void	execute(t_data *data, t_node *node)
 {
 	pid_t	pid;
 
+	if (node == NULL)
+		return ;
 	if (node->next == NULL && is_builtin(node->args))
 		execute_builtin(data, node);
 	else

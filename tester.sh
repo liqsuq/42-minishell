@@ -68,6 +68,8 @@ echo "+-------------------------------------------------------------------------
 
 # Empty line (EOF)
 assert 1 ''
+assert 1 '    '
+assert 1 '\t'
 assert 1 '$NOVAR'
 
 # Absolute path commands without args
