@@ -27,7 +27,7 @@ Minishellは、Bashが備える代表的な機能（コマンド実行やリダ�
 |-----------|---------------------------------------------------------------------|
 | プロンプト   | 	minish$ というプロンプトを常時表示し、履歴機能（readline）に対応 |
 | コマンド実行      | PATH 上のコマンド、または相対/絶対パス指定バイナリを execve(2) で起動 |
-| リダイレクト    | `<`, `>`,`>>`, `<<（Here-Document）`をネストも含めて正しく処理 |
+| リダイレクト    | `<`, `>`,`>>`, `<<（Here-Document)`をネストも含めて正しく処理 |
 | パイプ | 無限長パイプラインを再帰的に展開・実行 |
 | 環境変数展開   | `$VAR` と直前コマンド終了値を示す `$?` をトークン単位で展開 |
 | ビルドイン     | `echo`, `cd`, `pwd`, `export`, `unset`, `env`, `exit` |
@@ -63,11 +63,6 @@ tokenize/   … 字句解析器
 pipeline/   … パイプノード生成／実行
 tester.sh   … Bash 互換性テストスクリプト
 ```
-## テスト
-コンパイル後`tester.sh`を実行すると Bash と Minishell の出力差分と終了コード差分を自動比較し、主要機能が互換であるか一括検証できます。
-<p align="left">
-  <img src="https://github.com/user-attachments/assets/acb01f2c-5a10-4465-86d0-332571e75438" height="500">
-</p>
 
 ## Norminetteへの適応 ※2025年05月時点
 
@@ -83,7 +78,12 @@ tester.sh   … Bash 互換性テストスクリプト
 - 変数宣言・命名に関する厳密な規定
 - インデントはタブを用いて揃えること
 - `for`, `switch`, `do-while` などの文を使用禁止
-
+  
+## テスト
+コンパイル後`tester.sh`を実行すると Bash と Minishell の出力差分と終了コード差分を自動比較し、主要機能が互換であるか一括検証できます。
+<p align="left">
+  <img src="https://github.com/user-attachments/assets/acb01f2c-5a10-4465-86d0-332571e75438" height="500">
+</p>
 
 ## 評価
 
