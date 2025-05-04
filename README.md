@@ -44,7 +44,7 @@ Minishellは、Bashが備える代表的な機能（コマンド実行・リダ�
 ## ビルド方法
 ```
 $ git clone <this repository>
-$ cd minishell
+$ cd 42-minishell
 $ make
 $ ./minishell
 minish$
