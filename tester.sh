@@ -117,6 +117,10 @@ assert 1 'echo >'
 assert 1 '>>'
 assert 1 'echo >>'
 assert 1 'echo > >>'
+assert 1 '$NOVAR'
+assert 1 '> .'
+assert 1 '> asd'
+rm -f asd
 
 ## Redirecting input
 assert 1 'cat <Makefile'

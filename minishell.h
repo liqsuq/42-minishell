@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:51:30 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/03 19:05:54 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/04 11:05:50 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,10 +167,10 @@ int		pipeline(t_data *data, t_node *node, int prev_pipeout);
 // builtin
 void	builtin_echo(t_data *data, char **argv);
 void	builtin_cd(t_data *data, char **argv);
-void	builtin_pwd(t_data *data);
+void	builtin_pwd(t_data *data, char **argv);
 void	builtin_export(t_data *data, char **argv);
 void	builtin_unset(t_data *data, char **argv);
-void	builtin_env(t_data *data);
+void	builtin_env(t_data *data, char **argv);
 void	builtin_exit(t_data *data, char **argv);
 // builtin/pathutils.c
 t_path	*new_path(char *name, size_t len);
