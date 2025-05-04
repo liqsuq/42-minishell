@@ -1,4 +1,4 @@
-[English]() | 日本語 | 
+<!-- [English]() | 日本語 | -->
 
 <p align="center">
   <picture>
