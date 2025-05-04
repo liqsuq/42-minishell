@@ -66,7 +66,7 @@ tester.sh   … Bash 互換性テストスクリプト
 
 ## Norminetteへの適応 ※2025年05月時点
 
-このプロジェクトでは、42 School Norminette ルール (v3.3.55) に忠実に従っています。
+このプロジェクトでは、42 School Norminette ルール (v3.3.58) に忠実に従っています。
 [Norminette (42School/norminette)](https://github.com/42School/norminette)
  は、42のC言語プロジェクトで一貫したスタイルを強制するためのツールです。主なルールの一例は以下のとおりです。
 
