@@ -11,12 +11,10 @@ jobs:
     steps:
       - name: update apt-get
         run: sudo apt-get update
-      - name: install dependencies
-        run: sudo apt-get install -y pipx
       - name: install norminette
-        run: pipx install norminette && pipx ensurepath
+        run: pip install norminette=3.3.58
       - name: checkout
         uses: actions/checkout@v4
       - name: run norminette
         run: |
-          norminette | grep -v 'OK!' | grep -v 'Notice'
+          norminette | grep -ve 'OK!' -ve 'Notice'
