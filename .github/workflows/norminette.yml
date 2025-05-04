@@ -1,0 +1,19 @@
+name: norminette
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: install norminette
+        run: pip install norminette==3.3.58
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: run norminette
+        run: |
+          out=$(norminette|tee /dev/stderr)
+          echo "$out"|grep -v 'OK!'|grep -v 'Notice'|grep -q .&&exit 1||exit 0
