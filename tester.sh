@@ -68,6 +68,7 @@ echo "+-------------------------------------------------------------------------
 
 # Empty line (EOF)
 assert 1 ''
+assert 1 '$NOVAR'
 
 # Absolute path commands without args
 assert 1 '/bin/pwd'
@@ -117,10 +118,10 @@ assert 1 'echo >'
 assert 1 '>>'
 assert 1 'echo >>'
 assert 1 'echo > >>'
-assert 1 '$NOVAR'
 assert 1 '> .'
 assert 1 '> asd'
 rm -f asd
+assert 1 'echo hello > $NOVAR'
 
 ## Redirecting input
 assert 1 'cat <Makefile'
