@@ -12,7 +12,7 @@ jobs:
       - name: update apt-get
         run: sudo apt-get update
       - name: install norminette
-        run: pip install norminette=3.3.58
+        run: pip install norminette==3.3.58
       - name: checkout
         uses: actions/checkout@v4
       - name: run norminette
