@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:43:05 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/03 19:27:33 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/04 11:54:30 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,20 @@ void	execute_command(t_data *data, t_node *node)
 	char	**envp;
 	int		error;
 
+	if (setup_redirect(node->redirects) != 0)
+		exit_shell(data, EXIT_FAILURE);
+	if (node == NULL || node->args == NULL || node->args->word == NULL)
+		exit_shell(data, EXIT_SUCCESS);
 	argv = new_argv(node->args);
 	if (argv == NULL)
 		fatal_error("new_argv", strerror(errno));
 	if (find_path(data->env, path, argv[0]) == NULL)
-		(void)(free_argv(&argv), exit_shell(data, ERROR_NOFILE));
+		exit_shell(data, ERROR_NOFILE);
 	envp = dump_environ(data->env);
 	if (envp == NULL)
 		fatal_error("dump_environ", strerror(errno));
-	if (setup_redirect(node->redirects) != 0)
-		fatal_error("open", strerror(errno));
 	execve(path, argv, envp);
 	error = errno;
-	reset_redirect(node->redirects);
-	(void)(free_argv(&argv), free_environ(&envp));
 	ft_dprintf(STDERR, HEADER "%s\n", strerror(error));
 	if (error == ENOENT)
 		exit_shell(data, ERROR_NOFILE);
@@ -51,37 +51,31 @@ int	is_builtin(t_token *args)
 	i = -1;
 	while (++i < sizeof(cmd) / sizeof(*cmd))
 		if (ft_strcmp(args->word, cmd[i]) == 0)
-			return (1);
+			return (i + 1);
 	return (0);
 }
 
 void	execute_builtin(t_data *data, t_node *node)
 {
 	char	**argv;
+	void	(*func[7])(t_data *, char **);
 
+	func[0] = builtin_echo;
+	func[1] = builtin_cd;
+	func[2] = builtin_pwd;
+	func[3] = builtin_export;
+	func[4] = builtin_unset;
+	func[5] = builtin_env;
+	func[6] = builtin_exit;
 	argv = new_argv(node->args);
 	if (argv == NULL)
 		fatal_error("new_argv", strerror(errno));
-	if (setup_redirect(node->redirects) != 0)
-	{
+	if (setup_redirect(node->redirects) == 0)
+		func[is_builtin(node->args) - 1](data, argv);
+	else
 		data->exit_status = EXIT_FAILURE;
-		return ((void)(reset_redirect(node->redirects), free_argv(&argv)));
-	}
-	if (ft_strcmp(node->args->word, "echo") == 0)
-		builtin_echo(data, argv);
-	else if (ft_strcmp(node->args->word, "cd") == 0)
-		builtin_cd(data, argv);
-	else if (ft_strcmp(node->args->word, "pwd") == 0)
-		builtin_pwd(data);
-	else if (ft_strcmp(node->args->word, "export") == 0)
-		builtin_export(data, argv);
-	else if (ft_strcmp(node->args->word, "unset") == 0)
-		builtin_unset(data, argv);
-	else if (ft_strcmp(node->args->word, "env") == 0)
-		builtin_env(data);
-	else if (ft_strcmp(node->args->word, "exit") == 0)
-		builtin_exit(data, argv);
-	(void)(reset_redirect(node->redirects), free_argv(&argv));
+	reset_redirect(node->redirects);
+	free_argv(&argv);
 }
 
 static void	wait_pids(t_data *data, pid_t pid)
@@ -116,11 +110,6 @@ void	execute(t_data *data, t_node *node)
 {
 	pid_t	pid;
 
-	if (node == NULL || node->args == NULL || node->args->word == NULL)
-	{
-		data->exit_status = EXIT_SUCCESS;
-		return ;
-	}
 	if (node->next == NULL && is_builtin(node->args))
 		execute_builtin(data, node);
 	else
