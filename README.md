@@ -65,7 +65,7 @@ minish$
 
 ## コーディング規約
 このリポジトリではNorminette (v3.3.58)を採用しています。
-[Norminette (42School/norminette)](https://github.com/42School/norminette)
+[Norminette](https://github.com/42School/norminette)
 はC言語プロジェクトで一貫したスタイルを強制するためのツールです。主なルールの一例は以下のとおりです。
 
 - 1関数につき最大25行
@@ -89,4 +89,6 @@ minish$
 必須部分：〇/100
 
 ボーナス：〇/15
+
+[Wikiにも情報があります](https://github.com/liqsuq/42-minishell/wiki)
 
