@@ -14,6 +14,10 @@ Minishellは、Bashが備える代表的な機能（コマンド実行・リダ�
 </p>
 
 <p align="center">
+  <a href="https://github.com/liqsuq/42-minishell/wiki">🐚 ER図・構成の理解に役立つWikiはこちら</a>
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/-C-213a70.svg?logo=C&style=flat">
   <img src="https://img.shields.io/badge/-Linux-ea5520.svg?logo=linux&style=flat">
 </p>
@@ -89,6 +93,4 @@ minish$
 必須部分：〇/100
 
 ボーナス：〇/15
-
-[Wikiにも情報があります](https://github.com/liqsuq/42-minishell/wiki)
 
