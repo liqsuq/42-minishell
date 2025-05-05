@@ -6,15 +6,15 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 12:37:53 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 12:45:22 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 14:48:44 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void *xcalloc(size_t count, size_t size)
+void	*xcalloc(size_t count, size_t size)
 {
-	void *ptr;
+	void	*ptr;
 
 	ptr = ft_calloc(count, size);
 	if (ptr == NULL)
@@ -22,9 +22,9 @@ void *xcalloc(size_t count, size_t size)
 	return (ptr);
 }
 
-pid_t xfork(void)
+pid_t	xfork(void)
 {
-	pid_t pid;
+	pid_t	pid;
 
 	pid = fork();
 	if (pid < 0)

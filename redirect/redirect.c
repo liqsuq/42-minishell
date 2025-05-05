@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:46:34 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 13:03:49 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 14:48:15 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ static void	write_heredoc(int fd, t_token *token)
 static void	open_heredoc(t_node *redi)
 {
 	int	pipefd[2];
-
 
 	xpipe(pipefd);
 	write_heredoc(pipefd[1], redi->args->next);
