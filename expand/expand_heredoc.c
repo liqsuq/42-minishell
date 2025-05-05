@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:58:19 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 22:44:11 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/06 01:08:19 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	expand_heredoc(t_data *data, t_node *node)
 		read_heredoc(data, &node);
 		if (!is_quoted && !data->abort)
 		{
-			expand_variable_token(node->args->next, 1, data->env);
+			expand_variable_token(data, node->args->next, 1);
 			expand_parameter_token(data, node->args->next, 1);
 		}
 	}

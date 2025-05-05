@@ -6,13 +6,13 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:44:20 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 22:44:11 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/06 00:14:51 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	append_status(char **dst, char **str, t_data *data)
+static void	append_status(t_data *data, char **dst, char **str)
 {
 	char	*stat;
 	char	*cur;
@@ -25,7 +25,7 @@ static void	append_status(char **dst, char **str, t_data *data)
 	*str += 2;
 }
 
-static void	append_quote_para(char **dst, char **str, t_data *data)
+static void	append_quote_para(t_data *data, char **dst, char **str)
 {
 	char	c;
 	char	*cur;
@@ -36,7 +36,7 @@ static void	append_quote_para(char **dst, char **str, t_data *data)
 	while (*cur != c)
 	{
 		if (c == '\"' && cur[0] == '$' && cur[1] == '?')
-			append_status(dst, &cur, data);
+			append_status(data, dst, &cur);
 		else
 			append_char(dst, *cur++);
 	}
@@ -58,9 +58,9 @@ void	expand_parameter_token(t_data *data, t_token *token, int force)
 		while (*str != '\0')
 		{
 			if (!force && (*str == '\'' || *str == '\"'))
-				append_quote_para(&new_word, &str, data);
+				append_quote_para(data, &new_word, &str);
 			else if (str[0] == '$' && str[1] == '?')
-				append_status(&new_word, &str, data);
+				append_status(data, &new_word, &str);
 			else
 				append_char(&new_word, *str++);
 		}

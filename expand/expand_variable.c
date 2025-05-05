@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:44:48 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 22:44:11 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/06 00:17:04 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	is_variable(const char *s)
 	return (s[0] == '$' && (ft_isalpha(s[1]) || s[1] == '_'));
 }
 
-static void	append_variable(char **dst, char **str, t_env *env)
+static void	append_variable(t_data *data, char **dst, char **str)
 {
 	char	*name;
 	char	*value;
@@ -28,7 +28,7 @@ static void	append_variable(char **dst, char **str, t_env *env)
 	append_char(&name, *cur++);
 	while (ft_isalpha(*cur) || ft_isdigit(*cur) || *cur == '_')
 		append_char(&name, *cur++);
-	value = get_env(env, name);
+	value = get_env(data->env, name);
 	free(name);
 	if (value)
 		while (*value)
@@ -36,7 +36,7 @@ static void	append_variable(char **dst, char **str, t_env *env)
 	*str = cur;
 }
 
-static void	append_quote_var(char **dst, char **str, t_env *env)
+static void	append_quote_var(t_data *data, char **dst, char **str)
 {
 	char	c;
 	char	*cur;
@@ -47,7 +47,7 @@ static void	append_quote_var(char **dst, char **str, t_env *env)
 	while (*cur != c)
 	{
 		if (c == '\"' && is_variable(cur))
-			append_variable(dst, &cur, env);
+			append_variable(data, dst, &cur);
 		else
 			append_char(dst, *cur++);
 	}
@@ -55,7 +55,7 @@ static void	append_quote_var(char **dst, char **str, t_env *env)
 	*str = cur;
 }
 
-void	expand_variable_token(t_token *token, int force, t_env *env)
+void	expand_variable_token(t_data *data, t_token *token, int force)
 {
 	char	*new_word;
 	char	*str;
@@ -69,16 +69,16 @@ void	expand_variable_token(t_token *token, int force, t_env *env)
 		while (*str != '\0')
 		{
 			if (!force && (*str == '\'' || *str == '\"'))
-				append_quote_var(&new_word, &str, env);
+				append_quote_var(data, &new_word, &str);
 			else if (is_variable(str))
-				append_variable(&new_word, &str, env);
+				append_variable(data, &new_word, &str);
 			else
 				append_char(&new_word, *str++);
 		}
 		free(token->word);
 		token->word = new_word;
 	}
-	expand_variable_token(token->next, force, env);
+	expand_variable_token(data, token->next, force);
 }
 
 void	expand_variable(t_data *data, t_node *node)
@@ -86,7 +86,7 @@ void	expand_variable(t_data *data, t_node *node)
 	if (node == NULL || data->abort)
 		return ;
 	if (node->kind != ND_REDIR_HEREDOC)
-		expand_variable_token(node->args, 0, data->env);
+		expand_variable_token(data, node->args, 0);
 	if (node->kind != ND_SIMPLE_CMD && node->kind != ND_REDIR_HEREDOC)
 		if (node->args == NULL || ft_strlen(node->args->word) == 0)
 			expand_error(data, "ambiguous redirect", &node);

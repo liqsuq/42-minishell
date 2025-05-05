@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:51:30 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/06 00:00:37 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/06 01:07:45 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void	expand(t_data *data, t_node *node);
 void	append_char(char **s, char c);
 // expand/expand_variable.c
 void	expand_variable(t_data *data, t_node *node);
-void	expand_variable_token(t_token *token, int force, t_env *env);
+void	expand_variable_token(t_data *data, t_token *token, int force);
 // expand/expand_parameter.c
 void	expand_parameter(t_data *data, t_node *node);
 void	expand_parameter_token(t_data *data, t_token *token, int force);
