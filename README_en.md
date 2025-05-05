@@ -30,15 +30,15 @@ with careful attention to closely mimic the behavior of Bash wherever possible.
 | Redirection          | Correctly handles `<`, `>`, `>>`, and `<<` (here-document), including nested redirections    |
 | Pipes                | Recursively expands and executes pipelines of unlimited length                               |
 | Environment Expansion| Expands `$VAR` and the exit status `$?` token by token                                       |
-| Built-in Commands    | Supports `echo`, `cd`, `pwd`, `export`, `unset`, `env`, and `exit`                           |
-| Signal Handling      | Handles `Ctrl-C`, `Ctrl-\`, and `Ctrl-D`                                                     |
+| Built-in Commands    | `echo`・`cd`・`pwd`・`export`・`unset`・`env`・`exit`                                          |
+| Signal Handling      | Ctrl-C`・`Ctrl-\`・`Ctrl-D`                                                                   |
 | Error Compatibility  | Returns the same exit codes as Bash for command not found (127), permission denied (126), and syntax errors (2) |
 
 
 ## Make Command List
 | Make Target | Description                                                                                     |
 |-------------|-------------------------------------------------------------------------------------------------|
-| all         | Compiles the dependent source files and creates the executable. Usually includes the $(NAME) target. |
+| all         | Compiles all dependent source files and creates the executable file.                            |
 | clean       | Removes object files (*.o, etc.) generated during compilation.                                  |
 | fclean      | Performs `clean` and additionally removes the generated executable and any libraries.           |
 | re          | Runs `fclean` followed by `all` to rebuild the project from scratch.                            |
@@ -66,8 +66,6 @@ pipeline/    … Pipeline node creation and execution
 tester.sh    … Bash compatibility test script  
 ```
 
-## Norminetteへの適応 ※2025年05月時点
-
 ## Compliance with Norminette (as of May 2025)
 
 This project strictly follows the 42 School Norminette rules (version 3.3.58).  
@@ -81,7 +79,7 @@ Key rules include:
 - Restrictions on the use of standard library functions  
 - Strict rules for variable declaration and naming conventions  
 - Indentation must be done using tabs  
-- Forbidden use of `for`, `switch`, `do-while`, and similar statements  
+- Forbidden use of `for`・`switch`・`do-while`, and similar statements  
 
   
 ## Testing
