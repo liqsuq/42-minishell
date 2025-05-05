@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:51:30 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 22:44:11 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/06 00:00:37 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ typedef struct s_node
 	t_node_kind		kind;
 	t_token			*args;
 	struct s_node	*redirects;
-	int				stashed_fd;
+	int				dstfd;
+	int				bakfd;
 	struct s_node	*next;
 }					t_node;
 
@@ -157,7 +158,8 @@ void	free_argv(char ***argv);
 char	*find_path(t_env *env, char path[PATH_MAX], char *line);
 
 // redirect/redirect.c
-int		setup_redirect(t_node *redi);
+int		open_redirect(t_node *re);
+void	setup_redirect(t_node *redi);
 void	reset_redirect(t_node *redi);
 
 // pipeline/pipeline.c

@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:46:11 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 16:30:23 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 23:58:53 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ t_node	*new_node(t_node_kind kind)
 
 	node = xcalloc(1, sizeof(t_node));
 	node->kind = kind;
-	node->stashed_fd = -1;
+	node->args = NULL;
+	node->redirects = NULL;
+	node->dstfd = -1;
+	node->bakfd = -1;
 	return (node);
 }
 
