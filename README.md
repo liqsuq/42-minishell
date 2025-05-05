@@ -1,4 +1,4 @@
-<!-- [English]() | 日本語 | -->
+[English](./README_en.md) | 日本語 
 
 <p align="center">
   <picture>
