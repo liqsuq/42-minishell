@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:46:20 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 15:57:26 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 22:53:46 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ t_node	*parse(t_data *data, t_token *token)
 	t_node	*node;
 
 	node = NULL;
-	if (token == NULL)
+	if (token == NULL || data->abort)
 		return (NULL);
 	parse_pipeline(data, &node, token);
 	return (node);

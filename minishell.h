@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:51:30 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 16:11:03 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 22:44:11 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ typedef struct s_path
 typedef struct s_data
 {
 	int				exit_status;
-	int				is_abort;
+	int				abort;
 	t_env			*env;
 }					t_data;
 

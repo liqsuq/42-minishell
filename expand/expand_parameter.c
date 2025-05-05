@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:44:20 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 15:57:29 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 22:44:11 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	expand_parameter_token(t_data *data, t_token *token, int force)
 
 void	expand_parameter(t_data *data, t_node *node)
 {
-	if (node == NULL || data->is_abort)
+	if (node == NULL || data->abort)
 		return ;
 	if (node->kind != ND_REDIR_HEREDOC)
 		expand_parameter_token(data, node->args, 0);

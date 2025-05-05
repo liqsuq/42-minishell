@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:44:29 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 13:00:44 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 22:44:11 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	expand_quote_token(t_token *token)
 
 void	expand_quote(t_data *data, t_node *node)
 {
-	if (node == NULL || data->is_abort)
+	if (node == NULL || data->abort)
 		return ;
 	if (node->kind != ND_REDIR_HEREDOC)
 		expand_quote_token(node->args);

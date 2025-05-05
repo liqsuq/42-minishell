@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:58:19 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 15:59:21 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 22:44:11 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	is_delim_quoted(char *str)
 static void	interrupt_heredoc(t_data *data)
 {
 	g_signal = 0;
-	data->is_abort = 1;
+	data->abort = 1;
 	data->exit_status = SIGINT + 128;
 }
 
@@ -65,14 +65,14 @@ void	expand_heredoc(t_data *data, t_node *node)
 {
 	int	is_quoted;
 
-	if (node == NULL || data->is_abort)
+	if (node == NULL || data->abort)
 		return ;
 	if (node->kind == ND_REDIR_HEREDOC && node->args != NULL)
 	{
 		is_quoted = is_delim_quoted(node->args->word);
 		expand_quote_token(node->args);
 		read_heredoc(data, &node);
-		if (!is_quoted && !data->is_abort)
+		if (!is_quoted && !data->abort)
 		{
 			expand_variable_token(node->args->next, 1, data->env);
 			expand_parameter_token(data, node->args->next, 1);

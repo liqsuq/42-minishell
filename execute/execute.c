@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:43:05 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 15:57:27 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 22:53:52 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	execute(t_data *data, t_node *node)
 {
 	pid_t	pid;
 
-	if (node == NULL)
+	if (node == NULL || data->abort)
 		return ;
 	if (node->next == NULL && is_builtin(node->args))
 		execute_builtin(data, node);

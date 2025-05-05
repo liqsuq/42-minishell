@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:44:48 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 12:58:36 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 22:44:11 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,14 +83,14 @@ void	expand_variable_token(t_token *token, int force, t_env *env)
 
 void	expand_variable(t_data *data, t_node *node)
 {
-	if (node == NULL || data->is_abort)
+	if (node == NULL || data->abort)
 		return ;
 	if (node->kind != ND_REDIR_HEREDOC)
 		expand_variable_token(node->args, 0, data->env);
 	if (node->kind != ND_SIMPLE_CMD && node->kind != ND_REDIR_HEREDOC)
 		if (node->args == NULL || ft_strlen(node->args->word) == 0)
 			expand_error(data, "ambiguous redirect", &node);
-	if (node == NULL || data->is_abort)
+	if (node == NULL || data->abort)
 		return ;
 	expand_variable(data, node->redirects);
 	expand_variable(data, node->next);

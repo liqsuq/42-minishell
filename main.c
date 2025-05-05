@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:47:39 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 15:57:31 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 22:54:10 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	setup_shell(t_data *data, char **envp)
 	rl_outstream = stderr;
 	setup_signal();
 	data->exit_status = 0;
-	data->is_abort = 0;
+	data->abort = 0;
 	data->env = init_env(envp);
 }
 
@@ -31,13 +31,12 @@ static void	process_line(t_data *data, char *line)
 	t_token	*token;
 	t_node	*node;
 
-	data->is_abort = 0;
+	data->abort = 0;
 	token = tokenize(data, line);
 	node = parse(data, token);
 	free_token(&token);
 	expand(data, node);
-	if (!data->is_abort)
-		execute(data, node);
+	execute(data, node);
 	free_node(&node);
 }
 
