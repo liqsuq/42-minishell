@@ -1,4 +1,4 @@
-[English](./README_fr.md) | [日本語](./README.md) | French
+[English](./README_en.md) | [日本語](./README.md) | French
 
 <p align="center">
   <picture>
