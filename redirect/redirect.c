@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:46:34 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/03 19:32:04 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 13:03:49 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,9 @@ static int	open_redirect(t_node *redi, int srcfd, int flags, mode_t mode)
 		ft_dprintf(STDERR, HEADER "open: %s\n", strerror(errno));
 		return (errno);
 	}
-	redi->stashed_fd = dup(srcfd);
-	if (redi->stashed_fd < 0)
-		fatal_error("dup", strerror(errno));
-	if (dup2(dstfd, srcfd) < 0)
-		fatal_error("dup2", strerror(errno));
-	if (close(dstfd) < 0)
-		fatal_error("close", strerror(errno));
+	redi->stashed_fd = xdup(srcfd);
+	xdup2(dstfd, srcfd);
+	xclose(dstfd);
 	return (0);
 }
 
@@ -36,10 +32,8 @@ static void	write_heredoc(int fd, t_token *token)
 {
 	if (token == NULL)
 		return ;
-	if (write(fd, token->word, ft_strlen(token->word)) < 0)
-		fatal_error("write", strerror(errno));
-	if (write(fd, "\n", 1) < 0)
-		fatal_error("write", strerror(errno));
+	xwrite(fd, token->word, ft_strlen(token->word));
+	xwrite(fd, "\n", 1);
 	write_heredoc(fd, token->next);
 }
 
@@ -47,18 +41,13 @@ static void	open_heredoc(t_node *redi)
 {
 	int	pipefd[2];
 
-	if (pipe(pipefd) < 0)
-		fatal_error("pipe", strerror(errno));
+
+	xpipe(pipefd);
 	write_heredoc(pipefd[1], redi->args->next);
-	if (close(pipefd[1]) < 0)
-		fatal_error("close", strerror(errno));
-	redi->stashed_fd = dup(STDIN);
-	if (redi->stashed_fd < 0)
-		fatal_error("dup", strerror(errno));
-	if (dup2(pipefd[0], STDIN) < 0)
-		fatal_error("dup2", strerror(errno));
-	if (close(pipefd[0]) < 0)
-		fatal_error("close", strerror(errno));
+	xclose(pipefd[1]);
+	redi->stashed_fd = xdup(STDIN);
+	xdup2(pipefd[0], STDIN);
+	xclose(pipefd[0]);
 }
 
 int	setup_redirect(t_node *redi)
@@ -92,8 +81,6 @@ void	reset_redirect(t_node *redi)
 		fd = STDIN;
 	else
 		fd = STDOUT;
-	if (dup2(redi->stashed_fd, fd) < 0)
-		fatal_error("dup2", strerror(errno));
-	if (close(redi->stashed_fd) < 0)
-		fatal_error("close", strerror(errno));
+	xdup2(redi->stashed_fd, fd);
+	xclose(redi->stashed_fd);
 }

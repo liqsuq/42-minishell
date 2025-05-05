@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:46:27 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/01 15:51:56 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 13:04:19 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,49 +19,27 @@ static int	has_pipe(t_node *node)
 
 static void	move_fd(int src, int dst)
 {
-	int	retval;
-
-	retval = dup2(src, dst);
-	if (retval < 0)
-		fatal_error("dup2", strerror(errno));
-	retval = close(src);
-	if (retval < 0)
-		fatal_error("close", strerror(errno));
+	xdup2(src, dst);
+	xclose(src);
 }
 
 static void	attach_pipe(t_node *node, int prev_pipeout, int *pipefd)
 {
-	int	retval;
-
 	if (prev_pipeout != -1)
-	{
 		move_fd(prev_pipeout, STDIN);
-	}
 	if (has_pipe(node))
 	{
-		retval = close(pipefd[0]);
-		if (retval < 0)
-			fatal_error("close", strerror(errno));
+		xclose(pipefd[0]);
 		move_fd(pipefd[1], STDOUT);
 	}
 }
 
 static void	detach_pipe(t_node *node, int prev_pipeout, int *pipefd)
 {
-	int	retval;
-
 	if (prev_pipeout != -1)
-	{
-		retval = close(prev_pipeout);
-		if (retval < 0)
-			fatal_error("close", strerror(errno));
-	}
+		xclose(prev_pipeout);
 	if (has_pipe(node))
-	{
-		retval = close(pipefd[1]);
-		if (retval < 0)
-			fatal_error("close", strerror(errno));
-	}
+		xclose(pipefd[1]);
 }
 
 int	pipeline(t_data *data, t_node *node, int prev_pipeout)
@@ -70,11 +48,8 @@ int	pipeline(t_data *data, t_node *node, int prev_pipeout)
 	pid_t	pid;
 
 	if (has_pipe(node))
-		if (pipe(pipefd) < 0)
-			fatal_error("pipe", strerror(errno));
-	pid = fork();
-	if (pid < 0)
-		fatal_error("fork", strerror(errno));
+		xpipe(pipefd);
+	pid = xfork();
 	if (pid == 0)
 	{
 		attach_pipe(node, prev_pipeout, pipefd);

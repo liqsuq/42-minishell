@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:51:30 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/04 12:23:34 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 13:03:14 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,5 +202,15 @@ void	bltin_error(t_data *data, const char *msg, const char *errstr);
 // misc/ft_funcs.c
 int		ft_strcmp(const char *s1, const char *s2);
 char	*get_next_line_nonl(int fd);
+// misc/xfuncs_fd.c
+void	xwrite(int fd, const void *buf, size_t count);
+void	xclose(int fd);
+void	xpipe(int *fd);
+int		xdup(int oldfd);
+void	xdup2(int oldfd, int newfd);
+// misc/xfuncs_sys.c
+void	*xcalloc(size_t count, size_t size);
+pid_t	xfork(void);
+void	xsigaction(int sig, const struct sigaction *new, struct sigaction *old);
 
 #endif

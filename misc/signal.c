@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:46:04 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/29 18:46:06 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 13:00:38 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,9 @@ void	setup_signal(void)
 	sigemptyset(&sigact.sa_mask);
 	sigact.sa_flags = 0;
 	sigact.sa_handler = signal_handler;
-	if (sigaction(SIGINT, &sigact, NULL) < 0)
-		fatal_error("sigaction", strerror(errno));
+	xsigaction(SIGINT, &sigact, NULL);
 	sigact.sa_handler = SIG_IGN;
-	if (sigaction(SIGQUIT, &sigact, NULL) < 0)
-		fatal_error("sigaction", strerror(errno));
+	xsigaction(SIGQUIT, &sigact, NULL);
 }
 
 void	reset_signal(void)
@@ -63,8 +61,6 @@ void	reset_signal(void)
 	sigemptyset(&sigact.sa_mask);
 	sigact.sa_flags = 0;
 	sigact.sa_handler = SIG_DFL;
-	if (sigaction(SIGINT, &sigact, NULL) < 0)
-		fatal_error("sigaction", strerror(errno));
-	if (sigaction(SIGQUIT, &sigact, NULL) < 0)
-		fatal_error("sigaction", strerror(errno));
+	xsigaction(SIGINT, &sigact, NULL);
+	xsigaction(SIGQUIT, &sigact, NULL);
 }

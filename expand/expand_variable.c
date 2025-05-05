@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:44:48 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/04 12:46:59 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 12:58:36 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,7 @@ void	expand_variable_token(t_token *token, int force, t_env *env)
 	if (token->kind == TK_WORD && token->word != NULL)
 	{
 		str = token->word;
-		new_word = ft_calloc(1, sizeof(char));
-		if (new_word == NULL)
-			fatal_error("ft_calloc", strerror(errno));
+		new_word = xcalloc(1, sizeof(char));
 		while (*str != '\0')
 		{
 			if (!force && (*str == '\'' || *str == '\"'))

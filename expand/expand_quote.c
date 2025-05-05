@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:44:29 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/03 15:02:03 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 13:00:44 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ static void	remove_quote(t_token *token)
 	char	*cur;
 	char	c;
 
-	new_word = ft_calloc(1, sizeof(char));
-	if (new_word == NULL)
-		fatal_error("ft_calloc", strerror(errno));
+	new_word = xcalloc(1, sizeof(char));
 	cur = token->word;
 	while (*cur != '\0')
 	{
