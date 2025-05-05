@@ -1,12 +1,10 @@
-[English](./README_en.md) | 日本語 
+[English](./README_en.md) | 日本語 | [French](./README_fr.md)
 
 <p align="center">
   <picture>
     <img height="300" alt="minishellImage" src="https://github.com/user-attachments/assets/96aab2ee-f9e3-4db8-ac33-61ad4aed5ad8">
   </picture>
 </p>
-
-<!--  <hr style="border: none; height: 0.2px; background-color: #ccc;" /> -->
 
 <p align="center">
 Minishellは、Bashが備える代表的な機能（コマンド実行・リダイレクト・パイプ・環境変数展開など）を核として、C言語で実装した軽量シェルです。<br>

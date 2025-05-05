@@ -13,6 +13,10 @@ with careful attention to closely mimic the behavior of Bash wherever possible.
 </p>
 
 <p align="center">
+  <a href="https://github.com/liqsuq/42-minishell/wiki">🐚 Here's a Wiki to help you understand the ER diagram and project structure</a>
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/-C-213a70.svg?logo=C&style=flat">
   <img src="https://img.shields.io/badge/-Linux-ea5520.svg?logo=linux&style=flat">
 </p>
