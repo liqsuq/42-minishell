@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:41:14 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/02 16:10:51 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 14:45:42 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	change_directory(t_data *data, t_path *path)
 		return (bltin_error(data, "cd: dump_path", strerror(errno)));
 	if (chdir(s) < 0)
 		return (free(s), bltin_error(data, "cd", strerror(errno)));
-	if (get_env(data->env, "PWD") != NULL && set_env(&data->env, "PWD", s) < 0)
+	if (get_env(data->env, "PWD") && set_env(&data->env, "PWD", s, NULL) < 0)
 		return (free(s), bltin_error(data, "cd: set_env", strerror(errno)));
 	free(s);
 	data->exit_status = 0;

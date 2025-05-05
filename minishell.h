@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:51:30 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 13:07:55 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 13:35:26 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ void	free_environ(char ***envp);
 t_env	*new_env(char *key, char *value);
 void	free_env(t_env **env);
 char	*get_env(t_env *env, char *key);
-int		set_env(t_env **env, char *key, char *value);
+int		set_env(t_env **env, char *key, char *value, t_env *prev);
 t_env	*init_env(char **envp);
 // misc/error.c
 void	fatal_error(const char *msg, const char *errstr);
