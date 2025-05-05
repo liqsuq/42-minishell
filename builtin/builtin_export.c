@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:42:13 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 14:43:34 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 16:31:51 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	check_name(t_data *data, char *arg)
 	size_t	key_len;
 
 	eq = ft_strchr(arg, '=');
-	if (eq)
+	if (eq != NULL)
 		key_len = (size_t)(eq - arg);
 	else
 		key_len = ft_strlen(arg);
@@ -46,17 +46,14 @@ static void	export_arg(t_data *data, char *arg)
 {
 	char	*eq;
 	size_t	key_len;
-	int		retval;
 
 	eq = ft_strchr(arg, '=');
 	if (eq == NULL)
 		return ;
 	key_len = (size_t)(eq - arg);
 	arg[key_len] = '\0';
-	retval = set_env(&data->env, arg, eq + 1, NULL);
+	set_env(&data->env, arg, eq + 1, NULL);
 	arg[key_len] = '=';
-	if (retval != 0)
-		bltin_error(data, "export: set_env", strerror(errno));
 }
 
 void	builtin_export(t_data *data, char **argv)

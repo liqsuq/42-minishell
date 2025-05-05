@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:46:11 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/03 19:23:45 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 16:30:23 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ t_node	*new_node(t_node_kind kind)
 {
 	t_node	*node;
 
-	node = ft_calloc(1, sizeof(t_node));
-	if (node == NULL)
-		return (NULL);
+	node = xcalloc(1, sizeof(t_node));
 	node->kind = kind;
 	node->stashed_fd = -1;
 	return (node);
@@ -26,8 +24,6 @@ t_node	*new_node(t_node_kind kind)
 
 t_node	*add_node(t_node **head, t_node *new)
 {
-	if (head == NULL || new == NULL)
-		return (NULL);
 	if (*head == NULL)
 	{
 		*head = new;
@@ -38,7 +34,7 @@ t_node	*add_node(t_node **head, t_node *new)
 
 void	free_node(t_node **node)
 {
-	if (node == NULL || *node == NULL)
+	if (*node == NULL)
 		return ;
 	free_node(&(*node)->next);
 	free_node(&(*node)->redirects);

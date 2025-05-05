@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:46:20 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/03 11:22:03 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 15:57:26 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,10 @@ static t_token	*parse_redirect(t_data *data, t_node *node, t_token *token)
 		nd = add_node(&node->redirects, new_node(ND_REDIR_IN));
 	else
 		nd = add_node(&node->redirects, new_node(ND_REDIR_HEREDOC));
-	if (nd == NULL)
-		fatal_error("add_node", strerror(errno));
 	token = token->next;
 	if (token == NULL || token->kind != TK_WORD)
 		return (parse_error(data, "unexpected token", &token), token);
 	nd->args = dup_token(token);
-	if (nd->args == NULL)
-		fatal_error("dup_token", strerror(errno));
 	token = token->next;
 	return (token);
 }
@@ -53,14 +49,11 @@ static t_token	*parse_simple_cmd(t_data *data, t_node **node, t_token *token)
 	t_node	*nd;
 
 	nd = add_node(node, new_node(ND_SIMPLE_CMD));
-	if (nd == NULL)
-		fatal_error("add_node", strerror(errno));
 	while (token != NULL)
 	{
 		if (token->kind == TK_WORD)
 		{
-			if (add_token(&nd->args, dup_token(token)) == NULL)
-				fatal_error("add_token", strerror(errno));
+			add_token(&nd->args, dup_token(token));
 			token = token->next;
 		}
 		else if (is_redirect(token))

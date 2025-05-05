@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:43:18 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/01 17:00:13 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 15:57:44 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ static char	**trans_args(char **argv, t_token *args)
 {
 	if (args == NULL)
 		return (argv);
-	*argv = ft_strdup(args->word);
-	if (*argv == NULL)
-		return (NULL);
+	*argv = xstrdup(args->word);
 	return (trans_args(argv + 1, args->next));
 }
 
@@ -35,9 +33,7 @@ char	**new_argv(t_token *args)
 		len++;
 		cur = cur->next;
 	}
-	argv = ft_calloc((len + 1), sizeof(char *));
-	if (argv == NULL)
-		return (NULL);
+	argv = xcalloc((len + 1), sizeof(char *));
 	if (trans_args(argv, args) == NULL)
 		return (free_argv(&argv), NULL);
 	return (argv);

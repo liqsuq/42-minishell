@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:46:42 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/29 18:46:43 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 15:42:59 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,7 @@ t_token	*tokenize_operator(t_data *data, char **line)
 	{
 		if (ft_strncmp(cur, ops[i], ft_strlen(ops[i])) == 0)
 		{
-			op = ft_strdup(ops[i]);
-			if (op == NULL)
-				fatal_error("ft_strdup", strerror(errno));
+			op = xstrdup(ops[i]);
 			*line = cur + ft_strlen(op);
 			return (new_token(op, TK_OP));
 		}

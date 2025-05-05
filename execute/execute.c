@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:43:05 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 13:09:02 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 15:57:27 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,9 @@ void	execute_command(t_data *data, t_node *node)
 	if (node->args == NULL || node->args->word == NULL)
 		exit(EXIT_SUCCESS);
 	argv = new_argv(node->args);
-	if (argv == NULL)
-		fatal_error("new_argv", strerror(errno));
 	if (find_path(data->env, path, argv[0]) == NULL)
 		exit(ERROR_NOFILE);
 	envp = dump_environ(data->env);
-	if (envp == NULL)
-		fatal_error("dump_environ", strerror(errno));
 	execve(path, argv, envp);
 	error = errno;
 	ft_dprintf(STDERR, HEADER "%s\n", strerror(error));
@@ -68,8 +64,6 @@ void	execute_builtin(t_data *data, t_node *node)
 	func[5] = builtin_env;
 	func[6] = builtin_exit;
 	argv = new_argv(node->args);
-	if (argv == NULL)
-		fatal_error("new_argv", strerror(errno));
 	if (setup_redirect(node->redirects) == 0)
 		func[is_builtin(node->args) - 1](data, argv);
 	else

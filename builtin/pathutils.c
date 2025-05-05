@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 18:41:34 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/02 16:03:34 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 16:34:50 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,14 @@ t_path	*new_path(char *name, size_t len)
 {
 	t_path	*path;
 
-	if (name == NULL)
-		return (NULL);
-	path = ft_calloc(1, sizeof(t_path));
-	if (path == NULL)
-		return (NULL);
-	path->name = ft_substr(name, 0, len);
-	if (path->name == NULL)
-		return (free(path), NULL);
+	path = xcalloc(1, sizeof(t_path));
+	path->name = xsubstr(name, 0, len);
 	path->next = NULL;
 	return (path);
 }
 
 t_path	*push_path(t_path **head, t_path *new)
 {
-	if (head == NULL || new == NULL)
-		return (NULL);
 	if (*head == NULL)
 	{
 		*head = new;
@@ -42,7 +34,7 @@ t_path	*push_path(t_path **head, t_path *new)
 
 void	pop_path(t_path **head, t_path *prev)
 {
-	if (head == NULL || *head == NULL)
+	if (*head == NULL)
 		return ;
 	if ((*head)->next == NULL)
 	{
@@ -70,13 +62,13 @@ char	*dump_path(t_path *head)
 		head = head->next;
 	}
 	if (ft_strlen(path) == 0)
-		return (ft_strdup("/"));
-	return (ft_strdup(path));
+		return (xstrdup("/"));
+	return (xstrdup(path));
 }
 
 void	free_path(t_path **path)
 {
-	if (path == NULL || *path == NULL)
+	if (*path == NULL)
 		return ;
 	free_path(&(*path)->next);
 	free((*path)->name);

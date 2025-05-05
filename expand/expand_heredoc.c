@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:58:19 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/01 15:35:39 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 15:59:21 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,7 @@ static void	read_heredoc(t_data *data, t_node **node)
 			free(line);
 			break ;
 		}
-		if (add_token(&(*node)->args, new_token(line, TK_WORD)) == NULL)
-			(free(line), fatal_error("add_token", strerror(errno)));
+		add_token(&(*node)->args, new_token(line, TK_WORD));
 	}
 	if (g_signal == SIGINT)
 		interrupt_heredoc(data);

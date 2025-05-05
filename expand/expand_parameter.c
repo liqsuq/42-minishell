@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:44:20 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 13:00:43 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 15:57:29 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@ static void	append_status(char **dst, char **str, t_data *data)
 	char	*stat;
 	char	*cur;
 
-	stat = ft_itoa(data->exit_status);
-	if (stat == NULL)
-		fatal_error("ft_itoa", strerror(errno));
+	stat = xitoa(data->exit_status);
 	cur = stat;
 	while (*cur != '\0')
 		append_char(dst, *cur++);

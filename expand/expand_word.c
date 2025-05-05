@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:44:58 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/29 18:45:01 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 16:27:06 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,25 +17,14 @@ static t_token	*split_word(t_token *token, char *end, char *next)
 	char	*str;
 	t_token	*new;
 
-	if (token == NULL || end == NULL || next == NULL)
-		return (NULL);
 	if (*next != '\0')
 	{
-		str = ft_strdup(next);
-		if (str == NULL)
-			return (NULL);
+		str = xstrdup(next);
 		new = new_token(str, TK_WORD);
-		if (new == NULL)
-		{
-			free(str);
-			return (NULL);
-		}
 		new->next = token->next;
 		token->next = new;
 	}
-	str = ft_substr(token->word, 0, end - token->word);
-	if (str == NULL)
-		return (NULL);
+	str = xsubstr(token->word, 0, end - token->word);
 	free(token->word);
 	token->word = str;
 	return (token);
@@ -78,9 +67,7 @@ static t_token	*split_word_head(t_token *token)
 		cur++;
 	if (cur != token->word)
 	{
-		new = ft_strdup(cur);
-		if (new == NULL)
-			return (NULL);
+		new = xstrdup(cur);
 		free(token->word);
 		token->word = new;
 	}
@@ -93,10 +80,8 @@ static void	expand_word_token(t_token *token)
 		return ;
 	if (token->kind == TK_WORD && token->word != NULL)
 	{
-		if (split_word_head(token) == NULL)
-			fatal_error("split_word_head", strerror(errno));
-		if (split_word_tail(token) == NULL)
-			fatal_error("split_word_tail", strerror(errno));
+		split_word_head(token);
+		split_word_tail(token);
 	}
 	expand_word_token(token->next);
 }

@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:46:48 by kadachi           #+#    #+#             */
-/*   Updated: 2025/04/29 18:46:50 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 15:31:19 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,7 @@ t_token	*tokenize_word(t_data *data, char **line)
 		}
 		cur++;
 	}
-	word = ft_substr(*line, 0, cur - *line);
-	if (word == NULL)
-		fatal_error("ft_substr", strerror(errno));
+	word = xsubstr(*line, 0, cur - *line);
 	*line = cur;
 	return (new_token(word, TK_WORD));
 }

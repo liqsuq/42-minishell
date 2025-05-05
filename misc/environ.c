@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:45:36 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/03 13:41:24 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 16:25:22 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,12 @@ char	**dump_environ(t_env *env)
 	if (env == NULL)
 		return (NULL);
 	count = count_env(env);
-	envp = ft_calloc(count + 1, sizeof(char *));
-	if (envp == NULL)
-		return (NULL);
+	envp = xcalloc(count + 1, sizeof(char *));
 	i = 0;
 	while (i < count)
 	{
 		len = ft_strlen(env->key) + 1 + ft_strlen(env->value) + 1;
-		envp[i] = ft_calloc(len, sizeof(char));
-		if (envp[i] == NULL)
-			return (free_environ(&envp), NULL);
+		envp[i] = xcalloc(len, sizeof(char));
 		ft_strlcpy(envp[i], env->key, len);
 		ft_strlcat(envp[i], "=", len);
 		ft_strlcat(envp[i++], env->value, len);
@@ -58,7 +54,7 @@ void	free_environ(char ***envp)
 {
 	char	**cur;
 
-	if (envp == NULL || *envp == NULL)
+	if (*envp == NULL)
 		return ;
 	cur = *envp;
 	while (*cur)

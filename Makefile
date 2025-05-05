@@ -16,7 +16,8 @@ BLTSRC := $(addprefix builtin/, \
 	builtin_echo.c builtin_cd.c builtin_pwd.c builtin_export.c \
 	builtin_unset.c builtin_env.c builtin_exit.c pathutils.c)
 MSCSRC := $(addprefix misc/, \
-	signal.c environ.c envutils.c error.c ft_funcs.c xfuncs_fd.c xfuncs_sys.c)
+	signal.c environ.c envutils.c error.c ft_funcs.c\
+	xfuncs_fd.c xfuncs_sys.c xfuncs_str.c)
 SOURCE := main.c \
 	$(TOKSRC) $(PARSRC) $(EXPSRC) $(EXESRC) \
 	$(REDSRC) $(PIPSRC) $(BLTSRC) $(MSCSRC)

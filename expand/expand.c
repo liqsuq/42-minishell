@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:45:07 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/03 13:40:59 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 15:57:52 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,7 @@ void	append_char(char **s, char c)
 	size = 2;
 	if (*s != NULL)
 		size += ft_strlen(*s);
-	new = ft_calloc(size, sizeof(char));
-	if (new == NULL)
-	{
-		free(*s);
-		fatal_error("ft_calloc", strerror(errno));
-	}
+	new = xcalloc(size, sizeof(char));
 	if (*s != NULL)
 		ft_strlcpy(new, *s, size);
 	new[size - 2] = c;
