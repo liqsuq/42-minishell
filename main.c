@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:47:39 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/01 17:56:53 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 13:09:25 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,6 @@ static void	setup_shell(t_data *data, char **envp)
 static void	reset_shell(t_data *data)
 {
 	free_env(&data->env);
-}
-
-void	exit_shell(t_data *data, int status)
-{
-	reset_shell(data);
-	exit(status);
 }
 
 static void	process_line(t_data *data, char *line)

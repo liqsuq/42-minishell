@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:51:30 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/05 13:03:14 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 13:07:55 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ typedef struct s_data
 extern volatile sig_atomic_t	g_signal;
 
 // main.c
-void	exit_shell(t_data *data, int status);
 
 // tokenize/tokenize.c
 int		is_blank(char c);

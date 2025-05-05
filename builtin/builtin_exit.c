@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:42:02 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/02 20:41:10 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/05 13:07:46 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,5 +100,5 @@ void	builtin_exit(t_data *data, char **argv)
 			summarize(&stat, NULL, (int)(unsigned int)(num % 256));
 	}
 	free_argv(&argv);
-	exit_shell(data, stat);
+	exit(stat);
 }
