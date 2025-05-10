@@ -6,7 +6,7 @@
 /*   By: kadachi <kadachi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:41:14 by kadachi           #+#    #+#             */
-/*   Updated: 2025/05/02 16:10:51 by kadachi          ###   ########.fr       */
+/*   Updated: 2025/05/10 19:15:36 by kadachi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,19 +54,19 @@ static int	stuck_path(t_data *data, t_path **path, char *arg)
 	return (0);
 }
 
-static t_path	*stuck_home(t_data *data, t_path **path)
+static int	stuck_home(t_data *data, t_path **path)
 {
 	char	*home;
 
 	home = get_env(data->env, "HOME");
 	if (home == NULL)
-		return (bltin_error(data, "cd: HOME not set", NULL), NULL);
+		return (bltin_error(data, "cd: HOME not set", NULL), 1);
 	if (stuck_path(data, path, home))
-		return (bltin_error(data, "cd: stuck_path", strerror(errno)), NULL);
-	return (*path);
+		return (bltin_error(data, "cd: stuck_path", strerror(errno)), 1);
+	return (0);
 }
 
-static t_path	*stuck_wd(t_data *data, t_path **path)
+static int	stuck_wd(t_data *data, t_path **path)
 {
 	char	*wd;
 	char	cwd[PATH_MAX];
@@ -75,12 +75,12 @@ static t_path	*stuck_wd(t_data *data, t_path **path)
 	if (wd == NULL)
 	{
 		if (getcwd(cwd, PATH_MAX) == NULL)
-			return (bltin_error(data, "cd: getcwd", strerror(errno)), NULL);
+			return (bltin_error(data, "cd: getcwd", strerror(errno)), 1);
 		wd = cwd;
 	}
 	if (stuck_path(data, path, wd))
-		return (bltin_error(data, "cd: stuck_path", strerror(errno)), NULL);
-	return (*path);
+		return (bltin_error(data, "cd: stuck_path", strerror(errno)), 1);
+	return (0);
 }
 
 void	builtin_cd(t_data *data, char **argv)
@@ -94,14 +94,14 @@ void	builtin_cd(t_data *data, char **argv)
 	path = NULL;
 	if (argv[1] == NULL)
 	{
-		if (stuck_home(data, &path) == NULL)
+		if (stuck_home(data, &path))
 			return ;
 	}
 	else if (argv[2] != NULL)
 		return (bltin_error(data, "cd: too many arguments", NULL));
 	else if (argv[1][0] == '/')
 		str = argv[1];
-	else if (stuck_wd(data, &path) != NULL)
+	else if (!stuck_wd(data, &path))
 		str = argv[1];
 	else
 		return ;
