@@ -44,21 +44,21 @@ Minishellは、Bashが備える代表的な機能（コマンド実行・リダ�
 | re | fclean を実行後 all を実行して再ビルドを行います |
 
 ## ビルド方法
-```
-$ git clone <this repository>
-$ cd 42-minishell
-$ make
-$ ./minishell
-minish$
-```
-### 依存パッケージのインストール
-- macOS (Homebrew) ビルドには readline が必要です
+ビルドには readline が必要です。
+- macOS (Homebrew)
 ```
 $ brew install readline
 ```
 - Ubuntu (APT)
 ```
 $ sudo apt-get update && sudo apt-get install libreadline-dev
+```
+```
+$ git clone <this repository>
+$ cd 42-minishell
+$ make
+$ ./minishell
+minish$
 ```
 
 ## ディレクトリ構成
