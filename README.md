@@ -51,6 +51,15 @@ $ make
 $ ./minishell
 minish$
 ```
+### 依存パッケージのインストール
+- macOS (Homebrew) ビルドには readline が必要です
+```
+$ brew install readline
+```
+- Ubuntu (APT)
+```
+$ sudo apt-get update && sudo apt-get install libreadline-dev
+```
 
 ## ディレクトリ構成
 | ディレクトリ | 概要 |
