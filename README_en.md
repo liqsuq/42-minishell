@@ -46,9 +46,18 @@ with careful attention to closely mimic the behavior of Bash wherever possible.
 
 
 ## How to Build
+Dependency Installation
+- macOS (Homebrew)
+```
+$ brew install readline
+```
+- Ubuntu (APT)
+```
+$ sudo apt-get update && sudo apt-get install libreadline-dev
+```
 ```
 $ git clone <this repository>
-$ cd minishell
+$ cd 42-minishell
 $ make
 $ ./minishell
 minish$

@@ -44,7 +44,7 @@ Minishellは、Bashが備える代表的な機能（コマンド実行・リダ�
 | re | fclean を実行後 all を実行して再ビルドを行います |
 
 ## ビルド方法
-ビルドには readline が必要です。
+依存パッケージのインストール
 - macOS (Homebrew)
 ```
 $ brew install readline
