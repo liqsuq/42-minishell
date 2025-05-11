@@ -2,7 +2,7 @@
 
 <p align="center">
   <picture>
-    <img height="300" alt="minishellImage" src="https://github.com/user-attachments/assets/96aab2ee-f9e3-4db8-ac33-61ad4aed5ad8">
+    <img height="300" alt="minishellImage" src="https://github.com/user-attachments/assets/6753f61f-15b6-4d17-bcad-bad4a277fb19">
   </picture>
 </p>
 
@@ -106,4 +106,3 @@ Date de l'évaluation : 11-mai-2025
 Partie obligatoire : 100 / 100
 
 Bonus : 1 / 15
-

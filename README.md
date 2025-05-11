@@ -3,7 +3,6 @@
 <p align="center">
   <picture>
     <img height="300" alt="minishellImage" src="https://github.com/user-attachments/assets/6753f61f-15b6-4d17-bcad-bad4a277fb19">
-    
   </picture>
 </p>
 
@@ -101,4 +100,3 @@ minish$
 必須部分：100/100
 
 ボーナス：1/15
-
