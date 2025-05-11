@@ -100,8 +100,8 @@ This allows you to verify at once whether the main features are compatible.
 
 ## Evaluation
 
-Date of Evaluation: YYYY-MM-DD
+Date of Evaluation: 11-May-2025
 
-Mandatory Part: XX / 100
+Mandatory Part: 100 / 100
 
-Bonus: XX / 15
+Bonus: 1 / 15

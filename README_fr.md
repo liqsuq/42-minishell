@@ -101,9 +101,9 @@ Cela permet de vérifier en un seul coup si toutes les fonctionnalités principa
 
 ## Évaluation
 
-Date de l'évaluation : JJ-MM-AAAA
+Date de l'évaluation : 11-mai-2025
 
-Partie obligatoire : XX / 100
+Partie obligatoire : 100 / 100
 
-Bonus : XX / 15
+Bonus : 1 / 15
 
