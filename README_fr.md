@@ -9,7 +9,7 @@
 <p align="center">
 Minishell est un shell léger écrit en C, inspiré des fonctions essentielles des Bash comme l'exécution de commandes, la redirection, les pipes et l'expansion des variables d'environnement.<br>
 Il gère différents mécanismes bas niveau du système, notamment la création de processus, la gestion des entrées/sorties via des descripteurs de fichiers, et les signaux,<br>
-tout en cherchant à reproduire au mieux le comportement de Bash.
+tout en cherchant à reproduire au mieux le comportement des Bash.
 </p>
 
 
