@@ -412,6 +412,7 @@ assert 1 'cd /tmp///\n echo $PWD'
 assert 1 'cd /../../../././.././\n echo $PWD'
 assert 1 'cd src\n echo $PWD'
 assert 1 'unset HOME\ncd \n echo $PWD'
+assert 1 'cd /\n cd bin\n echo $PWD'
 
 ## pwd
 assert 1 'pwd'
