@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-Minishell est un shell léger écrit en C, inspiré des fonctions essentielles de Bash comme l'exécution de commandes, la redirection, les pipes et l'expansion des variables d'environnement.<br>
+Minishell est un shell léger écrit en C, inspiré des fonctions essentielles des Bash comme l'exécution de commandes, la redirection, les pipes et l'expansion des variables d'environnement.<br>
 Il gère différents mécanismes bas niveau du système, notamment la création de processus, la gestion des entrées/sorties via des descripteurs de fichiers, et les signaux,<br>
 tout en cherchant à reproduire au mieux le comportement de Bash.
 </p>
@@ -28,7 +28,7 @@ tout en cherchant à reproduire au mieux le comportement de Bash.
 | Catégorie de fonctionnalité | Description |
 |-----------------------------|-------------|
 | Invite de commande          | Affiche toujours l'invite `minish$` avec la gestion de l'historique grâce à `readline` |
-| Exécution de commandes      | Exécute les commandes trouvées dans le `PATH` ou les binaires spécifiés via des chemins relatifs/absolus à l'aide de `execve(2)` |
+| Exécution de commandes      | Exécute les commandes trouvées dans le `PATH` ou les codes binaires spécifiés via des chemins relatifs/absolus à l'aide de `execve(2)` |
 | Redirections                | Gère correctement `<`, `>`, `>>` et `<<` (here-document), y compris les redirections imbriquées |
 | Pipes                       | Développe et exécute récursivement des pipelines de longueur illimitée |
 | Expansion des variables     | Développe `$VAR` et le code de retour `$?` jeton par jeton |
@@ -94,7 +94,7 @@ Les principales règles incluent :
 
 ## Tests
 Après la compilation, vous pouvez exécuter `tester.sh` pour comparer automatiquement la sortie et les codes de retour entre Bash et Minishell.  
-Cela permet de vérifier d’un coup si les fonctionnalités principales sont compatibles.
+Cela permet de vérifier en un seul coup si toutes les fonctionnalités principales sont compatibles.
 <p align="left">
   <img src="https://github.com/user-attachments/assets/acb01f2c-5a10-4465-86d0-332571e75438" height="500">
 </p>
